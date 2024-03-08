@@ -1,15 +1,23 @@
-import React from 'react';
-import Sidebar from '../components/navbar/Sidebar';
+import React from "react"
+import Sidebar from '../components/navbar/Sidebar'
+import '../index.css'
+import { userStore } from "../stores/UserStore"
+import Footer from '../components/footer/footer';
 
 function Profile(){
+    const username  = userStore((state) => state.username)
+
     return(
         <div className="Profile" id="profile-outer-container">
-            <Sidebar pageWrapId={'profile-page-wrap'} outerContainerId={'profile-outer-continer'} />
-            <div className="page-wrap" id="profile-page-wrap">
+            <Sidebar pageWrapId={'profile-page-wrap'} outerContainerId={'profile-outer-container'} />
+            <div className="page-wrap" id="profile-page-wrap"> 
                 <h1>My Profile</h1>
-            </div>
-        </div>
-    );
-};
+                <p>Welcome {username}</p>
 
-export default Profile;
+            </div>
+        <Footer />
+        </div>
+    )
+}
+
+export default Profile

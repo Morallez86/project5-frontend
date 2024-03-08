@@ -23,7 +23,6 @@ root.render(
         <Route path="/login" element={<Login/>}/>
       </Routes>
     </Router>
-    <App />
   </React.StrictMode>
 );
 
