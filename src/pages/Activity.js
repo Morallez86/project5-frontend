@@ -124,10 +124,8 @@ function Activity(){
                         <input type="submit" value="Add" />
                     </form>
                     
-                </div>
-                
+                </div>               
             </div>
-            <Footer />
         </div>
         
     )

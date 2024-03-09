@@ -5,13 +5,14 @@ import Footer from './components/footer/footer';
 
 function App() {
   return (
-    <div className="App" id="outer-container">
-      <div className="page-wrap" id="app-page-wrap">
-        <h1> Welcome to this cool Application</h1>
+    <div >
+      <div className="text-white h-[100vh] flex justify-center items-center">
         <Login />
-        <Footer />
+        
       </div>
+      <Footer />
     </div>
+    
   );
 }
 

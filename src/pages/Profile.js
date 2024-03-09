@@ -15,7 +15,6 @@ function Profile(){
                 <p>Welcome {username}</p>
 
             </div>
-        <Footer />
         </div>
     )
 }
