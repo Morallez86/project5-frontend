@@ -11,16 +11,15 @@ import Activity from './pages/Activity';
 import Profile from './pages/Profile';
 
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(
+ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
     <Router>
       <Routes>
-        <Route index element={<App/>}/>
-        <Route path="/home" element={<Home/>}/>
-        <Route path="/activity" element={<Activity/>}/>
-        <Route path="/profile" element={<Profile/>}/>
-        <Route path="/login" element={<Login/>}/>
+        <Route index element={<App />} />
+        <Route path="/home" element={<Home />} />
+        <Route path="/activity" element={<Activity />} />
+        <Route path="/profile" element={<Profile />} />
+        <Route path="/login" element={<Login />} />
       </Routes>
     </Router>
   </React.StrictMode>
