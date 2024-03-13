@@ -7,20 +7,25 @@ import Header from '../components/header/Header';
 import ProfileInformation from "../components/profileInformation/ProfileInformation";
 
 function Profile(){
-    const username  = userStore((state) => state.username)
+    const [isSidebarVisible, setIsSidebarVisible] = React.useState(false);
+
+    const toggleSidebar = () => {
+        setIsSidebarVisible(!isSidebarVisible);
+    };
+
+    const username2 = userStore((state) => state.username);
 
     return(
         <div className="flex flex-col h-screen">
             <div className="flex flex-1">
-                <Sidebar />
+                {isSidebarVisible && <Sidebar />}
                 <div className="flex-1">
-                    <Header />
+                    <Header username={username2} toggleSidebar={toggleSidebar} />
                     <div>
                         <ProfileInformation/>
                     </div>
                 </div>
             </div>
-
             <Footer className="bg-gray-800 text-white p-4" />
         </div>
     )

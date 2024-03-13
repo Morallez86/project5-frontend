@@ -100,7 +100,7 @@ const UserProfileMenu = () => {
         </button>
       </div>
       {isOpen && (
-        <div className="origin-top-right absolute right-0 -mr-4 mt-4 w-32 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
+        <div className="origin-top-right absolute right-0 -mr-4 mt-4 w-32 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-10">
           <div className="flex flex-col items-center py-1">
             <button
               href="#"

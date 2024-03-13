@@ -9,6 +9,7 @@ import { Route, Routes } from "react-router-dom";
 import Home from './pages/Home'; 
 import Activity from './pages/Activity';
 import Profile from './pages/Profile';
+import AddUser from './pages/AddUser';
 
 
 ReactDOM.createRoot(document.getElementById("root")).render(
@@ -20,6 +21,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         <Route path="/activity" element={<Activity />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/addUser" element={<AddUser />} />
       </Routes>
     </Router>
   </React.StrictMode>

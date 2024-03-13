@@ -35,7 +35,7 @@ function Login(){
             });
             if (response.ok) {
                 const userData = await response.json();
-                // Update user information in the store or set it in local storage
+                // Update user information in the store
                 updateUserData(
                     userData.username,
                     userData.token,
