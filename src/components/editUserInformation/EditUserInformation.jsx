@@ -1,10 +1,11 @@
 import React from 'react';
-import { useState } from "react";
+import { useState, useEffect } from "react"
 import { userStore } from "../../stores/UserStore";
 
-const ProfileInformation = () => {
+
+const NewUserInformation = () => {
   const token = userStore((state) => state.token);
-  const role = userStore((state) => state.role);
+  const username2 = userStore((state) => state.username);
   const [formData, setFormData] = useState({
     username: '',
     firstname: '',
@@ -15,27 +16,49 @@ const ProfileInformation = () => {
     photoURL: ''
   });
 
+  useEffect(() => {
+    const fetchUserDetails = async () => {
+      try {
+        const response = await fetch('http://localhost:8080/demo-1.0-SNAPSHOT/rest/user/getDetails', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'token': token,
+            'selectedUser': username2
+          }
+        });
+        const userDetails = await response.json();
+        setFormData(userDetails); // Update the formData state with user details
+        console.log(userDetails);
+      } catch (error) {
+        console.error('Error fetching user details:', error);
+      }
+    };
+
+    fetchUserDetails();
+  }, []);
+
   const handleSubmit = async (event) => {
   event.preventDefault();
   
-  try {
-    // Make a POST request to your endpoint
-    const response = await fetch('http://localhost:8080/demo-1.0-SNAPSHOT/rest/user/add', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'token': token, // Provide your token here
-        'role': role // Provide the role of the new user here
-      },
-      body: JSON.stringify(formData)
+    try {
+        // Make a POST request to your endpoint
+        const response = await fetch('http://localhost:8080/demo-1.0-SNAPSHOT/rest/user/update', {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+            'token': token, 
+            'selectedUser': username2 
+        },
+        body: JSON.stringify(formData)
     });
     console.log(formData)
-    const data = await response.json(); // Parse the JSON response
-    console.log(data); // Log the response from the server
-  } catch (error) {
+    const data = await response.json();
+    console.log(data); 
+    } catch (error) {
     console.error('Error adding user:', error);
-  }
-  };
+    }
+    };
 
   const handleChange = (event) => {
     setFormData({
@@ -55,6 +78,7 @@ const ProfileInformation = () => {
                         type="text" 
                         className="block w-72 py-2.5 px-0 text-sm text-white bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:focus:border-cyan-950 focus:outline-none focus:ring-0 focus:text-white focus:border-cyan-950 peer" 
                         placeholder=""
+                        value={formData.username}
                         onChange={handleChange}
                         name="username"/>
                     <label 
@@ -65,22 +89,10 @@ const ProfileInformation = () => {
                 </div>
                 <div className="relative my-4">
                     <input 
-                    type="password" 
-                    className="block w-72 py-2.5 px-0 text-sm text-white bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:focus:border-cyan-950 focus:outline-none focus:ring-0 focus:text-white focus:border-cyan-950 peer" 
-                    placeholder=""
-                    onChange={handleChange}
-                    name="password"
-                    />
-                    <label 
-                    htmlFor="" 
-                    className="absolute text-sm text-white duration-300 transform translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-cyan-900 peer-focus:dark:text-cyan-950 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:translate-y-6">Your Password
-                    </label>
-                </div>
-                <div className="relative my-4">
-                    <input 
                     type="text" 
                     className="block w-72 py-2.5 px-0 text-sm text-white bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:focus:border-cyan-950 focus:outline-none focus:ring-0 focus:text-white focus:border-cyan-950 peer" 
                     placeholder=""
+                    value={formData.firstname}
                     onChange={handleChange}
                     name="firstname"
                     />
@@ -95,6 +107,7 @@ const ProfileInformation = () => {
                     type="text" 
                     className="block w-72 py-2.5 px-0 text-sm text-white bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:focus:border-cyan-950 focus:outline-none focus:ring-0 focus:text-white focus:border-cyan-950 peer" 
                     placeholder=""
+                    value={formData.lastname}
                     onChange={handleChange}
                     name="lastname"
                     />
@@ -109,6 +122,7 @@ const ProfileInformation = () => {
                     type="email" 
                     className="block w-72 py-2.5 px-0 text-sm text-white bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:focus:border-cyan-950 focus:outline-none focus:ring-0 focus:text-white focus:border-cyan-950 peer" 
                     placeholder=""
+                    value={formData.email}
                     onChange={handleChange}
                     name="email"
                     />
@@ -123,6 +137,7 @@ const ProfileInformation = () => {
                     type="text" 
                     className="block w-72 py-2.5 px-0 text-sm text-white bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:focus:border-cyan-950 focus:outline-none focus:ring-0 focus:text-white focus:border-cyan-950 peer" 
                     placeholder=""
+                    value={formData.phone}
                     onChange={handleChange}
                     name="phone"
                     />
@@ -136,6 +151,7 @@ const ProfileInformation = () => {
                 <select 
                 className="block w-72 py-2.5 px-0 text-sm text-white bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:focus:border-cyan-950 focus:outline-none focus:ring-0 focus:text-white focus:border-cyan-950 peer"
                 name="role"
+                value={formData.role}
                 onChange={handleChange}
                 >
                 <option className="text-black" value="dev">Developer</option>
@@ -154,6 +170,7 @@ const ProfileInformation = () => {
                     type="text" 
                     className="block w-72 py-2.5 px-0 text-sm text-white bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:focus:border-cyan-950 focus:outline-none focus:ring-0 focus:text-white focus:border-cyan-950 peer" 
                     placeholder=""
+                    value={formData.photoURL}
                     onChange={handleChange}
                     name="photoURL"
                     />
@@ -176,4 +193,4 @@ const ProfileInformation = () => {
   )
 }
 
-export default ProfileInformation
+export default NewUserInformation

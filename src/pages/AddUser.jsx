@@ -4,7 +4,7 @@ import '../index.css'
 import { userStore } from "../stores/UserStore"
 import Footer from '../components/footer/footer';
 import Header from '../components/header/Header';
-import ProfileInformation from "../components/profileInformation/ProfileInformation";
+import ProfileInformation from "../components/newUserInformation/NewUserInformation";
 
 function AddUser(){
     const [isSidebarVisible, setIsSidebarVisible] = React.useState(false);

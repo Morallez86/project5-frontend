@@ -4,7 +4,9 @@ import '../index.css'
 import { userStore } from "../stores/UserStore"
 import Footer from '../components/footer/footer';
 import Header from '../components/header/Header';
-import ProfileInformation from "../components/profileInformation/ProfileInformation";
+import EditUserInformation from '../components/editUserInformation/EditUserInformation';
+
+
 
 function Profile(){
     const [isSidebarVisible, setIsSidebarVisible] = React.useState(false);
@@ -22,7 +24,7 @@ function Profile(){
                 <div className="flex-1">
                     <Header username={username2} toggleSidebar={toggleSidebar} />
                     <div>
-                        <ProfileInformation/>
+                        <EditUserInformation/>
                     </div>
                 </div>
             </div>
