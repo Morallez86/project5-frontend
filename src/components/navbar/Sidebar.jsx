@@ -45,6 +45,11 @@ const Sidebar = () => {
             Users
           </button>
         </li>
+        <li className='p-2 text-center'>
+          <button className="focus:outline-none" onClick={() => handleNavigation('/ManagingCategories')}>
+            Categories
+          </button>
+        </li>
       </ul>
     </div>
   );

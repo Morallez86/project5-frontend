@@ -10,6 +10,8 @@ import Home from './pages/Home';
 import Activity from './pages/Activity';
 import Profile from './pages/Profile';
 import AddUser from './pages/AddUser';
+import AddTask from './pages/AddTask';
+import ManagingCategories from './pages/ManagingCategories';
 
 
 ReactDOM.createRoot(document.getElementById("root")).render(
@@ -22,6 +24,8 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         <Route path="/profile" element={<Profile />} />
         <Route path="/login" element={<Login />} />
         <Route path="/addUser" element={<AddUser />} />
+        <Route path="/addTask" element={<AddTask />} />
+        <Route path="/managingCategories" element={<ManagingCategories />} />
       </Routes>
     </Router>
   </React.StrictMode>
