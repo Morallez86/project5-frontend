@@ -1,7 +1,8 @@
+// CategoryComboBox.jsx
 import React, { useEffect, useState } from 'react';
 import { userStore } from "../../stores/UserStore"
 
-function CategoryComboBox() {
+function CategoryComboBox({ onRefresh }) {
     const [categories, setCategories] = useState([]);
     const token = userStore((state) => state.token);
 
@@ -32,7 +33,7 @@ function CategoryComboBox() {
         .catch(error => {
             console.error('Error fetching categories:', error);
         });
-    }, [token]); // Include token in the dependency array
+    }, [token, onRefresh]); // Include token and onRefresh in the dependency array
 
     return (
         <>

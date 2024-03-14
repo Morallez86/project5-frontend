@@ -3,7 +3,6 @@ import Sidebar from '../components/navbar/Sidebar'
 import '../index.css'
 import { userStore } from "../stores/UserStore"
 import { useState, useEffect } from "react"
-import Footer from '../components/footer/footer';
 
 
 function Activity(){
