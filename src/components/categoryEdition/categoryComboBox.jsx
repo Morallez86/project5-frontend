@@ -1,9 +1,9 @@
-// CategoryComboBox.jsx
 import React, { useEffect, useState } from 'react';
-import { userStore } from "../../stores/UserStore"
+import { userStore } from "../../stores/UserStore";
 
 function CategoryComboBox({ onRefresh }) {
     const [categories, setCategories] = useState([]);
+    const [selectedValue, setSelectedValue] = useState(""); // State to store the selected option value
     const token = userStore((state) => state.token);
 
     useEffect(() => {
@@ -35,11 +35,20 @@ function CategoryComboBox({ onRefresh }) {
         });
     }, [token, onRefresh]); // Include token and onRefresh in the dependency array
 
+    // Function to handle option selection
+    const handleSelectChange = (event) => {
+        const selectedValue = event.target.value;
+        setSelectedValue(selectedValue);
+        // Call the onRefresh function with the selected option value
+        onRefresh(selectedValue);
+    };
+
     return (
         <>
-            <select className="bg-cyan-950 rounded border border-white">
+            <select className="bg-cyan-950 rounded border border-white" value={selectedValue} onChange={handleSelectChange}>
+                <option value="">Add Category</option>
                 {categories.map(category => (
-                    <option key={category.id} value={category.id}>{category.title}</option>
+                    <option key={category.id} value={category.title}>{category.title}</option>
                 ))}
             </select>
         </>
