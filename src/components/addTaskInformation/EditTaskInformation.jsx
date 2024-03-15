@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { userStore } from "../../stores/UserStore";
+import { taskStore } from "../../stores/TaskStore";
 
 function EditTaskInformation() {
     const [categories, setCategories] = useState([]); // State variable to store categories
     const token = userStore((state) => state.token);
+    const taskId = taskStore((state) => state.taskId);
     const [formData, setFormData] = useState({
         title: "",
         description: "",
@@ -35,28 +37,32 @@ function EditTaskInformation() {
         };
         
         fetchCategories();
-    }, [token]);
 
-    const handleSave = async (e) => {
-        e.preventDefault();
-        try {
-            const response = await fetch('http://localhost:8080/demo-1.0-SNAPSHOT/rest/task/add', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'token': token
-                },
-                body: JSON.stringify(formData)
-            });
-            if (!response.ok) {
-                console.log(formData);
-                throw new Error('Failed to add task');
+        const fetchTask = async () => {
+            try {
+                const response = await fetch(`http://localhost:8080/demo-1.0-SNAPSHOT/rest/task/get?id=${taskId}`, {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'token': token
+                    }
+                });
+                if (!response.ok) {
+                    throw new Error('Failed to fetch task');
+                }
+                const taskData = await response.json();
+                setFormData(taskData);
+            } catch (error) {
+                console.error('Error fetching task:', error);
             }
-            // Handle success, e.g., show a success message or redirect
-        } catch (error) {
-            console.error('Error adding task:', error);
-            // Handle error, e.g., show an error message
+        };
+        if (taskId) {
+            fetchTask();
         }
+    }, [token, taskId]);
+    
+    const handleSave = async (e) => {
+
     };
 
     const handleChange = (event) => {
@@ -70,7 +76,7 @@ function EditTaskInformation() {
     <div className="text-white mt-8 flex justify-center items-center">
         <div className="bg-cyan-900/60 border border-cyan-950 rounded-md p-12 backdrop-filter backdrop-blur-sm bg-opacity-30 relative">
             <div>
-                <h1 className="text-4xl font-bold text-center mb-6">New task</h1>
+                <h1 className="text-4xl font-bold text-center mb-6">Edit task</h1>
                 <form onSubmit={handleSave}>
                     <div className="relative my-4">
                         <input 
@@ -161,6 +167,9 @@ function EditTaskInformation() {
                                     Cancel
                                 </button>
                             </div>
+                            <button className="w-full mb-4 text-[18px] mt-6 rounded-full bg-red-500 text-white hover:bg-red-700 py-2 transition-colors duration-300">
+                                Delete
+                            </button>
                         </div>
                     </div>
                 </form>

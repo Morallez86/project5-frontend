@@ -54,17 +54,17 @@ function Home() {
                     <div className="flex flex-row">
                         <TasksListColumn title="To Do">
                             {filterTasksByStatus(100).map(task => (
-                                <TaskComponent key={task.id} title={task.title} priority={task.priority} />
+                                <TaskComponent key={task.id} id={task.id} title={task.title} priority={task.priority} />
                             ))}
                         </TasksListColumn>
                         <TasksListColumn title="Doing">
                             {filterTasksByStatus(200).map(task => (
-                                <TaskComponent key={task.id} title={task.title} priority={task.priority} />
+                                <TaskComponent key={task.id} id={task.id} title={task.title} priority={task.priority} />
                             ))}
                         </TasksListColumn>
                         <TasksListColumn title="Done">
                             {filterTasksByStatus(300).map(task => (
-                                <TaskComponent key={task.id} title={task.title} priority={task.priority} />
+                                <TaskComponent key={task.id} id={task.id} title={task.title} priority={task.priority} />
                             ))}
                         </TasksListColumn>
                     </div>

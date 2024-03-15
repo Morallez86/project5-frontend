@@ -12,6 +12,7 @@ import Profile from './pages/Profile';
 import AddUser from './pages/AddUser';
 import AddTask from './pages/AddTask';
 import ManagingCategories from './pages/ManagingCategories';
+import EditTask from './pages/EditTask';
 
 
 ReactDOM.createRoot(document.getElementById("root")).render(
@@ -26,6 +27,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         <Route path="/addUser" element={<AddUser />} />
         <Route path="/addTask" element={<AddTask />} />
         <Route path="/managingCategories" element={<ManagingCategories />} />
+        <Route path="/editTask" element={<EditTask />} />
       </Routes>
     </Router>
   </React.StrictMode>
