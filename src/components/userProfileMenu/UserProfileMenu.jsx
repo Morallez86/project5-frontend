@@ -1,19 +1,16 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { BiUser } from 'react-icons/bi';
 import { useNavigate } from "react-router-dom";
 import { userStore } from "../../stores/UserStore";
 import { ProfileStore } from "../../stores/ProfileStore";
 
-// ... (previous imports)
-
 const UserProfileMenu = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [photoURL, setPhotoURL] = useState('');
   const clearUserId = ProfileStore((state) => state.clearUserId);
-
   const navigate = useNavigate();
   const { token, clearUserData } = userStore.getState();
-  console.log('Token:', token);
+  const menuRef = useRef();
 
   useEffect(() => {
     const fetchPhoto = async () => {
@@ -31,7 +28,6 @@ const UserProfileMenu = () => {
         if (response.ok) {
           // Photo URL successfully fetched
           const photoURL = await response.json();
-          console.log('Fetched Photo URL:', photoURL);
           setPhotoURL(photoURL);
         } else {
           // Fetching photo URL failed
@@ -45,11 +41,6 @@ const UserProfileMenu = () => {
     // Fetch photo URL when the component mounts
     fetchPhoto();
   }, [token]);
-
-  // Log the photoURL when it changes
-  useEffect(() => {
-    console.log('Updated Photo URL:', photoURL);
-  }, [photoURL]);
 
   const handleProfileClick = () => {
     clearUserId();
@@ -87,8 +78,22 @@ const UserProfileMenu = () => {
     setIsOpen(!isOpen);
   };
 
+  useEffect(() => {
+    const handleOutsideClick = (event) => {
+      if (menuRef.current && !menuRef.current.contains(event.target)) {
+        setIsOpen(false);
+      }
+    };
+
+    document.addEventListener('click', handleOutsideClick);
+
+    return () => {
+      document.removeEventListener('click', handleOutsideClick);
+    };
+  }, []);
+
   return (
-    <div className="relative inline-block text-left">
+    <div className="relative inline-block text-left" ref={menuRef}>
       <div>
         <button
           type="button"
@@ -127,4 +132,3 @@ const UserProfileMenu = () => {
 };
 
 export default UserProfileMenu;
-

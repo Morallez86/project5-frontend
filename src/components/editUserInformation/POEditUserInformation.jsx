@@ -2,10 +2,12 @@ import React from 'react';
 import { useState, useEffect } from "react"
 import { ProfileStore } from "../../stores/ProfileStore";
 import { userStore } from "../../stores/UserStore";
+import { useNavigate } from "react-router-dom";
 
 const POEditUserInformation = () => {
   const token = userStore((state) => state.token);
   const selectedUserId = ProfileStore((state) => state.userId);
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     username: '',
     firstname: '',
@@ -53,11 +55,12 @@ const POEditUserInformation = () => {
     });
     console.log(formData)
     const data = await response.json();
-    console.log(data); 
+    console.log(data);
+    navigate('/Home')
     } catch (error) {
     console.error('Error adding user:', error);
     }
-    };
+  };
 
   const handleChange = (event) => {
     setFormData({

@@ -1,12 +1,12 @@
 import React from 'react';
 import { useState, useEffect } from "react"
 import { userStore } from "../../stores/UserStore";
-
-
+import { useNavigate } from "react-router-dom";
 
 const EditUserInformation = () => {
   const token = userStore((state) => state.token);
   const username2 = userStore((state) => state.username);
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     username: '',
     firstname: '',
@@ -56,6 +56,7 @@ const EditUserInformation = () => {
     console.log(formData)
     const data = await response.json();
     console.log(data); 
+    navigate('/Home');
     } catch (error) {
     console.error('Error adding user:', error);
     }

@@ -1,9 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { userStore } from "../../stores/UserStore";
+import { useNavigate } from 'react-router-dom';
 
 function AddTaskInformation() {
     const [categories, setCategories] = useState([]); // State variable to store categories
     const token = userStore((state) => state.token);
+    const navigate = useNavigate();
     const [formData, setFormData] = useState({
         title: "",
         description: "",
@@ -52,7 +54,7 @@ function AddTaskInformation() {
                 console.log(formData);
                 throw new Error('Failed to add task');
             }
-            // Handle success, e.g., show a success message or redirect
+            navigate('/Home');
         } catch (error) {
             console.error('Error adding task:', error);
             // Handle error, e.g., show an error message

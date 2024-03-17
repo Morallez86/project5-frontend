@@ -77,7 +77,7 @@ function EditTaskInformation() {
             if (!response.ok) {
                 throw new Error('Failed to update task');
             }
-            navigate('/home');
+            navigate('/Home');
         } catch (error) {
             console.error('Error updating task:', error);
             // Handle error, such as displaying an error message

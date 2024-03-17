@@ -8,7 +8,7 @@ const Header = ({ toggleSidebar, isSidebarVisible }) => {
   const username2 = userStore((state) => state.username);
 
   return (
-    <header className='bg-blue-500 text-white p-4'>
+    <header className='bg-teal-950 text-white p-4'>
       <div className='flex items-center justify-between'>
         <div className='flex items-center'>
           {!isSidebarVisible && ( // Render the icon only if the sidebar is not visible
