@@ -1,12 +1,11 @@
 import React from 'react';
 import { useState, useEffect } from "react"
+import { ProfileStore } from "../../stores/ProfileStore";
 import { userStore } from "../../stores/UserStore";
 
-
-
-const NewUserInformation = () => {
+const POEditUserInformation = () => {
   const token = userStore((state) => state.token);
-  const username2 = userStore((state) => state.username);
+  const selectedUserId = ProfileStore((state) => state.userId);
   const [formData, setFormData] = useState({
     username: '',
     firstname: '',
@@ -20,36 +19,35 @@ const NewUserInformation = () => {
   useEffect(() => {
     const fetchUserDetails = async () => {
       try {
-        const response = await fetch('http://localhost:8080/demo-1.0-SNAPSHOT/rest/user/getDetails', {
+        const response = await fetch('http://localhost:8080/demo-1.0-SNAPSHOT/rest/user/getProfileDetails', {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
             'token': token,
-            'selectedUser': username2
+            'selectedUserId': selectedUserId
           }
         });
         const userDetails = await response.json();
         setFormData(userDetails); // Update the formData state with user details
-        console.log(userDetails);
       } catch (error) {
         console.error('Error fetching user details:', error);
       }
     };
 
     fetchUserDetails();
-  }, [token, username2]);
+  }, [token, selectedUserId]);
 
   const handleSubmit = async (event) => {
   event.preventDefault();
   
     try {
         // Make a POST request to your endpoint
-        const response = await fetch('http://localhost:8080/demo-1.0-SNAPSHOT/rest/user/update', {
+        const response = await fetch('http://localhost:8080/demo-1.0-SNAPSHOT/rest/user/updateById', {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
             'token': token, 
-            'selectedUser': username2 
+            'selectedUserId': selectedUserId 
         },
         body: JSON.stringify(formData)
     });
@@ -72,7 +70,7 @@ const NewUserInformation = () => {
     <div className="text-white mt-8 flex justify-center items-center">
     <div className="bg-cyan-900/60	border border-cyan-950 rounded-md p-12 backdrop-filter backdrop-blur-sm bg-opacity-30 relative">
             <div> 
-                <h1 className="text-4xl text-whitefont-bold text-center mb-6">Profile</h1>
+                <h1 className="text-4xl text-whitefont-bold text-center mb-6">Profile User</h1>
                 <form onSubmit={handleSubmit}>
                 <div className="relative my-4">
                     <input 
@@ -194,4 +192,4 @@ const NewUserInformation = () => {
   )
 }
 
-export default NewUserInformation
+export default POEditUserInformation

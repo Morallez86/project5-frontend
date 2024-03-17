@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { BiUser } from 'react-icons/bi';
 import { useNavigate } from "react-router-dom";
-import { userStore } from "../../stores/UserStore"
+import { userStore } from "../../stores/UserStore";
+import { ProfileStore } from "../../stores/ProfileStore";
 
 // ... (previous imports)
 
 const UserProfileMenu = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [photoURL, setPhotoURL] = useState('');
+  const clearUserId = ProfileStore((state) => state.clearUserId);
 
   const navigate = useNavigate();
   const { token, clearUserData } = userStore.getState();
@@ -50,6 +52,7 @@ const UserProfileMenu = () => {
   }, [photoURL]);
 
   const handleProfileClick = () => {
+    clearUserId();
     navigate('../Profile', { replace: true });
     setIsOpen(false);
   };

@@ -1,11 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { userStore } from "../../stores/UserStore";
 import { taskStore } from "../../stores/TaskStore";
+import { useNavigate } from 'react-router-dom'; 
 
 function EditTaskInformation() {
     const [categories, setCategories] = useState([]); // State variable to store categories
     const token = userStore((state) => state.token);
     const taskId = taskStore((state) => state.taskId);
+    const navigate = useNavigate();
     const [formData, setFormData] = useState({
         title: "",
         description: "",
@@ -62,7 +64,24 @@ function EditTaskInformation() {
     }, [token, taskId]);
     
     const handleSave = async (e) => {
-
+        e.preventDefault();
+        try {
+            const response = await fetch(`http://localhost:8080/demo-1.0-SNAPSHOT/rest/task/update?id=${taskId}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'token': token
+                },
+                body: JSON.stringify(formData)
+            });
+            if (!response.ok) {
+                throw new Error('Failed to update task');
+            }
+            navigate('/home');
+        } catch (error) {
+            console.error('Error updating task:', error);
+            // Handle error, such as displaying an error message
+        }
     };
 
     const handleChange = (event) => {

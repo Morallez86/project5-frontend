@@ -133,7 +133,7 @@ function EditTaskInformation() {
                             <label><b>Category:</b></label>
                             <select 
                                 className="bg-cyan-950 rounded border border-white"
-                                value={formData.category}
+                                value={formData.category ?? categories?.[0]}
                                 onChange={handleChange}
                                 name="category"
                                 >
