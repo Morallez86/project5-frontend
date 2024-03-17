@@ -7,7 +7,6 @@ import { BrowserRouter as Router } from 'react-router-dom';
 import Login from './pages/Login';
 import { Route, Routes } from "react-router-dom";
 import Home from './pages/Home'; 
-import Activity from './pages/Activity';
 import Profile from './pages/Profile';
 import AddUser from './pages/AddUser';
 import AddTask from './pages/AddTask';
@@ -23,7 +22,6 @@ ReactDOM.createRoot(document.getElementById("root")).render(
       <Routes>
         <Route index element={<App />} />
         <Route path="/home" element={<Home />} />
-        <Route path="/activity" element={<Activity />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/login" element={<Login />} />
         <Route path="/addUser" element={<AddUser />} />

@@ -1,18 +1,20 @@
+// Sidebar.jsx
 import React from 'react';
 import { IoMenu } from 'react-icons/io5';
 import { useNavigate } from 'react-router-dom';
 
-const Sidebar = () => {
+const Sidebar = ({ toggleSidebar, isSidebarVisible }) => {
   const navigate = useNavigate();
 
   const handleNavigation = (path) => {
     navigate(path);
+    toggleSidebar(); // Close the sidebar when a navigation item is clicked
   };
 
   return (
-    <div className='flex flex-col h-full bg-gray-800 text-[#00df9a] p-4'>
+    <div className={`flex flex-col h-full bg-gray-800 text-[#00df9a] p-4 ${isSidebarVisible ? '' : 'hidden'}`}>
       <div className='flex items-center mb-6'>
-        <IoMenu size={40} className='text-3xl mx-auto' />
+        <IoMenu size={40} className='text-3xl mx-auto cursor-pointer' onClick={toggleSidebar} />
       </div>
       <ul>
         <li className='p-2 text-center'>

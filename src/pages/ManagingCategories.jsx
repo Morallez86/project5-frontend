@@ -18,7 +18,7 @@ function ManagingCategories(){
     return(
         <div className="flex flex-col h-screen">
             <div className="flex flex-1">
-                {isSidebarVisible && <Sidebar />}
+                {isSidebarVisible && <Sidebar toggleSidebar={toggleSidebar}/>}
                 <div className="flex-1">
                     <Header username={username2} toggleSidebar={toggleSidebar} />
                     <div>

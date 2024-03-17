@@ -9,7 +9,7 @@ import '../index.css';
 
 function Home() {
     const [tasks, setTasks] = useState([]);
-    const [isSidebarVisible, setIsSidebarVisible] = useState(false); // Define isSidebarVisible
+    const [isSidebarVisible, setIsSidebarVisible] = useState(false); // Initialize to false
     const username = userStore((state) => state.username);
     const token = userStore((state) => state.token); // Define token
 
@@ -48,9 +48,9 @@ function Home() {
     return (
         <div className="flex flex-col h-screen">
             <div className="flex flex-1">
-                {isSidebarVisible && <Sidebar />}
+                <Sidebar toggleSidebar={toggleSidebar} isSidebarVisible={isSidebarVisible} /> {/* Pass isSidebarVisible to Sidebar */}
                 <div className="flex-1">
-                    <Header username={username} toggleSidebar={toggleSidebar} />
+                    <Header username={username} toggleSidebar={toggleSidebar} isSidebarVisible={isSidebarVisible} /> {/* Pass isSidebarVisible to Header */}
                     <div className="flex flex-row">
                         <TasksListColumn title="To Do">
                             {filterTasksByStatus(100).map(task => (
