@@ -1,7 +1,7 @@
 import React from 'react';
 import { MdPriorityHigh } from "react-icons/md";
 import { taskStore } from "../../stores/TaskStore";
-import { useNavigate } from 'react-router-dom'; // Import useNavigate
+import { useNavigate } from 'react-router-dom';
 
 function TaskComponent({ id, title, priority }) {
   const updateTaskId = taskStore((state) => state.updateTaskId);

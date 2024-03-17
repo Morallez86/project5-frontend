@@ -13,6 +13,7 @@ import AddUser from './pages/AddUser';
 import AddTask from './pages/AddTask';
 import ManagingCategories from './pages/ManagingCategories';
 import ManagingUsers from './pages/ManagingUsers';
+import ManagingTasks from './pages/ManagingTasks';
 import EditTask from './pages/EditTask';
 
 
@@ -29,6 +30,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         <Route path="/addTask" element={<AddTask />} />
         <Route path="/managingCategories" element={<ManagingCategories />} />
         <Route path="/managingUsers" element={<ManagingUsers />} />
+        <Route path="managingTasks" element={<ManagingTasks />} />
         <Route path="/editTask" element={<EditTask />} />
       </Routes>
     </Router>

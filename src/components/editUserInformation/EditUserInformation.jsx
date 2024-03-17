@@ -4,7 +4,7 @@ import { userStore } from "../../stores/UserStore";
 
 
 
-const NewUserInformation = () => {
+const EditUserInformation = () => {
   const token = userStore((state) => state.token);
   const username2 = userStore((state) => state.username);
   const [formData, setFormData] = useState({
@@ -194,4 +194,4 @@ const NewUserInformation = () => {
   )
 }
 
-export default NewUserInformation
+export default EditUserInformation

@@ -31,12 +31,12 @@ const Sidebar = () => {
           </button>
         </li>
         <li className='p-2 text-center'>
-          <button className="focus:outline-none" onClick={() => handleNavigation('/Management')}>
+          <button className="focus:outline-none">
             Management
           </button>
         </li>
         <li className='p-2 text-center'>
-          <button className="focus:outline-none" onClick={() => handleNavigation('/Tasks')}>
+          <button className="focus:outline-none" onClick={() => handleNavigation('/ManagingTasks')}>
             Tasks
           </button>
         </li>

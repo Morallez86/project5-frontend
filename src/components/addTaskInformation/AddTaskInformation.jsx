@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { userStore } from "../../stores/UserStore";
 
-function EditTaskInformation() {
+function AddTaskInformation() {
     const [categories, setCategories] = useState([]); // State variable to store categories
     const token = userStore((state) => state.token);
     const [formData, setFormData] = useState({
@@ -170,4 +170,4 @@ function EditTaskInformation() {
   );
 }
 
-export default EditTaskInformation;
+export default AddTaskInformation;
