@@ -1,40 +1,19 @@
-import React from "react"
-import Sidebar from '../components/navbar/Sidebar'
-import '../index.css'
-import { userStore } from "../stores/UserStore"
-import Footer from '../components/footer/footer';
-import Header from '../components/header/Header';
+import React from "react";
+import Layout from "./Layout"; // Assuming the Layout component is in the same directory
 import EditUserInformation from '../components/editUserInformation/EditUserInformation';
-import { ProfileStore } from "../stores/ProfileStore";
 import POEditUserInformation from '../components/editUserInformation/POEditUserInformation';
+import { ProfileStore } from "../stores/ProfileStore";
 
-
-
-function Profile(){
-    const [isSidebarVisible, setIsSidebarVisible] = React.useState(false);
+function Profile() {
     const selectedUserId = ProfileStore((state) => state.userId);
-    console.log(selectedUserId);
-
-    const toggleSidebar = () => {
-        setIsSidebarVisible(!isSidebarVisible);
-    };
-
-    const username2 = userStore((state) => state.username);
 
     return (
-        <div className="flex flex-col h-screen">
-            <div className="flex flex-1">
-                {isSidebarVisible && <Sidebar toggleSidebar={toggleSidebar}/>}
-                <div className="flex-1">
-                    <Header username={username2} toggleSidebar={toggleSidebar} />
-                    <div>
-                        {selectedUserId ? <POEditUserInformation /> : <EditUserInformation />}
-                    </div>
-                </div>
+        <Layout>
+            <div>
+                {selectedUserId ? <POEditUserInformation /> : <EditUserInformation />}
             </div>
-            <Footer className="bg-gray-800 text-white p-4" />
-        </div>
+        </Layout>
     );
 }
 
-export default Profile
+export default Profile;

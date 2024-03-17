@@ -14,6 +14,7 @@ import ManagingCategories from './pages/ManagingCategories';
 import ManagingUsers from './pages/ManagingUsers';
 import ManagingTasks from './pages/ManagingTasks';
 import EditTask from './pages/EditTask';
+import Layout from './pages/Layout';
 
 
 ReactDOM.createRoot(document.getElementById("root")).render(
@@ -22,6 +23,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
       <Routes>
         <Route index element={<App />} />
         <Route path="/home" element={<Home />} />
+        <Route path="/layout" element={<Layout />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/login" element={<Login />} />
         <Route path="/addUser" element={<AddUser />} />
