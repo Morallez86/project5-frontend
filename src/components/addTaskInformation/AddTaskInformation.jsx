@@ -117,6 +117,7 @@ function AddTaskInformation() {
                                 onChange={handleChange}
                                 name="status"
                             >
+                                <option value="">Select Status</option>
                                 <option value="100">TO DO</option>
                                 <option value="200">DOING</option>
                                 <option value="300">DONE</option>
@@ -128,9 +129,10 @@ function AddTaskInformation() {
                                 onChange={handleChange}
                                 name="priority"
                             >
-                                <option value="100">High</option>
+                                <option value="">Select Priority</option>
+                                <option value="100">Low</option>
                                 <option value="200">Medium</option>
-                                <option value="300">Low</option>
+                                <option value="300">High</option>
                             </select>
                             <label><b>Category:</b></label>
                             <select 

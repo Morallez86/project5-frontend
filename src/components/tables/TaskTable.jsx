@@ -9,7 +9,7 @@ function TaskTable() {
   const [users, setUsers] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
   const token = userStore((state) => state.token);
-  const updateTaskId = taskStore((state) => state.updateTaskId);
+  const { updateTaskId, updateTaskOwner } = taskStore(); 
   const navigate = useNavigate(); // Get the navigate function
 
   useEffect(() => {
@@ -34,12 +34,12 @@ function TaskTable() {
     fetchUsers();
   }, [token]);
 
-  const handleEdit = (taskId) => {
+  const handleEdit = (id, owner) => {
     // Set the task ID in the task storage
-    updateTaskId(taskId);
+    updateTaskId(id);
+    updateTaskOwner(owner);
     // Navigate to EditTask
     navigate('/EditTask');
-    console.log(`Editing task with ID: ${taskId}`);
   };
 
   const getPriorityColor = (priority) => {
@@ -147,7 +147,7 @@ function TaskTable() {
                 </td>
                 <td className="px-6 py-2 border border-gray-300">{task.active ? 'Active' : 'Inactive'}</td>
                 <td className="px-8 py-2 border border-gray-300">
-                  <button onClick={() => handleEdit(task.id)} className="focus:outline-none">
+                  <button onClick={() => handleEdit(task.id, task.owner.username)} className="focus:outline-none">
                     <FaEdit className="cursor-pointer hover:text-blue-500" />
                   </button>
                 </td>   

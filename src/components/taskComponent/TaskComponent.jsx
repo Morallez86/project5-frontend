@@ -4,7 +4,7 @@ import { taskStore } from "../../stores/TaskStore";
 import { useNavigate } from 'react-router-dom';
 
 function TaskComponent({ id, title, priority, owner }) {
-  const updateTaskData = taskStore((state) => state.updateTaskData); // Use updateTaskData function
+  const { updateTaskId, updateTaskOwner } = taskStore(); // Use both update functions
   const navigate = useNavigate(); // Get the navigate function
 
   let bgColor;
@@ -26,7 +26,8 @@ function TaskComponent({ id, title, priority, owner }) {
   // Function to handle task click
   const handleClick = () => {
     // Store the task ID and owner using Zustand
-    updateTaskData(id, owner);
+    updateTaskId(id);
+    updateTaskOwner(owner);
     // Navigate to the EditTask component
     navigate('/EditTask'); // Replace '/editTask' with the actual path to the EditTask component
   };

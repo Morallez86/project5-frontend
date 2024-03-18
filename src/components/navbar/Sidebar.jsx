@@ -56,7 +56,7 @@ const Sidebar = ({ toggleSidebar, isSidebarVisible }) => {
           </button>
         </li>
         )}
-        {(role === "po" || role === "sm") && (
+        {(role === "po") && (
         <li className='p-2 text-center'>
           <button className="focus:outline-none" onClick={() => handleNavigation('/ManagingCategories')}>
             Categories
