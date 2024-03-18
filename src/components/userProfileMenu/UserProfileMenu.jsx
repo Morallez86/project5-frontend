@@ -3,11 +3,13 @@ import { BiUser } from 'react-icons/bi';
 import { useNavigate } from "react-router-dom";
 import { userStore } from "../../stores/UserStore";
 import { ProfileStore } from "../../stores/ProfileStore";
+import { taskStore } from '../../stores/TaskStore';
 
 const UserProfileMenu = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [photoURL, setPhotoURL] = useState('');
   const clearUserId = ProfileStore((state) => state.clearUserId);
+  const clearTaskId = taskStore((state) => state.clearTaskId);
   const navigate = useNavigate();
   const { token, clearUserData } = userStore.getState();
   const menuRef = useRef();
@@ -62,9 +64,11 @@ const UserProfileMenu = () => {
       if (response.ok) {
         // Logout successful
         // You may want to clear user information from your state/store here
-        clearUserData();
-        setIsOpen(false);
         navigate('/', { replace: true });
+        setIsOpen(false);
+        clearUserData();
+        clearTaskId();
+        clearUserId();
       } else {
         // Logout failed
         console.error('Logout failed');

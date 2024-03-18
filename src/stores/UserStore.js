@@ -15,7 +15,7 @@ export const userStore = create(
             clearUserData: () => set({ username: "", token: "", role: "" }), // Clear user data
         }),
     {
-        name: "mystore", // The name to use for the persisted data
+        name: "userStore", // The name to use for the persisted data
         storage: createJSONStorage(() => sessionStorage),
     }
     )

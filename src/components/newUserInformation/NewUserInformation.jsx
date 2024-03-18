@@ -137,6 +137,7 @@ const NewUserInformation = () => {
                 name="role"
                 onChange={handleChange}
                 >
+                <option value="">Select Job</option>
                 <option className="text-black" value="dev">Developer</option>
                 <option className="text-black" value="sm">Scrum Master</option>
                 <option className="text-black" value="po">Product Owner</option>
