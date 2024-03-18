@@ -9,7 +9,7 @@ const UserProfileMenu = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [photoURL, setPhotoURL] = useState('');
   const clearUserId = ProfileStore((state) => state.clearUserId);
-  const clearTaskId = taskStore((state) => state.clearTaskId);
+  const clearTaskData = taskStore((state) => state.clearTaskData);
   const navigate = useNavigate();
   const { token, clearUserData } = userStore.getState();
   const menuRef = useRef();
@@ -67,7 +67,7 @@ const UserProfileMenu = () => {
         navigate('/', { replace: true });
         setIsOpen(false);
         clearUserData();
-        clearTaskId();
+        clearTaskData();
         clearUserId();
       } else {
         // Logout failed

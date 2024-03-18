@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { userStore } from "../../stores/UserStore";
 import { FaEdit } from "react-icons/fa";
 import { useNavigate } from 'react-router-dom';
@@ -6,33 +6,33 @@ import { MdPriorityHigh } from "react-icons/md";
 import { taskStore } from "../../stores/TaskStore";
 
 function TaskTable() {
-  const [users, setUsers] = useState([]);
+  const [tasks, setTasks] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
   const token = userStore((state) => state.token);
   const { updateTaskId, updateTaskOwner } = taskStore(); 
   const navigate = useNavigate(); // Get the navigate function
 
-  useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        const response = await fetch('http://localhost:8080/demo-1.0-SNAPSHOT/rest/task/allManagingTasks', {
-          headers: {
-            'token': token
-          }
-        });
-        if (!response.ok) {
-          throw new Error('Failed to fetch users');
+  const fetchTasks = useCallback(async () => {
+    try {
+      const response = await fetch('http://localhost:8080/demo-1.0-SNAPSHOT/rest/task/allManagingTasks', {
+        headers: {
+          'token': token
         }
-        const data = await response.json();
-        console.log(data);
-        setUsers(data);
-      } catch (error) {
-        console.error('Error fetching users:', error);
+      });
+      if (!response.ok) {
+        throw new Error('Failed to fetch tasks');
       }
-    };
-
-    fetchUsers();
+      const data = await response.json();
+      console.log(data);
+      setTasks(data);
+    } catch (error) {
+      console.error('Error fetching tasks:', error);
+    }
   }, [token]);
+
+  useEffect(() => {
+    fetchTasks();
+  }, [fetchTasks, token]);
 
   const handleEdit = (id, owner) => {
     // Set the task ID in the task storage
@@ -83,20 +83,64 @@ function TaskTable() {
 
   const handleSelectAll = () => {
     setSelectAll(!selectAll);
-    const updatedUsers = users.map(user => {
-      return { ...user, selected: !selectAll };
+    const updatedTasks = tasks.map(task => {
+      return { ...task, selected: !selectAll };
     });
-    setUsers(updatedUsers);
+    setTasks(updatedTasks);
   };
 
   const handleCheckboxChange = (taskId) => {
-    const updatedUsers = users.map(user => {
-      if (user.id === taskId) {
-        return { ...user, selected: !user.selected };
+    const updatedTasks = tasks.map(task => {
+      if (task.id === taskId) {
+        return { ...task, selected: !task.selected };
       }
-      return user;
+      return task;
     });
-    setUsers(updatedUsers);
+    setTasks(updatedTasks);
+  };
+
+  const handleSetInactive = async () => {
+    const selectedTaskIds = tasks.filter(task => task.selected).map(task => task.id);
+    console.log(selectedTaskIds);
+    try {
+      const response = await fetch('http://localhost:8080/demo-1.0-SNAPSHOT/rest/task/deactivate', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'token': token
+        },
+        body: JSON.stringify(selectedTaskIds)
+      });
+      if (!response.ok) {
+        throw new Error('Failed to set tasks inactive');
+      }
+      // Refresh the task list after setting tasks inactive
+      fetchTasks();
+    } catch (error) {
+      console.error('Error setting tasks inactive:', error);
+    }
+  };
+
+  const handleSetActive = async () => {
+    const selectedTaskIds = tasks.filter(task => task.selected).map(task => task.id);
+    console.log(selectedTaskIds);
+    try {
+      const response = await fetch('http://localhost:8080/demo-1.0-SNAPSHOT/rest/task/activate', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'token': token
+        },
+        body: JSON.stringify(selectedTaskIds)
+      });
+      if (!response.ok) {
+        throw new Error('Failed to set tasks active');
+      }
+      // Refresh the task list after setting tasks active
+      fetchTasks();
+    } catch (error) {
+      console.error('Error setting tasks active:', error);
+    }
   };
 
   return (
@@ -118,7 +162,7 @@ function TaskTable() {
             </tr>
           </thead>
           <tbody>
-            {users.map(task => (
+            {tasks.map(task => (
               <tr key={task.id} className='text-center'>
                 <td className="px-6 py-2 border border-gray-300">
                   <input type="checkbox" checked={task.selected} onChange={() => handleCheckboxChange(task.id)} />
@@ -156,7 +200,10 @@ function TaskTable() {
           </tbody>
         </table>
         <div className="flex mt-4 justify-between">
-          <button type="button" id="Inactivate" className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 mr-2">
+          <button type="button" onClick={handleSetActive} className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 mr-2">
+            Set Active
+          </button>
+          <button type="button" onClick={handleSetInactive} className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 mr-2">
             Set Inactive
           </button>
           <button type="button" id="DeleteTask" className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600">

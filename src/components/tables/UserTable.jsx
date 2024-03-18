@@ -6,6 +6,7 @@ import { useNavigate } from 'react-router-dom';
 
 function UserTable() {
   const [users, setUsers] = useState([]);
+  const [selectAll, setSelectAll] = useState(false);
   const token = userStore((state) => state.token);
   const updateUserId = ProfileStore((state) => state.updateUserId);
   const navigate = useNavigate(); // Get the navigate function
@@ -38,6 +39,24 @@ function UserTable() {
     console.log(`Editing user with ID: ${userId}`);
   };
 
+  const handleSelectAll = () => {
+    setSelectAll(!selectAll);
+    const updatedUsers = users.map(user => {
+      return { ...user, selected: !selectAll };
+    });
+    setUsers(updatedUsers);
+  };
+
+  const handleCheckboxChange = (taskId) => {
+    const updatedUsers = users.map(user => {
+      if (user.id === taskId) {
+        return { ...user, selected: !user.selected };
+      }
+      return user;
+    });
+    setUsers(updatedUsers);
+  };
+
   return (
     <div className="bg-cyan-900/60 border border-cyan-950 rounded-md p-14 backdrop-filter backdrop-blur-sm bg-opacity-30 text-center">
       <div className="justify-center items-center">
@@ -45,7 +64,9 @@ function UserTable() {
         <table className="w-full mt-4 border-collapse border border-gray-300">
           <thead>
             <tr>
-              <th className="px-6 py-2 border border-gray-300"></th>
+              <th className="px-6 py-2 border border-gray-300">
+                <input type="checkbox" checked={selectAll} onChange={handleSelectAll} />
+              </th>
               <th className="px-6 py-2 border border-gray-300">Email</th>
               <th className="px-6 py-2 border border-gray-300">Username</th>
               <th className="px-6 py-2 border border-gray-300">First Name</th>
@@ -58,7 +79,7 @@ function UserTable() {
             {users.map(user => (
               <tr key={user.id} className='text-center'>
                 <td className="px-6 py-2 border border-gray-300">
-                  <input type="checkbox" />
+                  <input type="checkbox" checked={user.selected} onChange={() => handleCheckboxChange(user.id)} />
                 </td>
                 <td className="px-6 py-2 border border-gray-300">{user.email}</td>
                 <td className="px-6 py-2 border border-gray-300">{user.username}</td>
@@ -75,9 +96,6 @@ function UserTable() {
           </tbody>
         </table>
         <div className="flex mt-4 justify-between">
-          <button type="button" id="ResetChecks" className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 mr-2">
-            Uncheck
-          </button>
           <button type="button" id="Inactivate" className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 mr-2">
             Set Inactive
           </button>
