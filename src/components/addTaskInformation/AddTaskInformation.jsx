@@ -159,13 +159,17 @@ function AddTaskInformation() {
                                 <button type="submit" className="w-full mb-4 text-[18px] mt-6 rounded-full bg-green-500 text-white hover:bg-green-700 py-2 transition-colors duration-300">
                                     Save
                                 </button>
-                                <button className="w-full mb-4 text-[18px] mt-6 rounded-full bg-gray-500 text-white hover:bg-gray-700 py-2 transition-colors duration-300">
-                                    Cancel
-                                </button>
+                                
                             </div>
                         </div>
                     </div>
                 </form>
+                <button 
+                type="button" 
+                className="w-full mb-4 text-[18px] mt-6 rounded-full bg-gray-500 text-white hover:bg-gray-700 py-2 transition-colors duration-300"
+                onClick={() => navigate('/Home')}
+                >Cancel
+                </button>
             </div>
         </div>
     </div>

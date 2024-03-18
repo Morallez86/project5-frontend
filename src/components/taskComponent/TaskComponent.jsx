@@ -3,8 +3,8 @@ import { MdPriorityHigh } from "react-icons/md";
 import { taskStore } from "../../stores/TaskStore";
 import { useNavigate } from 'react-router-dom';
 
-function TaskComponent({ id, title, priority }) {
-  const updateTaskId = taskStore((state) => state.updateTaskId);
+function TaskComponent({ id, title, priority, owner }) {
+  const updateTaskData = taskStore((state) => state.updateTaskData); // Use updateTaskData function
   const navigate = useNavigate(); // Get the navigate function
 
   let bgColor;
@@ -25,8 +25,8 @@ function TaskComponent({ id, title, priority }) {
 
   // Function to handle task click
   const handleClick = () => {
-    // Store the task ID using Zustand
-    updateTaskId(id);
+    // Store the task ID and owner using Zustand
+    updateTaskData(id, owner);
     // Navigate to the EditTask component
     navigate('/EditTask'); // Replace '/editTask' with the actual path to the EditTask component
   };

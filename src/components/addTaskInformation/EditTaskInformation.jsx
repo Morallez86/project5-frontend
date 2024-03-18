@@ -6,7 +6,10 @@ import { useNavigate } from 'react-router-dom';
 function EditTaskInformation() {
     const [categories, setCategories] = useState([]); // State variable to store categories
     const token = userStore((state) => state.token);
+    const username2 = userStore((state) => state.username);
     const taskId = taskStore((state) => state.taskId);
+    const taskOwner = taskStore((state) => state.taskOwner);
+    const role = userStore((state) => state.role);
     const navigate = useNavigate();
     const [formData, setFormData] = useState({
         title: "",
@@ -86,8 +89,8 @@ function EditTaskInformation() {
 
     const handleChange = (event) => {
     setFormData({
-      ...formData,
-      [event.target.name]: event.target.value
+        ...formData,
+        [event.target.name]: event.target.value
     });
     };
 
@@ -179,19 +182,27 @@ function EditTaskInformation() {
                         </div>
                         <div>
                             <div>
+                                {(role === "po" || role === "sm" || (role === "dev" && username2 === taskOwner)) && (
                                 <button type="submit" className="w-full mb-4 text-[18px] mt-6 rounded-full bg-green-500 text-white hover:bg-green-700 py-2 transition-colors duration-300">
                                     Save
                                 </button>
-                                <button className="w-full mb-4 text-[18px] mt-6 rounded-full bg-gray-500 text-white hover:bg-gray-700 py-2 transition-colors duration-300">
-                                    Cancel
-                                </button>
+                                )}
                             </div>
-                            <button className="w-full mb-4 text-[18px] mt-6 rounded-full bg-red-500 text-white hover:bg-red-700 py-2 transition-colors duration-300">
-                                Delete
-                            </button>
+                            
                         </div>
                     </div>
                 </form>
+                <button 
+                type="button" 
+                className="w-full mb-4 text-[18px] mt-6 rounded-full bg-gray-500 text-white hover:bg-gray-700 py-2 transition-colors duration-300"
+                onClick={() => navigate('/Home')}
+                >Cancel
+                </button>
+                {role === "po" && (
+                <button className="w-full mb-4 text-[18px] mt-6 rounded-full bg-red-500 text-white hover:bg-red-700 py-2 transition-colors duration-300">
+                Delete
+                </button>
+                )}
             </div>
         </div>
     </div>
