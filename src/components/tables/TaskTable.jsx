@@ -13,6 +13,7 @@ function TaskTable() {
   const navigate = useNavigate();
   const [category, setCategory] = useState("");
   const [owner, setOwner] = useState("");
+  const userRole = userStore((state) => state.role)
 
   const fetchTasks = useCallback(async () => {
     try {
@@ -161,6 +162,24 @@ function TaskTable() {
     }
 };
 
+  const handleInactiveSearch = async () => {
+    try {
+      const response = await fetch('http://localhost:8080/demo-1.0-SNAPSHOT/rest/task/inactive', {
+        headers: {
+          'token': token
+        }
+      });
+      if (!response.ok) {
+        throw new Error('Failed to fetch inactive tasks');
+      }
+      const data = await response.json();
+      console.log(data);
+      setTasks(data);
+    } catch (error) {
+      console.error('Error fetching inactive tasks:', error);
+    }
+  };
+
   const handleSetActive = async () => {
     const selectedTaskIds = tasks.filter(task => task.selected).map(task => task.id);
     console.log(selectedTaskIds);
@@ -192,6 +211,8 @@ function TaskTable() {
             <button onClick={handleCategorySearch} className="px-4 py-1 bg-blue-500 text-white rounded hover:bg-blue-600">Search</button>
             <input type="text" placeholder="Owner" value={owner} onChange={(e) => setOwner(e.target.value)} className="mr-2 px-2 py-1 border border-gray-300 text-black" />
             <button onClick={handleOwnerSearch} className="px-4 py-1 bg-blue-500 text-white rounded hover:bg-blue-600">Search</button>
+            <button onClick={handleInactiveSearch} className="px-4 py-1 bg-blue-500 text-white rounded hover:bg-blue-600">Inactive Tasks</button>
+            <button onClick={fetchTasks} className="px-4 py-1 bg-blue-500 text-white rounded hover:bg-blue-600">Reset</button>
         </div>
         <table className="w-full mt-4 border-collapse border border-gray-300">
           <thead>
@@ -252,9 +273,11 @@ function TaskTable() {
           <button type="button" onClick={handleSetInactive} className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 mr-2">
             Set Inactive
           </button>
-          <button type="button" id="DeleteTask" className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600">
-            Delete
-          </button>
+          {userRole === "po" && (
+            <button type="button" id="DeleteTask" className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600">
+              Delete
+            </button>
+          )}
         </div>
       </div>
     </div>
