@@ -19,6 +19,7 @@ function Home() {
 
     useEffect(() => {
         const fetchTasks = async () => {
+            if (token !== "") {
             try {
                 const response = await fetch("http://localhost:8080/demo-1.0-SNAPSHOT/rest/task/all", {
                     method: "GET",
@@ -36,6 +37,7 @@ function Home() {
             } catch (error) {
                 console.error('Error fetching tasks:', error);
             }
+        }
         };
 
         fetchTasks();

@@ -15,7 +15,8 @@ const UserProfileMenu = () => {
   const menuRef = useRef();
 
   useEffect(() => {
-    const fetchPhoto = async () => {
+  const fetchPhoto = async () => {
+    if (token !== "" && userStore.getState().username !== "") {
       try {
         // Make a request to your getPhoto endpoint with the user's token and username
         const response = await fetch('http://localhost:8080/demo-1.0-SNAPSHOT/rest/user/getPhoto', {
@@ -38,11 +39,14 @@ const UserProfileMenu = () => {
       } catch (error) {
         console.error('Error during fetching photo URL:', error);
       }
-    };
+    }
+  };
 
-    // Fetch photo URL when the component mounts
-    fetchPhoto();
-  }, [token]);
+  // Fetch photo URL when the component mounts
+  fetchPhoto();
+}, [token]);
+
+
 
   const handleProfileClick = () => {
     clearUserId();
@@ -64,11 +68,12 @@ const UserProfileMenu = () => {
       if (response.ok) {
         // Logout successful
         // You may want to clear user information from your state/store here
-        navigate('/', { replace: true });
-        setIsOpen(false);
         clearUserData();
         clearTaskData();
         clearUserId();
+        navigate('/', { replace: true });
+        setIsOpen(false);
+        
       } else {
         // Logout failed
         console.error('Logout failed');
