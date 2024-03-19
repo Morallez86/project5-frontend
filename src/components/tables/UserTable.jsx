@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { userStore } from "../../stores/UserStore";
 import { FaEdit } from "react-icons/fa";
 import { ProfileStore } from "../../stores/ProfileStore";
@@ -11,27 +11,27 @@ function UserTable() {
   const updateUserId = ProfileStore((state) => state.updateUserId);
   const navigate = useNavigate(); // Get the navigate function
 
-  useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        const response = await fetch('http://localhost:8080/demo-1.0-SNAPSHOT/rest/user/all', {
-          headers: {
-            'token': token
-          }
-        });
-        if (!response.ok) {
-          throw new Error('Failed to fetch users');
+  const fetchUsers = useCallback (async () => {
+    try {
+      const response = await fetch('http://localhost:8080/demo-1.0-SNAPSHOT/rest/user/all', {
+        headers: {
+          'token': token
         }
-        const data = await response.json();
-        console.log(data);
-        setUsers(data);
-      } catch (error) {
-        console.error('Error fetching users:', error);
+      });
+      if (!response.ok) {
+        throw new Error('Failed to fetch users');
       }
-    };
-
-    fetchUsers();
+      const data = await response.json();
+      console.log(data);
+      setUsers(data);
+    } catch (error) {
+      console.error('Error fetching users:', error);
+    }
   }, [token]);
+
+  useEffect(() => {
+    fetchUsers();
+  }, [token, fetchUsers]);
 
   const handleEdit = (userId) => {
     updateUserId(userId);
@@ -47,9 +47,51 @@ function UserTable() {
     setUsers(updatedUsers);
   };
 
-  const handleCheckboxChange = (taskId) => {
+  const handleSetInactive = async () => {
+    const selectedUserIds = users.filter(user => user.selected).map(user => user.id);
+    console.log(selectedUserIds);
+    try {
+      const response = await fetch('http://localhost:8080/demo-1.0-SNAPSHOT/rest/user/updateInactive', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'token': token
+        },
+        body: JSON.stringify(selectedUserIds)
+      });
+      if (!response.ok) {
+        throw new Error('Failed to set users inactive');
+      }
+      fetchUsers();
+    } catch (error) {
+      console.error('Error setting users inactive:', error);
+    }
+  };
+
+  const handleSetActive = async () => {
+    const selectedUserIds = users.filter(user => user.selected).map(user => user.id);
+    console.log(selectedUserIds);
+    try {
+      const response = await fetch('http://localhost:8080/demo-1.0-SNAPSHOT/rest/user/updateActive', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'token': token
+        },
+        body: JSON.stringify(selectedUserIds)
+      });
+      if (!response.ok) {
+        throw new Error('Failed to set users active');
+      }
+      fetchUsers();
+    } catch (error) {
+      console.error('Error setting users active:', error);
+    }
+  };
+
+  const handleCheckboxChange = (userId) => {
     const updatedUsers = users.map(user => {
-      if (user.id === taskId) {
+      if (user.id === userId) {
         return { ...user, selected: !user.selected };
       }
       return user;
@@ -65,7 +107,7 @@ function UserTable() {
           <thead>
             <tr>
               <th className="px-6 py-2 border border-gray-300">
-                <input type="checkbox" checked={selectAll} onChange={handleSelectAll} />
+                <input type="checkbox" checked={selectAll || false} onChange={handleSelectAll} />
               </th>
               <th className="px-6 py-2 border border-gray-300">Email</th>
               <th className="px-6 py-2 border border-gray-300">Username</th>
@@ -79,7 +121,7 @@ function UserTable() {
             {users.map(user => (
               <tr key={user.id} className='text-center'>
                 <td className="px-6 py-2 border border-gray-300">
-                  <input type="checkbox" checked={user.selected} onChange={() => handleCheckboxChange(user.id)} />
+                  <input type="checkbox" checked={user.selected || false} onChange={() => handleCheckboxChange(user.id)} />
                 </td>
                 <td className="px-6 py-2 border border-gray-300">{user.email}</td>
                 <td className="px-6 py-2 border border-gray-300">{user.username}</td>
@@ -96,8 +138,11 @@ function UserTable() {
           </tbody>
         </table>
         <div className="flex mt-4 justify-between">
-          <button type="button" id="Inactivate" className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 mr-2">
-            Set Inactive
+          <button type="button" onClick={handleSetInactive} className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 mr-2"
+            > Set Inactive
+          </button>
+          <button type="button" onClick={handleSetActive} className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 mr-2">
+            Set Active
           </button>
           <button type="button" id="DeleteTask" className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600">
             Delete

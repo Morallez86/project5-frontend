@@ -102,6 +102,7 @@ function TaskTable() {
     setTasks(updatedTasks);
   };
 
+
   const handleSetInactive = async () => {
     const selectedTaskIds = tasks.filter(task => task.selected).map(task => task.id);
     console.log(selectedTaskIds);
@@ -218,7 +219,7 @@ function TaskTable() {
           <thead>
             <tr>
               <th className="px-6 py-2 border border-gray-300">
-                <input type="checkbox" checked={selectAll} onChange={handleSelectAll} />
+                <input type="checkbox" checked={selectAll || false} onChange={handleSelectAll} />
               </th>
               <th className="px-6 py-2 border border-gray-300">Title</th>
               <th className="px-6 py-2 border border-gray-300">Owner</th>
@@ -232,7 +233,7 @@ function TaskTable() {
             {tasks.map(task => (
               <tr key={task.id} className='text-center'>
                 <td className="px-6 py-2 border border-gray-300">
-                  <input type="checkbox" checked={task.selected} onChange={() => handleCheckboxChange(task.id)} />
+                  <input type="checkbox" checked={task.selected || false} onChange={() => handleCheckboxChange(task.id)} />
                 </td>
                 <td className="px-6 py-2 border border-gray-300">
                   <div className="grid grid-cols-2 items-center">
