@@ -203,6 +203,28 @@ function TaskTable() {
     }
   };
 
+  const handleDelete = async () => {
+    const selectedTaskIds = tasks.filter(task => task.selected).map(task => task.id);
+    console.log(selectedTaskIds);
+    try {
+      const response = await fetch('http://localhost:8080/demo-1.0-SNAPSHOT/rest/task/deleteTasks', {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          'token': token
+        },
+        body: JSON.stringify(selectedTaskIds)
+      });
+      if (!response.ok) {
+        throw new Error('Failed delete tasks');
+      }
+      // Refresh the task list after setting tasks active
+      fetchTasks();
+    } catch (error) {
+      console.error('Error deleting tasks:', error);
+    }
+  };
+
   return (
     <div className="bg-cyan-900/60 border border-cyan-950 rounded-md p-14 backdrop-filter backdrop-blur-sm bg-opacity-30 text-center">
       <div className="justify-center items-center">
@@ -275,7 +297,7 @@ function TaskTable() {
             Set Inactive
           </button>
           {userRole === "po" && (
-            <button type="button" id="DeleteTask" className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600">
+            <button type="button" onClick={handleDelete} className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600">
               Delete
             </button>
           )}
