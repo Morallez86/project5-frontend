@@ -89,6 +89,27 @@ function UserTable() {
     }
   };
 
+  const handleDeleteUsers = async () => {
+    const selectedUserIds = users.filter(user => user.selected).map(user => user.id);
+    console.log(selectedUserIds);
+    try {
+      const response = await fetch('http://localhost:8080/demo-1.0-SNAPSHOT/rest/user/deleteUsers', {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          'token': token
+        },
+        body: JSON.stringify(selectedUserIds)
+      });
+      if (!response.ok) {
+        throw new Error('Failed to delete users');
+      }
+      fetchUsers();
+    } catch (error) {
+      console.error('Error deleting users:', error);
+    }
+  };
+
   const handleCheckboxChange = (userId) => {
     const updatedUsers = users.map(user => {
       if (user.id === userId) {
@@ -144,7 +165,7 @@ function UserTable() {
           <button type="button" onClick={handleSetActive} className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 mr-2">
             Set Active
           </button>
-          <button type="button" id="DeleteTask" className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600">
+          <button type="button" onClick={handleDeleteUsers} className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600">
             Delete
           </button>
         </div>
