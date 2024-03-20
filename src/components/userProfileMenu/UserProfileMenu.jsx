@@ -19,7 +19,7 @@ const UserProfileMenu = () => {
     if (token !== null && userStore.getState().username !== null) {
       try {
         // Make a request to your getPhoto endpoint with the user's token and username
-        const response = await fetch('http://localhost:8080/demo-1.0-SNAPSHOT/rest/user/getPhoto', {
+        const response = await fetch('http://localhost:8080/demo-1.0-SNAPSHOT/rest/users/getPhoto', {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -57,7 +57,7 @@ const UserProfileMenu = () => {
   const handleLogoutClick = async () => {
     try {
       // Make a request to your logout endpoint with the user's token
-      const response = await fetch('http://localhost:8080/demo-1.0-SNAPSHOT/rest/user/logout', {
+      const response = await fetch('http://localhost:8080/demo-1.0-SNAPSHOT/rest/users/logout', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -25,7 +25,7 @@ const EditUserInformation = () => {
   useEffect(() => {
     const fetchUserDetails = async () => {
       try {
-        const response = await fetch('http://localhost:8080/demo-1.0-SNAPSHOT/rest/user/getDetails', {
+        const response = await fetch('http://localhost:8080/demo-1.0-SNAPSHOT/rest/users/getDetails', {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -49,7 +49,7 @@ const EditUserInformation = () => {
   
     try {
         // Make a POST request to your endpoint
-        const response = await fetch('http://localhost:8080/demo-1.0-SNAPSHOT/rest/user/update', {
+        const response = await fetch('http://localhost:8080/demo-1.0-SNAPSHOT/rest/users/update', {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
@@ -76,7 +76,7 @@ const EditUserInformation = () => {
 
     // Send a request to change the password
     try {
-      const response = await fetch('http://localhost:8080/demo-1.0-SNAPSHOT/rest/user/updatePassword', {
+      const response = await fetch('http://localhost:8080/demo-1.0-SNAPSHOT/rest/users/updatePassword', {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',

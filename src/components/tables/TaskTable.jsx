@@ -20,7 +20,7 @@ function TaskTable() {
 
   const fetchTasks = useCallback(async () => {
     try {
-      const response = await fetch('http://localhost:8080/demo-1.0-SNAPSHOT/rest/task/allManagingTasks', {
+      const response = await fetch('http://localhost:8080/demo-1.0-SNAPSHOT/rest/tasks/allManagingTasks', {
         headers: {
           'token': token
         }
@@ -110,7 +110,7 @@ function TaskTable() {
     const selectedTaskIds = tasks.filter(task => task.selected).map(task => task.id);
     console.log(selectedTaskIds);
     try {
-      const response = await fetch('http://localhost:8080/demo-1.0-SNAPSHOT/rest/task/deactivate', {
+      const response = await fetch('http://localhost:8080/demo-1.0-SNAPSHOT/rest/tasks/deactivate', {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -131,7 +131,7 @@ function TaskTable() {
   const handleCategorySearch = async () => {
     // Fetch tasks based on the category input
     try {
-        const response = await fetch(`http://localhost:8080/demo-1.0-SNAPSHOT/rest/task/allManagingTasks?category=${category}`, {
+        const response = await fetch(`http://localhost:8080/demo-1.0-SNAPSHOT/rest/tasks/allManagingTasks?category=${category}`, {
             headers: {
                 'token': token
             }
@@ -150,7 +150,7 @@ function TaskTable() {
   const handleOwnerSearch = async () => {
     // Fetch tasks based on the owner input
     try {
-        const response = await fetch(`http://localhost:8080/demo-1.0-SNAPSHOT/rest/task/allManagingTasks?owner=${owner}`, {
+        const response = await fetch(`http://localhost:8080/demo-1.0-SNAPSHOT/rest/tasks/allManagingTasks?owner=${owner}`, {
             headers: {
                 'token': token
             }
@@ -168,7 +168,7 @@ function TaskTable() {
 
   const handleInactiveSearch = async () => {
     try {
-      const response = await fetch('http://localhost:8080/demo-1.0-SNAPSHOT/rest/task/inactive', {
+      const response = await fetch('http://localhost:8080/demo-1.0-SNAPSHOT/rest/tasks/inactive', {
         headers: {
           'token': token
         }
@@ -188,7 +188,7 @@ function TaskTable() {
     const selectedTaskIds = tasks.filter(task => task.selected).map(task => task.id);
     console.log(selectedTaskIds);
     try {
-      const response = await fetch('http://localhost:8080/demo-1.0-SNAPSHOT/rest/task/activate', {
+      const response = await fetch('http://localhost:8080/demo-1.0-SNAPSHOT/rest/tasks/activate', {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -216,7 +216,7 @@ function TaskTable() {
 
   const handleDeleteConfirmed = async () => {
     try {
-      const response = await fetch('http://localhost:8080/demo-1.0-SNAPSHOT/rest/task/deleteTasks', {
+      const response = await fetch('http://localhost:8080/demo-1.0-SNAPSHOT/rest/tasks/deleteTasks', {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',

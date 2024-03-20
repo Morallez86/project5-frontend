@@ -17,7 +17,7 @@ function CategoryEdition() {
         }
 
         // Make an HTTP request to fetch categories
-        fetch('http://localhost:8080/demo-1.0-SNAPSHOT/rest/category/all', {
+        fetch('http://localhost:8080/demo-1.0-SNAPSHOT/rest/categories/all', {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -62,7 +62,7 @@ function CategoryEdition() {
         };
 
         // Make a POST request to add a new category
-        fetch('http://localhost:8080/demo-1.0-SNAPSHOT/rest/category/add', {
+        fetch('http://localhost:8080/demo-1.0-SNAPSHOT/rest/categories/add', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -99,7 +99,7 @@ function CategoryEdition() {
         }
 
         // Make a DELETE request to delete the category
-        fetch(`http://localhost:8080/demo-1.0-SNAPSHOT/rest/category/delete?title=${selectedCategory}`, {
+        fetch(`http://localhost:8080/demo-1.0-SNAPSHOT/rest/categories/delete?title=${selectedCategory}`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
@@ -141,7 +141,7 @@ function CategoryEdition() {
         };
 
         // Make a DELETE request to delete the category
-        fetch(`http://localhost:8080/demo-1.0-SNAPSHOT/rest/category/update?title=${selectedCategory}`, {
+        fetch(`http://localhost:8080/demo-1.0-SNAPSHOT/rest/categories/update?title=${selectedCategory}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',

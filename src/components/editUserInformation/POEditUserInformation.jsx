@@ -21,7 +21,7 @@ const POEditUserInformation = () => {
   useEffect(() => {
     const fetchUserDetails = async () => {
       try {
-        const response = await fetch('http://localhost:8080/demo-1.0-SNAPSHOT/rest/user/getProfileDetails', {
+        const response = await fetch('http://localhost:8080/demo-1.0-SNAPSHOT/rest/users/getProfileDetails', {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -44,7 +44,7 @@ const POEditUserInformation = () => {
   
     try {
         // Make a POST request to your endpoint
-        const response = await fetch('http://localhost:8080/demo-1.0-SNAPSHOT/rest/user/updateById', {
+        const response = await fetch('http://localhost:8080/demo-1.0-SNAPSHOT/rest/users/updateById', {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',

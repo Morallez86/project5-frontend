@@ -19,7 +19,7 @@ function AddTaskInformation() {
     useEffect(() => {
         const fetchCategories = async () => {
             try {
-                const response = await fetch('http://localhost:8080/demo-1.0-SNAPSHOT/rest/category/all', {
+                const response = await fetch('http://localhost:8080/demo-1.0-SNAPSHOT/rest/categories/all', {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
@@ -42,7 +42,7 @@ function AddTaskInformation() {
     const handleSave = async (e) => {
         e.preventDefault();
         try {
-            const response = await fetch('http://localhost:8080/demo-1.0-SNAPSHOT/rest/task/add', {
+            const response = await fetch('http://localhost:8080/demo-1.0-SNAPSHOT/rest/tasks/add', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

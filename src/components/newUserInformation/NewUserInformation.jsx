@@ -21,7 +21,7 @@ const NewUserInformation = () => {
   event.preventDefault();
   
   try {
-    const response = await fetch('http://localhost:8080/demo-1.0-SNAPSHOT/rest/user/add', {
+    const response = await fetch('http://localhost:8080/demo-1.0-SNAPSHOT/rest/users/add', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',

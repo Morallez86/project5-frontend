@@ -25,7 +25,7 @@ function Login(){
         event.preventDefault();
         try {
             // Make a request to your authentication endpoint with user credentials
-            const response = await fetch('http://localhost:8080/demo-1.0-SNAPSHOT/rest/user/login', {
+            const response = await fetch('http://localhost:8080/demo-1.0-SNAPSHOT/rest/users/login', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',

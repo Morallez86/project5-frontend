@@ -25,7 +25,7 @@ function EditTaskInformation() {
         const fetchCategories = async () => {
             if (token !== null) {
             try {
-                const response = await fetch('http://localhost:8080/demo-1.0-SNAPSHOT/rest/category/all', {
+                const response = await fetch('http://localhost:8080/demo-1.0-SNAPSHOT/rest/categories/all', {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
@@ -47,7 +47,7 @@ function EditTaskInformation() {
 
         const fetchTask = async () => {
             try {
-                const response = await fetch(`http://localhost:8080/demo-1.0-SNAPSHOT/rest/task/get?id=${taskId}`, {
+                const response = await fetch(`http://localhost:8080/demo-1.0-SNAPSHOT/rest/tasks/get?id=${taskId}`, {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',
@@ -71,7 +71,7 @@ function EditTaskInformation() {
     const handleSave = async (e) => {
         e.preventDefault();
         try {
-            const response = await fetch(`http://localhost:8080/demo-1.0-SNAPSHOT/rest/task/update?id=${taskId}`, {
+            const response = await fetch(`http://localhost:8080/demo-1.0-SNAPSHOT/rest/tasks/update?id=${taskId}`, {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json',

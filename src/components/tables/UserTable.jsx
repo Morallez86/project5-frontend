@@ -16,7 +16,7 @@ function UserTable() {
 
   const fetchUsers = useCallback (async () => {
     try {
-      const response = await fetch('http://localhost:8080/demo-1.0-SNAPSHOT/rest/user/all', {
+      const response = await fetch('http://localhost:8080/demo-1.0-SNAPSHOT/rest/users/all', {
         headers: {
           'token': token
         }
@@ -54,7 +54,7 @@ function UserTable() {
     const selectedUserIds = users.filter(user => user.selected).map(user => user.id);
     console.log(selectedUserIds);
     try {
-      const response = await fetch('http://localhost:8080/demo-1.0-SNAPSHOT/rest/user/updateInactive', {
+      const response = await fetch('http://localhost:8080/demo-1.0-SNAPSHOT/rest/users/updateInactive', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -75,7 +75,7 @@ function UserTable() {
     const selectedUserIds = users.filter(user => user.selected).map(user => user.id);
     console.log(selectedUserIds);
     try {
-      const response = await fetch('http://localhost:8080/demo-1.0-SNAPSHOT/rest/user/updateActive', {
+      const response = await fetch('http://localhost:8080/demo-1.0-SNAPSHOT/rest/users/updateActive', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -96,7 +96,7 @@ function UserTable() {
     const selectedUserIds = users.filter(user => user.selected).map(user => user.id);
     console.log(selectedUserIds);
     try {
-      const response = await fetch('http://localhost:8080/demo-1.0-SNAPSHOT/rest/user/deleteUsers', {
+      const response = await fetch('http://localhost:8080/demo-1.0-SNAPSHOT/rest/users/deleteUsers', {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',
