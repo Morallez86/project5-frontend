@@ -33,9 +33,9 @@ function TaskComponent({ id, title, priority, owner }) {
   };
 
   return (
-    <div className="bg-gray-200 rounded-md p-4 mb-4 text-black cursor-pointer" onClick={handleClick}>
+    <div className="bg-slate-300 border border-emerald-900  rounded-md p-4 mb-4 text-black cursor-pointer" onClick={handleClick}>
       <div className="flex items-center">
-        <MdPriorityHigh className={`text-2xl mr-2 rounded-full ${bgColor}`} />
+        <MdPriorityHigh className={`text-2xl mr-2 rounded-full border border-black ${bgColor}`} />
         <p className="text-lg font-bold">{title}</p>
       </div>
     </div>

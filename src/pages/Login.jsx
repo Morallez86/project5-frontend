@@ -11,6 +11,7 @@ import {AiOutlineUnlock} from "react-icons/ai";
 function Login(){
     const updateUserData = userStore((state) => state.updateUserData);
     const [inputs, setInputs] = useState({});
+    const [showWarning, setShowWarning] = useState(false);
     const navigate = useNavigate();
 
     const handleChange = (event) => {
@@ -41,10 +42,11 @@ function Login(){
                     userData.token,
                     userData.role
                 );
+                setShowWarning(false);
                 // Navigate to the home page or another route
                 navigate('/Home', { replace: true });
             } else {
-                // Authentication failed
+                setShowWarning(true);
                 console.error('Authentication failed');
             }
             } catch (error) {
@@ -84,7 +86,15 @@ function Login(){
                     className="absolute text-sm text-white duration-300 transform translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-cyan-900 peer-focus:dark:text-cyan-950 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:translate-y-6">Your Password
                     </label>
                     <AiOutlineUnlock className="absolute top-4 right-4"></AiOutlineUnlock>
+                    
                 </div>
+                {showWarning &&(
+                        <label 
+                        htmlFor="" 
+                        className="text-sm text-red-600 text-center"
+                        >*Failed to login
+                        </label>
+                    )}
                 <button 
                     className="w-full mb-4 text-[18px] mt-6 rounded-full bg-white text-teal-900 hover:bg-teal-950 hover:text-white py-2 transition-colors duration-300" 
                     type="submit"

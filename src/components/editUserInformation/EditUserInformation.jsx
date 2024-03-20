@@ -86,6 +86,7 @@ const EditUserInformation = () => {
       });
       const data = await response.json();
       console.log(data);
+      setShowWarning(false);
       setShowModal(false); // Close the modal after changing the password
     } catch (error) {
       console.error('Error changing password:', error);
@@ -100,7 +101,7 @@ const EditUserInformation = () => {
   };
 
   return (
-    <div className="text-white mt-8 flex justify-center items-center">
+    <div className="text-white p-8 flex justify-center items-center">
     <div className="bg-cyan-900/60	border border-cyan-950 rounded-md p-12 backdrop-filter backdrop-blur-sm bg-opacity-30 relative">
             <div> 
                 <h1 className="text-4xl text-whitefont-bold text-center mb-6">Profile</h1>

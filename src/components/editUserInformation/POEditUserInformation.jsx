@@ -190,6 +190,12 @@ const POEditUserInformation = () => {
                     >Save
                 </button>
                 </form>
+                <button 
+                    className="w-full mb-4 text-[18px] mt-6 rounded-full bg-white text-teal-900 hover:bg-teal-950 hover:text-white py-2 transition-colors duration-300" 
+                    type="button"
+                    onClick={() => navigate('/ManagingUsers')}
+                    >Return
+                </button>
             </div>
         </div>
         </div>

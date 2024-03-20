@@ -23,6 +23,7 @@ function EditTaskInformation() {
 
     useEffect(() => {
         const fetchCategories = async () => {
+            if (token !== null) {
             try {
                 const response = await fetch('http://localhost:8080/demo-1.0-SNAPSHOT/rest/category/all', {
                     method: 'GET',
@@ -39,6 +40,7 @@ function EditTaskInformation() {
             } catch (error) {
                 console.error('Error fetching categories:', error);
             }
+        }
         };
         
         fetchCategories();
@@ -200,11 +202,6 @@ function EditTaskInformation() {
                 onClick={() => navigate('/Home')}
                 >Cancel
                 </button>
-                {role === "po" && (
-                <button className="w-full mb-4 text-[18px] mt-6 rounded-full bg-red-500 text-white hover:bg-red-700 py-2 transition-colors duration-300">
-                Delete
-                </button>
-                )}
             </div>
         </div>
     </div>

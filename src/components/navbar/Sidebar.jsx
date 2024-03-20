@@ -13,8 +13,8 @@ const Sidebar = ({ toggleSidebar, isSidebarVisible }) => {
   };
 
   return (
-    <div className={`flex flex-col h-full bg-teal-950 text-white p-4 ${isSidebarVisible ? '' : 'hidden'}`}>
-      <div className='flex items-center mb-6'>
+    <div className={` flex flex-col h-full bg-teal-950 text-white p-4 ${isSidebarVisible ? '' : 'hidden'}`}>
+      <div className=' flex items-center mb-6'>
         <IoMenu size={40} className='text-3xl mx-auto cursor-pointer' onClick={toggleSidebar} />
       </div>
       <ul>
