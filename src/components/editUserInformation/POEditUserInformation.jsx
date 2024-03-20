@@ -56,7 +56,7 @@ const POEditUserInformation = () => {
     console.log(formData)
     const data = await response.json();
     console.log(data);
-    navigate('/Home')
+    navigate('/Home');
     } catch (error) {
     console.error('Error adding user:', error);
     }

@@ -4,6 +4,7 @@ import { FaEdit } from "react-icons/fa";
 import { useNavigate } from 'react-router-dom';
 import { MdPriorityHigh } from "react-icons/md";
 import { taskStore } from "../../stores/TaskStore";
+import WarningModal from '../modal/WarningModal';
 
 function TaskTable() {
   const [tasks, setTasks] = useState([]);
@@ -13,6 +14,8 @@ function TaskTable() {
   const navigate = useNavigate();
   const [category, setCategory] = useState("");
   const [owner, setOwner] = useState("");
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [selectedTaskIdsForDeletion, setSelectedTaskIdsForDeletion] = useState([]);
   const userRole = userStore((state) => state.role)
 
   const fetchTasks = useCallback(async () => {
@@ -203,9 +206,15 @@ function TaskTable() {
     }
   };
 
-  const handleDelete = async () => {
-    const selectedTaskIds = tasks.filter(task => task.selected).map(task => task.id);
-    console.log(selectedTaskIds);
+  const handleDeleteButtonClick = () => {
+    // Get the IDs of selected tasks for deletion
+    const selectedIds = tasks.filter(task => task.selected).map(task => task.id);
+    setSelectedTaskIdsForDeletion(selectedIds);
+    // Open the delete modal
+    setShowDeleteModal(true);
+  };
+
+  const handleDeleteConfirmed = async () => {
     try {
       const response = await fetch('http://localhost:8080/demo-1.0-SNAPSHOT/rest/task/deleteTasks', {
         method: 'DELETE',
@@ -213,13 +222,15 @@ function TaskTable() {
           'Content-Type': 'application/json',
           'token': token
         },
-        body: JSON.stringify(selectedTaskIds)
+        body: JSON.stringify(selectedTaskIdsForDeletion)
       });
       if (!response.ok) {
         throw new Error('Failed delete tasks');
       }
       // Refresh the task list after setting tasks active
       fetchTasks();
+      // Close the delete modal
+      setShowDeleteModal(false);
     } catch (error) {
       console.error('Error deleting tasks:', error);
     }
@@ -227,6 +238,14 @@ function TaskTable() {
 
   return (
     <div className="bg-cyan-900/60 border border-cyan-950 rounded-md p-14 backdrop-filter backdrop-blur-sm bg-opacity-30 text-center">
+      <WarningModal
+            isOpen={showDeleteModal}
+            onClose={() => setShowDeleteModal(false)}
+            title="Confirm Deletion"
+            message="Are you sure you want to permanently delete this/these tasks? Deleted tasks cannot be recovered."
+            buttonText="Delete"
+            onButtonClick={handleDeleteConfirmed}
+      />
       <div className="justify-center items-center">
         <h1 className="text-2xl font-bold">Managing Tasks</h1>
         <div>
@@ -297,7 +316,7 @@ function TaskTable() {
             Set Inactive
           </button>
           {userRole === "po" && (
-            <button type="button" onClick={handleDelete} className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600">
+            <button type="button" onClick={handleDeleteButtonClick} className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600">
               Delete
             </button>
           )}

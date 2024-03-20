@@ -16,7 +16,7 @@ const UserProfileMenu = () => {
 
   useEffect(() => {
   const fetchPhoto = async () => {
-    if (token !== "" && userStore.getState().username !== "") {
+    if (token !== null && userStore.getState().username !== null) {
       try {
         // Make a request to your getPhoto endpoint with the user's token and username
         const response = await fetch('http://localhost:8080/demo-1.0-SNAPSHOT/rest/user/getPhoto', {

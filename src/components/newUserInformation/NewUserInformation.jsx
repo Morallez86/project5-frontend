@@ -1,10 +1,12 @@
 import React from 'react';
 import { useState } from "react";
 import { userStore } from "../../stores/UserStore";
+import { useNavigate } from "react-router-dom";
 
 const NewUserInformation = () => {
   const token = userStore((state) => state.token);
   const role = userStore((state) => state.role);
+  const navigate = useNavigate();
   const [formData, setFormData] = useState({
     username: '',
     firstname: '',
@@ -28,9 +30,9 @@ const NewUserInformation = () => {
       },
       body: JSON.stringify(formData)
     });
-    console.log(formData)
     const data = await response.json(); 
     console.log(data);
+    navigate('/Home');
   } catch (error) {
     console.error('Error adding user:', error);
   }
@@ -47,7 +49,7 @@ const NewUserInformation = () => {
     <div className="text-white mt-8 flex justify-center items-center">
     <div className="bg-cyan-900/60	border border-cyan-950 rounded-md p-12 backdrop-filter backdrop-blur-sm bg-opacity-30 relative">
             <div> 
-                <h1 className="text-4xl text-whitefont-bold text-center mb-6">Profile</h1>
+                <h1 className="text-4xl text-whitefont-bold text-center mb-6">New User</h1>
                 <form onSubmit={handleSubmit}>
                 <div className="relative my-4">
                     <input 
