@@ -237,15 +237,17 @@ function TaskTable() {
   };
 
   return (
-    <div className="bg-cyan-900/60 border border-cyan-950 rounded-md p-14 backdrop-filter backdrop-blur-sm bg-opacity-30 text-center">
+    <div className="text-white mt-8 flex justify-center items-center">
       <WarningModal
             isOpen={showDeleteModal}
             onClose={() => setShowDeleteModal(false)}
-            title="Confirm Deletion"
-            message="Are you sure you want to permanently delete this/these tasks? Deleted tasks cannot be recovered."
+            title="Are you sure you want to permanently delete this/these tasks?"
+            message="Deleted tasks cannot be recovered."
             buttonText="Delete"
             onButtonClick={handleDeleteConfirmed}
       />
+    <div className="bg-cyan-900/60 border border-cyan-950 rounded-md p-14 backdrop-filter backdrop-blur-sm bg-opacity-30 text-center">
+      
       <div className="justify-center items-center">
         <h1 className="text-2xl font-bold">Managing Tasks</h1>
         <div>
@@ -322,6 +324,7 @@ function TaskTable() {
           )}
         </div>
       </div>
+    </div>
     </div>
   );
 }

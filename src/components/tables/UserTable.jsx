@@ -3,12 +3,15 @@ import { userStore } from "../../stores/UserStore";
 import { FaEdit } from "react-icons/fa";
 import { ProfileStore } from "../../stores/ProfileStore";
 import { useNavigate } from 'react-router-dom';
+import WarningModal from '../modal/WarningModal';
 
 function UserTable() {
   const [users, setUsers] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
   const token = userStore((state) => state.token);
   const updateUserId = ProfileStore((state) => state.updateUserId);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [selectedUserIdsForDeletion, setSelectedUserIdsForDeletion] = useState([]);
   const navigate = useNavigate(); // Get the navigate function
 
   const fetchUsers = useCallback (async () => {
@@ -99,7 +102,7 @@ function UserTable() {
           'Content-Type': 'application/json',
           'token': token
         },
-        body: JSON.stringify(selectedUserIds)
+        body: JSON.stringify(selectedUserIdsForDeletion)
       });
       if (!response.ok) {
         throw new Error('Failed to delete users');
@@ -120,7 +123,24 @@ function UserTable() {
     setUsers(updatedUsers);
   };
 
+  const handleDeleteButtonClick = () => {
+    // Get the IDs of selected tasks for deletion
+    const selectedIds = users.filter(user => user.selected).map(user => user.id);
+    setSelectedUserIdsForDeletion(selectedIds);
+    // Open the delete modal
+    setShowDeleteModal(true);
+  };
+
   return (
+    <div className="text-white p-4 flex justify-center">
+      <WarningModal
+            isOpen={showDeleteModal}
+            onClose={() => setShowDeleteModal(false)}
+            title="Are you sure you want to permanently delete this/these users?"
+            message="Deleted users cannot be recovered."
+            buttonText="Delete"
+            onButtonClick={handleDeleteUsers}
+      />
     <div className="bg-cyan-900/60 border border-cyan-950 rounded-md p-14 backdrop-filter backdrop-blur-sm bg-opacity-30 text-center">
       <div className="justify-center items-center">
         <h1 className="text-2xl font-bold">Managing Users</h1>
@@ -165,11 +185,12 @@ function UserTable() {
           <button type="button" onClick={handleSetActive} className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 mr-2">
             Set Active
           </button>
-          <button type="button" onClick={handleDeleteUsers} className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600">
-            Delete
-          </button>
+            <button type="button" onClick={handleDeleteButtonClick} className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600">
+              Delete
+            </button>
         </div>
       </div>
+    </div>
     </div>
   );
 }

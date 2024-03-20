@@ -5,7 +5,7 @@ import UserTable from "../components/tables/UserTable";
 function ManagingUsers() {
     return (
         <Layout>
-            <div className="text-white p-4 flex justify-center">
+            <div>
                 <UserTable />
             </div>
         </Layout>

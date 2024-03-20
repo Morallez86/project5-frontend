@@ -7,8 +7,7 @@ function App() {
   return (
     <div >
       <div className="text-white h-[100vh] flex justify-center items-center">
-        <Login />
-        
+        <Login />        
       </div>
       <Footer />
     </div>
