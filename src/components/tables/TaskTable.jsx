@@ -248,17 +248,21 @@ function TaskTable() {
       />
     <div className="bg-cyan-900/60 border border-cyan-950 rounded-md p-14 backdrop-filter backdrop-blur-sm bg-opacity-30 text-center">
       
-      <div className="justify-center items-center">
-        <h1 className="text-2xl font-bold">Managing Tasks</h1>
-        <div>
-            <input type="text" placeholder="Category" value={category} onChange={(e) => setCategory(e.target.value)} className="mr-2 px-2 py-1 border border-gray-300 text-black" />
-            <button onClick={handleCategorySearch} className="px-4 py-1 bg-blue-500 text-white rounded hover:bg-blue-600">Search</button>
-            <input type="text" placeholder="Owner" value={owner} onChange={(e) => setOwner(e.target.value)} className="mr-2 px-2 py-1 border border-gray-300 text-black" />
-            <button onClick={handleOwnerSearch} className="px-4 py-1 bg-blue-500 text-white rounded hover:bg-blue-600">Search</button>
-            <button onClick={handleInactiveSearch} className="px-4 py-1 bg-blue-500 text-white rounded hover:bg-blue-600">Inactive Tasks</button>
-            <button onClick={fetchTasks} className="px-4 py-1 bg-blue-500 text-white rounded hover:bg-blue-600">Reset</button>
+      <div>
+        <h1 className="text-2xl font-bold mb-4">Managing Tasks</h1>
+        <div className="flex justify-between">
+          <div className="flex space-x-1 mr-4">
+            <input type="text" placeholder="Category" value={category} onChange={(e) => setCategory(e.target.value)} className="px-2 py-1 border rounded border-gray-300 text-black" />
+            <button onClick={handleCategorySearch} className="px-4 py-1 bg-slate-400 text-white rounded hover:bg-slate-500">Search</button>
+            <input type="text" placeholder="Owner" value={owner} onChange={(e) => setOwner(e.target.value)} className="px-2 py-1 border rounded border-gray-300 text-black" />
+            <button onClick={handleOwnerSearch} className="px-4 py-1 bg-slate-400 text-white rounded hover:bg-slate-500">Search</button>
+          </div>
+          <div className="flex space-x-1">
+            <button onClick={handleInactiveSearch} className="px-4 py-1 bg-cyan-900 text-white rounded hover:bg-cyan-950">Inactive Tasks</button>
+            <button onClick={fetchTasks} className="px-4 py-1 bg-cyan-900 text-white rounded hover:bg-cyan-950">Reset</button>
+          </div>
         </div>
-        <table className="w-full mt-4 border-collapse border border-gray-300">
+        <table className="w-full mt-1 border-collapse border border-gray-300">
           <thead>
             <tr>
               <th className="px-6 py-2 border border-gray-300">
@@ -311,15 +315,17 @@ function TaskTable() {
           </tbody>
         </table>
         <div className="flex mt-4 justify-between">
-          <button type="button" onClick={handleSetActive} className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 mr-2">
-            Set Active
-          </button>
-          <button type="button" onClick={handleSetInactive} className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 mr-2">
-            Set Inactive
-          </button>
+          <div>
+            <button type="button" onClick={handleSetActive} className="px-4 py-2 bg-cyan-900 text-white rounded hover:bg-cyan-950 mr-2">
+              Set Active
+            </button>
+            <button type="button" onClick={handleSetInactive} className="px-4 py-2 bg-cyan-900 text-white rounded hover:bg-cyan-950 mr-2">
+              Set Inactive
+            </button>
+          </div>
           {userRole === "po" && (
-            <button type="button" onClick={handleDeleteButtonClick} className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600">
-              Delete
+            <button type="button" onClick={handleDeleteButtonClick} className="px-4 py-2 bg-red-900 text-white rounded hover:bg-red-950">
+            Delete
             </button>
           )}
         </div>
