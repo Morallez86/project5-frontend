@@ -19,7 +19,7 @@ function AddTaskInformation() {
     useEffect(() => {
         const fetchCategories = async () => {
             try {
-                const response = await fetch('http://localhost:8080/demo-1.0-SNAPSHOT/rest/categories/all', {
+                const response = await fetch('http://localhost:8080/demo-1.0-SNAPSHOT/rest/categories', {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',

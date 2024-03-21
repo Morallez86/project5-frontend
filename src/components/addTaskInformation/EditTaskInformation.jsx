@@ -25,7 +25,7 @@ function EditTaskInformation() {
         const fetchCategories = async () => {
             if (token !== null) {
             try {
-                const response = await fetch('http://localhost:8080/demo-1.0-SNAPSHOT/rest/categories/all', {
+                const response = await fetch('http://localhost:8080/demo-1.0-SNAPSHOT/rest/categories', {
                     method: 'GET',
                     headers: {
                         'Content-Type': 'application/json',

@@ -17,7 +17,7 @@ function CategoryEdition() {
         }
 
         // Make an HTTP request to fetch categories
-        fetch('http://localhost:8080/demo-1.0-SNAPSHOT/rest/categories/all', {
+        fetch('http://localhost:8080/demo-1.0-SNAPSHOT/rest/categories', {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',

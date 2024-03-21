@@ -16,7 +16,7 @@ function UserTable() {
 
   const fetchUsers = useCallback (async () => {
     try {
-      const response = await fetch('http://localhost:8080/demo-1.0-SNAPSHOT/rest/users/all', {
+      const response = await fetch('http://localhost:8080/demo-1.0-SNAPSHOT/rest/users', {
         headers: {
           'token': token
         }
