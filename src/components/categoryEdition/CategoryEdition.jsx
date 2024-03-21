@@ -8,6 +8,7 @@ function CategoryEdition() {
     const [categories, setCategories] = useState([]); // State variable to store categories
     const token = userStore((state) => state.token); // Get token from store
     const username2 = userStore((state) => state.username);
+    const [categoryId, setCategoryId] = useState(""); // State variable to store the category ID
 
     // Function to fetch categories
     const fetchCategories = useCallback(() => {
@@ -99,7 +100,7 @@ function CategoryEdition() {
         }
 
         // Make a DELETE request to delete the category
-        fetch(`http://localhost:8080/demo-1.0-SNAPSHOT/rest/categories/delete?title=${selectedCategory}`, {
+        fetch(`http://localhost:8080/demo-1.0-SNAPSHOT/rest/categories/?title=${selectedCategory}`, {
             method: 'DELETE',
             headers: {
                 'Content-Type': 'application/json',
@@ -124,24 +125,25 @@ function CategoryEdition() {
     const handleRenameCategory = () => {
         // Check if token is available
         if (!token) {
-            console.error("Token is missing. Unable to delete category.");
+            console.error("Token is missing. Unable to rename category.");
             return;
         }
 
-        // Check if category title is provided
-        if (!selectedCategory) {
-            console.error("Category title is missing. Unable to delete category.");
+        // Check if category title and ID are provided
+        if (!selectedCategory || !categoryId) {
+            console.error("Category title or ID is missing. Unable to rename category.");
             return;
         }
 
-        // Create addCategoryBody for the POST request
+        // Create the renameCategoryBody for the PUT request
         const renameCategoryBody = {
+            // Assuming categoryId is the ID of the selected category
+            categoryId: categoryId,
             title: newCategoryTitle,
-            description: "nope",
         };
 
-        // Make a DELETE request to delete the category
-        fetch(`http://localhost:8080/demo-1.0-SNAPSHOT/rest/categories/update?title=${selectedCategory}`, {
+        // Make a PUT request to update the category
+        fetch(`http://localhost:8080/demo-1.0-SNAPSHOT/rest/categories/${categoryId}?title=${selectedCategory}`, {
             method: 'PUT',
             headers: {
                 'Content-Type': 'application/json',
@@ -151,7 +153,7 @@ function CategoryEdition() {
         })
         .then(response => {
             if (!response.ok) {
-                throw new Error('Failed to delete category');
+                throw new Error('Failed to rename category');
             }
             // Reset the new category title input
             setNewCategoryTitle("");
@@ -160,7 +162,7 @@ function CategoryEdition() {
             fetchCategories();
         })
         .catch(error => {
-            console.error('Error deleting category:', error);
+            console.error('Error renaming category:', error);
         });
     };
 
@@ -168,6 +170,14 @@ function CategoryEdition() {
     const handleCategorySelect = (selectedValue) => {
         setIsAddCategorySelected(selectedValue === "");
         setSelectedCategory(selectedValue); // Set the selected category
+
+        // Find the corresponding category ID based on the selected category title
+        const category = categories.find(cat => cat.title === selectedValue);
+        if (category) {
+            setCategoryId(category.id);
+        } else {
+            setCategoryId(""); // Reset the category ID if not found
+        }
     };
 
     useEffect(() => {
@@ -204,27 +214,29 @@ function CategoryEdition() {
                     </div>
                     <div className="flex justify-end space-x-24 mt-20">
                         { isAddCategorySelected && (
-                        <button 
-                            className="w-full mb-4 text-[18px] mt-6 rounded-full bg-green-500 text-white hover:bg-green-700 py-2 transition-colors duration-300" 
-                            onClick={handleAddCategory} // Call the function to add a new category
-                        >
-                            Add Category
-                        </button>
+                            <button 
+                                className="w-full mb-4 text-[18px] mt-6 rounded-full bg-green-500 text-white hover:bg-green-700 py-2 transition-colors duration-300" 
+                                onClick={handleAddCategory} // Call the function to add a new category
+                            >
+                                Add Category
+                            </button>
                         )}
                         { !isAddCategorySelected && (
-                        <>
-                            <button className="w-full mb-4 text-[18px] mt-6 rounded-full bg-gray-500 text-white hover:bg-gray-700 py-2 transition-colors duration-300"
-                            onClick={handleRenameCategory}
-                            >Rename Category
-                            </button>
-                            <button 
-                                className="w-full mb-4 text-[18px] mt-6 rounded-full bg-red-500 text-white hover:bg-red-700 py-2 transition-colors duration-300" 
-                                onClick={handleDeleteCategory} // Call the function to delete a category
-                            >
-                                Delete Category
-                            </button>
-                            
-                        </>
+                            <>
+                                <button 
+                                    className="w-full mb-4 text-[18px] mt-6 rounded-full bg-blue-500 text-white hover:bg-blue-700 py-2 transition-colors duration-300"
+                                    onClick={handleRenameCategory}
+                                >
+                                    Rename Category
+                                </button>
+                                <button 
+                                    className="w-full mb-4 text-[18px] mt-6 rounded-full bg-red-500 text-white hover:bg-red-700 py-2 transition-colors duration-300" 
+                                    onClick={handleDeleteCategory} // Call the function to delete a category
+                                >
+                                    Delete Category
+                                </button>
+                                
+                            </>
                         )}
                     </div>
                 </div>
