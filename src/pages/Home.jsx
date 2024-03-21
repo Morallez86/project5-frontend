@@ -53,7 +53,7 @@ function Home() {
                 <Sidebar toggleSidebar={toggleSidebar} isSidebarVisible={isSidebarVisible} /> {/* Pass isSidebarVisible to Sidebar */}
                 <div className="flex-1">
                     <Header username={username} toggleSidebar={toggleSidebar} isSidebarVisible={isSidebarVisible} /> {/* Pass isSidebarVisible to Header */}
-                    <div className="flex flex-row">
+                    <div className="flex flex-row h-5/6 p-10 mt-5 space-x-10">
                         <TasksListColumn title="To Do">
                             {filterTasksByStatus(100).map(task => (
                                 <TaskComponent key={task.id} id={task.id} title={task.title} priority={task.priority} owner={task.owner} />
