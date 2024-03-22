@@ -237,7 +237,8 @@ function TaskTable() {
   };
 
   return (
-    <div className="text-white mt-8 flex justify-center items-center">
+    <div className='p-8'>
+    <div className="text-white flex justify-center items-center">
       <WarningModal
             isOpen={showDeleteModal}
             onClose={() => setShowDeleteModal(false)}
@@ -262,7 +263,8 @@ function TaskTable() {
             <button onClick={fetchTasks} className="px-4 py-1 bg-cyan-900 text-white rounded hover:bg-cyan-950">Reset</button>
           </div>
         </div>
-        <table className="w-full mt-1 border-collapse border border-gray-300">
+        <div className='overflow-y-auto max-h-96 border-b border-t mt-1'>
+        <table className="w-full border-collapse border border-gray-300">
           <thead>
             <tr>
               <th className="px-6 py-2 border border-gray-300">
@@ -307,13 +309,14 @@ function TaskTable() {
                 <td className="px-6 py-2 border border-gray-300">{task.active ? 'Active' : 'Inactive'}</td>
                 <td className="px-8 py-2 border border-gray-300">
                   <button onClick={() => handleEdit(task.id, task.owner.username)} className="focus:outline-none">
-                    <FaEdit className="cursor-pointer hover:text-blue-500" />
+                    <FaEdit className="cursor-pointer" />
                   </button>
                 </td>   
               </tr>
             ))}
           </tbody>
         </table>
+        </div>
         <div className="flex mt-4 justify-between">
           <div>
             <button type="button" onClick={handleSetActive} className="px-4 py-2 bg-cyan-900 text-white rounded hover:bg-cyan-950 mr-2">
@@ -330,6 +333,7 @@ function TaskTable() {
           )}
         </div>
       </div>
+    </div>
     </div>
     </div>
   );

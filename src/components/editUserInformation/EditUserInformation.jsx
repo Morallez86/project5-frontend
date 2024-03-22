@@ -232,8 +232,8 @@ const EditUserInformation = () => {
       {showModal && (
         <div className="fixed inset-0 z-10 flex items-center justify-center">
           <div className="absolute inset-0 bg-black opacity-75"></div>
-          <div className="bg-white p-6 rounded-lg z-20">
-            <h2 className="text-lg font-bold mb-4 text-black text-center">Change Password</h2>
+          <div className="bg-cyan-900 p-6 rounded-lg z-20 border-2 border-white">
+            <h2 className="text-lg font-bold mb-4 text-white text-center">Change Password</h2>
             <input
               type="password"
               className="block w-full py-2.5 px-4 mb-4 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 text-black"
@@ -264,13 +264,13 @@ const EditUserInformation = () => {
             )}
             <div className="flex justify-end">
               <button
-                className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 mr-2"
+                className="px-4 py-2 bg-cyan-950 w-20 h-10 text-white rounded hover:bg-cyan-950 mr-2"
                 onClick={handlePasswordChange}
               >
                 Save
               </button>
               <button
-                className="px-4 py-2 bg-gray-300 text-gray-800 rounded hover:bg-gray-400"
+                className="px-4 py-2 w-20 h-10 bg-slate-400 text-white rounded hover:bg-slate-500"
                 onClick={() => setShowModal(false)}
               >
                 Cancel

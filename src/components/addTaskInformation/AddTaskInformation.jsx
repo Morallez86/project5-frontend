@@ -62,11 +62,27 @@ function AddTaskInformation() {
     };
 
     const handleChange = (event) => {
+    const { name, value } = event.target;
+
+    // Restrict selection of dates before the current date
+    if (name === 'initialDate' || name === 'finalDate') {
+        // Splits and saves as a variable the first string of the date format
+        const currentDate = new Date().toISOString().split('T')[0];
+        if (value < currentDate) {
+            return; // Do nothing if the selected date is before the current date
+        }
+    }
+
+    // Ensure final date is not before the start date
+    if (name === 'finalDate' && formData.initialDate && value < formData.initialDate) {
+        return; // Do nothing if the final date is before the start date
+    }
+
     setFormData({
-      ...formData,
-      [event.target.name]: event.target.value
+        ...formData,
+        [name]: value
     });
-    };
+};
 
 return (
     <div className="text-white pt-8 flex justify-center items-center">

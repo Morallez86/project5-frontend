@@ -186,14 +186,14 @@ function CategoryEdition() {
     }, [fetchCategories]); // Include fetchCategories in the dependency array
 
     return (
-        <div className="text-white mt-8 flex justify-center items-center">
+        <div className="text-white p-8 flex justify-center items-center">
             <div className="bg-cyan-900/60 border border-cyan-950 rounded-md p-12 backdrop-filter backdrop-blur-sm bg-opacity-30 relative">
                 <div>
                     <h1 className="text-4xl font-bold text-center mb-6">Category Edition:</h1>
-                    <div className="flex justify-between items-center space-x-32 mt-10">
+                    <div className="grid grid-cols-2 gap-10 relative items-center ">
                         <div >
                             <label className="mr-2" htmlFor="taskFilter">Categories:</label>
-                            <select className="bg-cyan-950 pl-1 rounded border border-white" value={selectedCategory} onChange={(e) => handleCategorySelect(e.target.value)}>
+                            <select className="bg-cyan-950 pl-1 max-w-36 rounded border border-white" value={selectedCategory} onChange={(e) => handleCategorySelect(e.target.value)}>
                                 <option value="">Add Category</option>
                                 {categories.map(category => (
                                     <option key={category.id} value={category.title}>{category.title}</option>

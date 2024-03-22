@@ -3,6 +3,7 @@ import React from 'react';
 import { IoMenu } from 'react-icons/io5';
 import { useNavigate } from 'react-router-dom';
 import { userStore } from "../../stores/UserStore";
+import { GrHome } from "react-icons/gr";
 
 const Sidebar = ({ toggleSidebar, isSidebarVisible }) => {
   const navigate = useNavigate();
@@ -19,8 +20,8 @@ const Sidebar = ({ toggleSidebar, isSidebarVisible }) => {
       </div>
       <ul>
         <li className='p-2 text-center'>
-          <button className="focus:outline-none" onClick={() => handleNavigation('/Home')}>
-            Home
+          <button className="focus:outline-none mb-4" onClick={() => handleNavigation('/Home')}>
+            <GrHome className='w-6 h-6'/>
           </button>
         </li>
         <li className='p-2 text-center'>
@@ -37,7 +38,7 @@ const Sidebar = ({ toggleSidebar, isSidebarVisible }) => {
         )}
         {(role === "po" || role === "sm") && (
         <li className='p-2 text-center'>
-          <button className="focus:outline-none cursor-default">
+          <button className="focus:outline-none cursor-default my-4 text-base font-bold">
             Management
           </button>
         </li>

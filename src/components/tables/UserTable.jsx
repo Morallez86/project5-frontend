@@ -132,7 +132,8 @@ function UserTable() {
   };
 
   return (
-    <div className="text-white p-4 flex justify-center">
+
+    <div className="text-white p-8 flex h-full justify-center">
       <WarningModal
             isOpen={showDeleteModal}
             onClose={() => setShowDeleteModal(false)}
@@ -144,6 +145,7 @@ function UserTable() {
     <div className="bg-cyan-900/60 border border-cyan-950 rounded-md p-14 backdrop-filter backdrop-blur-sm bg-opacity-30 text-center">
       <div className="justify-center items-center">
         <h1 className="text-2xl font-bold">Managing Users</h1>
+        <div className='overflow-y-auto h-96 border-b border-t mt-1'>
         <table className="w-full mt-4 border-collapse border border-gray-300">
           <thead>
             <tr>
@@ -178,6 +180,7 @@ function UserTable() {
             ))}
           </tbody>
         </table>
+        </div>
         <div className="flex mt-4 justify-between">
           <div>
           <button type="button" onClick={handleSetInactive} className="px-4 py-2 bg-cyan-900 text-white rounded hover:bg-cyan-950 mr-2"
@@ -194,6 +197,7 @@ function UserTable() {
       </div>
     </div>
     </div>
+
   );
 }
 
