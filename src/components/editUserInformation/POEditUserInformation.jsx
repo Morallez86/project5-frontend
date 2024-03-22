@@ -44,12 +44,11 @@ const POEditUserInformation = () => {
   
     try {
         // Make a POST request to your endpoint
-        const response = await fetch('http://localhost:8080/demo-1.0-SNAPSHOT/rest/users/updateById', {
+        const response = await fetch(`http://localhost:8080/demo-1.0-SNAPSHOT/rest/users/updateProfile/${selectedUserId}`, {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
             'token': token, 
-            'selectedUserId': selectedUserId 
         },
         body: JSON.stringify(formData)
     });

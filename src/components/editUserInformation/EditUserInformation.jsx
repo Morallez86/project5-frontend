@@ -5,7 +5,6 @@ import { useNavigate } from "react-router-dom";
 
 const EditUserInformation = () => {
   const token = userStore((state) => state.token);
-  const username2 = userStore((state) => state.username);
   const navigate = useNavigate();
   const [showModal, setShowModal] = useState(false);
   const [showWarning, setShowWarning] = useState(false);
@@ -49,12 +48,11 @@ const EditUserInformation = () => {
   
     try {
         // Make a POST request to your endpoint
-        const response = await fetch('http://localhost:8080/demo-1.0-SNAPSHOT/rest/users/update', {
+        const response = await fetch('http://localhost:8080/demo-1.0-SNAPSHOT/rest/users/updateProfile/0', {
         method: 'PUT',
         headers: {
             'Content-Type': 'application/json',
             'token': token, 
-            'selectedUser': username2 
         },
         body: JSON.stringify(formData)
     });
