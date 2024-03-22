@@ -159,12 +159,12 @@ return (
                         ></textarea>
                     </div>
                     <div className="flex justify-between space-x-10">
-                        <button type="submit" className="w-full mb-4 text-[18px] mt-6 rounded-full bg-white text-cyan-900 hover:bg-cyan-950 hover:text-white py-2 transition-colors duration-300">
+                        <button type="submit" className="w-full mb-4 text-[18px] mt-6 rounded bg-white text-cyan-900 hover:bg-cyan-950 hover:text-white py-2 transition-colors duration-300">
                         Save
                         </button>
                         <button 
                             type="button" 
-                            className="w-full mb-4 text-[18px] mt-6 rounded-full bg-white text-cyan-900 hover:bg-slate-500 hover:text-white py-2 transition-colors duration-300"
+                            className="w-full mb-4 text-[18px] mt-6 rounded bg-white text-cyan-900 hover:bg-slate-500 hover:text-white py-2 transition-colors duration-300"
                             onClick={() => navigate('/Home')}
                         >
                         Cancel

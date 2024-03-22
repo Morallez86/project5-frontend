@@ -193,7 +193,7 @@ function CategoryEdition() {
                     <div className="flex justify-between items-center space-x-32 mt-10">
                         <div >
                             <label className="mr-2" htmlFor="taskFilter">Categories:</label>
-                            <select className="bg-cyan-950 rounded border border-white" value={selectedCategory} onChange={(e) => handleCategorySelect(e.target.value)}>
+                            <select className="bg-cyan-950 pl-1 rounded border border-white" value={selectedCategory} onChange={(e) => handleCategorySelect(e.target.value)}>
                                 <option value="">Add Category</option>
                                 {categories.map(category => (
                                     <option key={category.id} value={category.title}>{category.title}</option>
@@ -207,30 +207,33 @@ function CategoryEdition() {
                                 id="categoryInput" 
                                 value={newCategoryTitle} 
                                 onChange={(e) => setNewCategoryTitle(e.target.value)} 
-                                className="bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:focus:border-cyan-950 focus:outline-none focus:ring-0 focus:text-white focus:border-cyan-950 py-2.5 text-sm" 
+                                className="bg-transparent border-0 pl-1 border-b-2 border-gray-300 appearance-none dark:focus:border-cyan-950 focus:outline-none focus:ring-0 focus:text-white focus:border-cyan-950 py-2.5 text-sm" 
                                 placeholder="Category title" 
                             />
                         </div>
                     </div>
-                    <div className="flex justify-end space-x-24 mt-20">
+                    <div className="flex justify-end space-x-24 mt-16">
+                        
                         { isAddCategorySelected && (
+                            <div className='w-full flex justify-center'>
                             <button 
-                                className="w-full mb-4 text-[18px] mt-6 rounded-full bg-green-500 text-white hover:bg-green-700 py-2 transition-colors duration-300" 
+                                className="mb-4 w-1/2 text-[18px] mt-6 rounded bg-white text-cyan-900 hover:bg-cyan-950 hover:text-white py-2 transition-colors duration-300" 
                                 onClick={handleAddCategory} // Call the function to add a new category
                             >
                                 Add Category
                             </button>
-                        )}
+                            </div>
+                        )}                       
                         { !isAddCategorySelected && (
                             <>
                                 <button 
-                                    className="w-full mb-4 text-[18px] mt-6 rounded-full bg-blue-500 text-white hover:bg-blue-700 py-2 transition-colors duration-300"
+                                    className="w-full mb-4 text-[18px] mt-6 rounded bg-white text-cyan-900 hover:bg-cyan-950 hover:text-white py-2 transition-colors duration-300"
                                     onClick={handleRenameCategory}
                                 >
                                     Rename Category
                                 </button>
                                 <button 
-                                    className="w-full mb-4 text-[18px] mt-6 rounded-full bg-red-500 text-white hover:bg-red-700 py-2 transition-colors duration-300" 
+                                    className="w-full mb-4 text-[18px] mt-6 bg-red-900 text-white rounded hover:bg-red-950" 
                                     onClick={handleDeleteCategory} // Call the function to delete a category
                                 >
                                     Delete Category

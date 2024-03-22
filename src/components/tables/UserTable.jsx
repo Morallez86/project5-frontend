@@ -179,13 +179,15 @@ function UserTable() {
           </tbody>
         </table>
         <div className="flex mt-4 justify-between">
-          <button type="button" onClick={handleSetInactive} className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 mr-2"
+          <div>
+          <button type="button" onClick={handleSetInactive} className="px-4 py-2 bg-cyan-900 text-white rounded hover:bg-cyan-950 mr-2"
             > Set Inactive
           </button>
-          <button type="button" onClick={handleSetActive} className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 mr-2">
+          <button type="button" onClick={handleSetActive} className="px-4 py-2 bg-cyan-900 text-white rounded hover:bg-cyan-950 mr-2">
             Set Active
           </button>
-            <button type="button" onClick={handleDeleteButtonClick} className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600">
+          </div>
+            <button type="button" onClick={handleDeleteButtonClick} className="px-4 py-2 bg-red-900 text-white rounded hover:bg-red-950">
               Delete
             </button>
         </div>
