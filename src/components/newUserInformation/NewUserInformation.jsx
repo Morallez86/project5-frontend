@@ -2,6 +2,7 @@ import React from 'react';
 import { useState } from "react";
 import { userStore } from "../../stores/UserStore";
 import { useNavigate } from "react-router-dom";
+import { GrDocumentVerified } from 'react-icons/gr';
 
 const NewUserInformation = () => {
   const token = userStore((state) => state.token);
@@ -139,7 +140,7 @@ const NewUserInformation = () => {
                 name="role"
                 onChange={handleChange}
                 >
-                <option value="">Select Job</option>
+                <option className="text-black" value="">Select Job</option>
                 <option className="text-black" value="dev">Developer</option>
                 <option className="text-black" value="sm">Scrum Master</option>
                 <option className="text-black" value="po">Product Owner</option>

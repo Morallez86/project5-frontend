@@ -4,6 +4,7 @@ import { FaEdit } from "react-icons/fa";
 import { ProfileStore } from "../../stores/ProfileStore";
 import { useNavigate } from 'react-router-dom';
 import WarningModal from '../modal/WarningModal';
+import MessageModal from '../modal/MessageModal';
 
 function UserTable() {
   const [users, setUsers] = useState([]);
@@ -12,6 +13,7 @@ function UserTable() {
   const updateUserId = ProfileStore((state) => state.updateUserId);
   const [showDeleteModal, setShowDeleteModal] = useState(false);
   const [selectedUserIdsForDeletion, setSelectedUserIdsForDeletion] = useState([]);
+  const [showMessageModal, setShowMessageModal] = useState(false);
   const navigate = useNavigate(); // Get the navigate function
 
   const fetchUsers = useCallback (async () => {
@@ -127,25 +129,39 @@ function UserTable() {
     // Get the IDs of selected tasks for deletion
     const selectedIds = users.filter(user => user.selected).map(user => user.id);
     setSelectedUserIdsForDeletion(selectedIds);
-    // Open the delete modal
-    setShowDeleteModal(true);
+    // Check if any selected user is active
+    const isActiveUserSelected = users.some(user => user.selected && user.active);
+    if (isActiveUserSelected) {
+      // If active user is selected, show message modal
+      setShowMessageModal(true);
+    } else {
+      // If no active user is selected, show delete modal directly
+      setShowDeleteModal(true);
+    }
   };
 
   return (
 
     <div className="text-white p-8 flex h-full justify-center">
+      {/* Show the MessageModal if showMessageModal is true */}
+      <MessageModal 
+        isOpen={showMessageModal} 
+        onClose={() => setShowMessageModal(false)} 
+        title="Warning"
+        message="Active users cannot be deleted."
+      />
       <WarningModal
-            isOpen={showDeleteModal}
-            onClose={() => setShowDeleteModal(false)}
-            title="Are you sure you want to permanently delete this/these users?"
-            message="Deleted users cannot be recovered."
-            buttonText="Delete"
-            onButtonClick={handleDeleteUsers}
+        isOpen={showDeleteModal}
+        onClose={() => setShowDeleteModal(false)}
+        title="Are you sure you want to permanently delete this/these users?"
+        message="Deleted users cannot be recovered."
+        buttonText="Delete"
+        onButtonClick={handleDeleteUsers}
       />
     <div className="bg-cyan-900/60 border border-cyan-950 rounded-md p-14 backdrop-filter backdrop-blur-sm bg-opacity-30 text-center">
       <div className="justify-center items-center">
         <h1 className="text-2xl font-bold">Managing Users</h1>
-        <div className='overflow-y-auto h-96 border-b border-t mt-1'>
+        <div className='overflow-y-auto h-96 mt-1'>
         <table className="w-full mt-4 border-collapse border border-gray-300">
           <thead>
             <tr>

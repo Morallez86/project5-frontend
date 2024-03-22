@@ -12,6 +12,7 @@ const EditUserInformation = () => {
   const [newPassword, setNewPassword] = useState('');
   const [oldPassword, setOldPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
+  const userRole = userStore((state) => state.role);
   const [formData, setFormData] = useState({
     username: '',
     firstname: '',
@@ -25,12 +26,11 @@ const EditUserInformation = () => {
   useEffect(() => {
     const fetchUserDetails = async () => {
       try {
-        const response = await fetch('http://localhost:8080/demo-1.0-SNAPSHOT/rest/users/getDetails', {
+        const response = await fetch('http://localhost:8080/demo-1.0-SNAPSHOT/rest/users/profileDetails/0', {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
             'token': token,
-            'selectedUser': username2
           }
         });
         const userDetails = await response.json();
@@ -42,7 +42,7 @@ const EditUserInformation = () => {
     };
 
     fetchUserDetails();
-  }, [token, username2]);
+  }, [token]);
 
   const handleSubmit = async (event) => {
   event.preventDefault();
@@ -180,6 +180,7 @@ const EditUserInformation = () => {
                     >Phone
                     </label>
                 </div>
+                {userRole === 'po' && (
                 <div className="relative my-4">
                 <select 
                 className="block w-72 py-2.5 px-0 text-sm text-white bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:focus:border-cyan-950 focus:outline-none focus:ring-0 focus:text-white focus:border-cyan-950 peer"
@@ -199,6 +200,7 @@ const EditUserInformation = () => {
                 User Job
               </label>
             </div>
+                )}
                 <div className="relative my-4">
                     <input 
                     type="text" 

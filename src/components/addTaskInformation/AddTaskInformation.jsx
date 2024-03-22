@@ -85,7 +85,7 @@ function AddTaskInformation() {
 };
 
 return (
-    <div className="text-white pt-8 flex justify-center items-center">
+    <div className="text-white p-8 flex justify-center items-center">
         <div className="bg-cyan-900/60 border border-cyan-950 rounded-md p-12 backdrop-filter backdrop-blur-sm bg-opacity-30 relative">
             <div>
                 <h1 className="text-4xl font-bold text-center mb-6">New task</h1>
