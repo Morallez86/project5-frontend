@@ -173,6 +173,7 @@ function UserTable() {
               <th className="px-6 py-2 border border-gray-300">Username</th>
               <th className="px-6 py-2 border border-gray-300">First Name</th>
               <th className="px-6 py-2 border border-gray-300">Last Name</th>
+              <th className="px-6 py-2 border border-gray-300">Job</th>
               <th className="px-6 py-2 border border-gray-300">State</th>
               <th className="px-6 py-2 border border-gray-300">Edit</th>
             </tr>
@@ -187,6 +188,7 @@ function UserTable() {
                 <td className="px-6 py-2 border border-gray-300">{user.username}</td>
                 <td className="px-6 py-2 border border-gray-300">{user.firstname}</td>
                 <td className="px-6 py-2 border border-gray-300">{user.lastname}</td>
+                <td className="px-6 py-2 border border-gray-300">{user.role}</td>
                 <td className="px-6 py-2 border border-gray-300">{user.active ? 'Active' : 'Inactive'}</td>
                 <td className="px-8 py-2 border border-gray-300">
                 <button onClick={() => handleEdit(user.id)} className="focus:outline-none">
