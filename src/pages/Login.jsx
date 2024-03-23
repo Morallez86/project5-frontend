@@ -91,7 +91,7 @@ function Login(){
                 {showWarning &&(
                         <label 
                         htmlFor="" 
-                        className="text-sm text-red-600 text-center"
+                        className="text-sm text-red-800 text-center"
                         >*Failed to login
                         </label>
                     )}

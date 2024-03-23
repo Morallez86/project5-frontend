@@ -19,7 +19,7 @@ const UserProfileMenu = () => {
     if (token !== null && userStore.getState().username !== null) {
       try {
         // Make a request to your getPhoto endpoint with the user's token and username
-        const response = await fetch('http://localhost:8080/demo-1.0-SNAPSHOT/rest/users/getPhoto', {
+        const response = await fetch('http://localhost:8080/demo-1.0-SNAPSHOT/rest/users/photo', {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',

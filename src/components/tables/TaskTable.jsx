@@ -216,7 +216,7 @@ function TaskTable() {
 
   const handleDeleteConfirmed = async () => {
     try {
-      const response = await fetch('http://localhost:8080/demo-1.0-SNAPSHOT/rest/tasks/deleteTasks', {
+      const response = await fetch('http://localhost:8080/demo-1.0-SNAPSHOT/rest/tasks', {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',

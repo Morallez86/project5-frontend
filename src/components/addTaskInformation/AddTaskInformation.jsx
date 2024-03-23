@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { userStore } from "../../stores/UserStore";
 import { useNavigate } from 'react-router-dom';
+import MessageModal from '../modal/MessageModal';
 
 function AddTaskInformation() {
     const [categories, setCategories] = useState([]); // State variable to store categories
@@ -15,6 +16,9 @@ function AddTaskInformation() {
         finalDate: "",
         category: ""
     });
+    const [showModal, setShowModal] = useState(false); // State variable to manage modal visibility
+    const [modalTitle, setModalTitle] = useState('');
+    const [modalMessage, setModalMessage] = useState('');
 
     useEffect(() => {
         const fetchCategories = async () => {
@@ -41,8 +45,15 @@ function AddTaskInformation() {
 
     const handleSave = async (e) => {
         e.preventDefault();
+        // Check if the end date is before the start date
+        if (formData.finalDate < formData.initialDate) {
+            setModalTitle('Invalid Date');
+            setModalMessage('End date cannot be before the start date.');
+            setShowModal(true);
+            return; // Stop execution if the condition is met
+        }
         try {
-            const response = await fetch('http://localhost:8080/demo-1.0-SNAPSHOT/rest/tasks/add', {
+            const response = await fetch('http://localhost:8080/demo-1.0-SNAPSHOT/rest/tasks/new', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -62,34 +73,41 @@ function AddTaskInformation() {
     };
 
     const handleChange = (event) => {
-    const { name, value } = event.target;
+        const { name, value } = event.target;
 
-    // Restrict selection of dates before the current date
-    if (name === 'initialDate' || name === 'finalDate') {
-        // Splits and saves as a variable the first string of the date format
-        const currentDate = new Date().toISOString().split('T')[0];
+        // Restrict selection of dates before the current date
+        if (name === 'initialDate' || name === 'finalDate') {
+            // Splits and saves as a variable the first string of the date format
+            const currentDate = new Date().toISOString().split('T')[0];
         if (value < currentDate) {
             return; // Do nothing if the selected date is before the current date
         }
-    }
+        }
 
-    // Ensure final date is not before the start date
-    if (name === 'finalDate' && formData.initialDate && value < formData.initialDate) {
-        return; // Do nothing if the final date is before the start date
-    }
+        // Ensure final date is not before the start date
+        if (name === 'finalDate' && formData.initialDate && value < formData.initialDate) {
+            return; // Do nothing if the final date is before the start date
+        }
 
-    setFormData({
-        ...formData,
-        [name]: value
-    });
-};
+        setFormData({
+            ...formData,
+            [name]: value
+        });
+    };
 
 return (
     <div className="text-white p-8 flex justify-center items-center">
+        <MessageModal 
+            isOpen={showModal} 
+            onClose={() => setShowModal(false)} 
+            title={modalTitle} 
+            message={modalMessage} 
+        />
         <div className="bg-cyan-900/60 border border-cyan-950 rounded-md p-12 backdrop-filter backdrop-blur-sm bg-opacity-30 relative">
             <div>
                 <h1 className="text-4xl font-bold text-center mb-6">New task</h1>
                 <form onSubmit={handleSave}>
+                    
                     <div className="grid grid-cols-2 grid-rows-3  gap-10 relative my-4 items-center px-2">
                         <div>
                             <label htmlFor="title" className="text-sm">Task Title:</label>

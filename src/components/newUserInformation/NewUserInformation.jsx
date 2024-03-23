@@ -2,7 +2,6 @@ import React from 'react';
 import { useState } from "react";
 import { userStore } from "../../stores/UserStore";
 import { useNavigate } from "react-router-dom";
-import { GrDocumentVerified } from 'react-icons/gr';
 
 const NewUserInformation = () => {
   const token = userStore((state) => state.token);
@@ -22,7 +21,7 @@ const NewUserInformation = () => {
   event.preventDefault();
   
   try {
-    const response = await fetch('http://localhost:8080/demo-1.0-SNAPSHOT/rest/users/add', {
+    const response = await fetch('http://localhost:8080/demo-1.0-SNAPSHOT/rest/users/new', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
