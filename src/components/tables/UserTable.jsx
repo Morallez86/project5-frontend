@@ -15,6 +15,7 @@ function UserTable() {
   const [selectedUserIdsForDeletion, setSelectedUserIdsForDeletion] = useState([]);
   const [showMessageModal, setShowMessageModal] = useState(false);
   const navigate = useNavigate(); // Get the navigate function
+  const userRole = userStore((state) => state.role)
 
   const fetchUsers = useCallback (async () => {
     try {
@@ -198,23 +199,38 @@ function UserTable() {
         </table>
         </div>
         <div className="flex mt-4 justify-between">
-          <div>
-          <button type="button" onClick={handleSetInactive} className="px-4 py-2 bg-cyan-900 text-white rounded hover:bg-cyan-950 mr-2"
-            > Set Inactive
-          </button>
-          <button type="button" onClick={handleSetActive} className="px-4 py-2 bg-cyan-900 text-white rounded hover:bg-cyan-950 mr-2">
-            Set Active
-          </button>
-          </div>
-            <button type="button" onClick={handleDeleteButtonClick} className="px-4 py-2 bg-red-900 text-white rounded hover:bg-red-950">
-              Delete
-            </button>
+          {userRole === 'po' && (
+            <div>
+              <button
+                type="button"
+                onClick={handleSetInactive}
+                className="px-4 py-2 bg-cyan-900 text-white rounded hover:bg-cyan-950 mr-2"
+              >
+                Set Inactive
+              </button>
+              <button
+                type="button"
+                onClick={handleSetActive}
+                className="px-4 py-2 bg-cyan-900 text-white rounded hover:bg-cyan-950 mr-2"
+              >
+                Set Active
+              </button>
+            </div>
+          )}
+          {userRole === 'po' && (
+              <button
+                type="button"
+                onClick={handleDeleteButtonClick}
+                className="px-4 py-2 bg-red-900 text-white rounded hover:bg-red-950"
+              >
+                Delete
+              </button>
+            )}
         </div>
       </div>
     </div>
-    </div>
-
-  );
+  </div>
+);
 }
 
 export default UserTable;

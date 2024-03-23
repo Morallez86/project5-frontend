@@ -86,6 +86,9 @@ const EditUserInformation = () => {
       console.log(data);
       setShowWarning(false);
       setShowModal(false); // Close the modal after changing the password
+      setOldPassword('');
+      setNewPassword('');
+      setConfirmPassword('');
     } catch (error) {
       console.error('Error changing password:', error);
     }

@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import { userStore } from "../../stores/UserStore";
+import WarningModal from '../modal/WarningModal';
 
 function CategoryEdition() {
     const [newCategoryTitle, setNewCategoryTitle] = useState(""); // State variable for new category title
@@ -9,6 +10,8 @@ function CategoryEdition() {
     const token = userStore((state) => state.token); // Get token from store
     const username2 = userStore((state) => state.username);
     const [categoryId, setCategoryId] = useState(""); // State variable to store the category ID
+    const [showDeleteModal, setShowDeleteModal] = useState(false); // State variable to manage delete modal visibility
+
 
     // Function to fetch categories
     const fetchCategories = useCallback(() => {
@@ -99,6 +102,12 @@ function CategoryEdition() {
             return;
         }
 
+        // Open the delete modal
+        setShowDeleteModal(true);
+    };
+
+    // Function to confirm category deletion
+    const confirmDeleteCategory = () => {
         // Make a DELETE request to delete the category
         fetch(`http://localhost:8080/demo-1.0-SNAPSHOT/rest/categories/?title=${selectedCategory}`, {
             method: 'DELETE',
@@ -111,7 +120,7 @@ function CategoryEdition() {
             if (!response.ok) {
                 throw new Error('Failed to delete category');
             }
-            // Refresh the category list
+            // Reset the new category title input
             setNewCategoryTitle("");
             setSelectedCategory(""); // Clear selected category
             // Refresh the category list
@@ -119,6 +128,9 @@ function CategoryEdition() {
         })
         .catch(error => {
             console.error('Error deleting category:', error);
+        })
+        .finally(() => {
+            setShowDeleteModal(false); // Close the delete modal regardless of the result
         });
     };
 
@@ -187,6 +199,14 @@ function CategoryEdition() {
 
     return (
         <div className="text-white p-8 flex justify-center items-center">
+            <WarningModal 
+                isOpen={showDeleteModal} 
+                onClose={() => setShowDeleteModal(false)} 
+                title="Delete Category"
+                message={`Are you sure you want to delete the category "${selectedCategory}"?`}
+                buttonText="Delete"
+                onButtonClick={confirmDeleteCategory}
+            />
             <div className="bg-cyan-900/60 border border-cyan-950 rounded-md p-12 backdrop-filter backdrop-blur-sm bg-opacity-30 relative">
                 <div>
                     <h1 className="text-4xl font-bold text-center mb-6">Category Edition:</h1>
