@@ -20,24 +20,24 @@ function Home() {
     useEffect(() => {
         const fetchTasks = async () => {
             if (token !== null) {
-            try {
-                const response = await fetch("http://localhost:8080/demo-1.0-SNAPSHOT/rest/tasks", {
-                    method: "GET",
-                    headers: {
-                        "Content-Type": "application/json",
-                        token: token,
-                    },
-                });
-                if (!response.ok) {
-                    throw new Error('Failed to fetch tasks');
+                try {
+                    const response = await fetch("http://localhost:8080/demo-1.0-SNAPSHOT/rest/tasks", {
+                        method: "GET",
+                        headers: {
+                            "Content-Type": "application/json",
+                            token: token,
+                        },
+                    });
+                    if (!response.ok) {
+                        throw new Error('Failed to fetch tasks');
+                    }
+                    const data = await response.json();
+                    console.log(data);
+                    setTasks(data);
+                } catch (error) {
+                    console.error('Error fetching tasks:', error);
                 }
-                const data = await response.json();
-                console.log(data);
-                setTasks(data);
-            } catch (error) {
-                console.error('Error fetching tasks:', error);
             }
-        }
         };
 
         fetchTasks();
@@ -53,7 +53,7 @@ function Home() {
                 <Sidebar toggleSidebar={toggleSidebar} isSidebarVisible={isSidebarVisible} /> {/* Pass isSidebarVisible to Sidebar */}
                 <div className="flex-1">
                     <Header username={username} toggleSidebar={toggleSidebar} isSidebarVisible={isSidebarVisible} /> {/* Pass isSidebarVisible to Header */}
-                    <div className="flex flex-row h-5/6 p-10 mt-5 space-x-10">
+                    <div className="flex flex-row h-5/6 p-10 mt-5 space-x-10 justify-center">
                         <TasksListColumn title="To Do">
                             {filterTasksByStatus(100).map(task => (
                                 <TaskComponent key={task.id} id={task.id} title={task.title} priority={task.priority} owner={task.owner} />
