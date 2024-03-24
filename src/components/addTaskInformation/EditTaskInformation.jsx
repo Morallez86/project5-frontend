@@ -96,7 +96,15 @@ function EditTaskInformation() {
                 setShowModal(true);
                 return;
             }
-            navigate('/Home');
+            // Task added successfully, show success message
+            setModalTitle('Success');
+            setModalMessage('Task changed successfully!');
+            setShowModal(true);
+            // Hide success message after a few seconds
+            setTimeout(() => {
+                setShowModal(false);
+                navigate('/Home');
+            }, 3000); // Adjust the timeout duration as needed
         } catch (error) {
             console.error('Error updating task:', error);
             // Handle error, such as displaying an error message
@@ -136,7 +144,7 @@ function EditTaskInformation() {
         />
         <div className="bg-cyan-900/60 border border-cyan-950 rounded-md p-12 backdrop-filter backdrop-blur-sm bg-opacity-30 relative">
             <div>
-                <h1 className="text-4xl font-bold text-center mb-6">New task</h1>
+                <h1 className="text-4xl font-bold text-center mb-6">Edit task</h1>
                 <form onSubmit={handleSave}>
                     <div className="grid grid-cols-2 grid-rows-3  gap-10 relative my-4 items-center px-2">
                         <div>

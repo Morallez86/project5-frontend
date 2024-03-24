@@ -67,12 +67,21 @@ function AddTaskInformation() {
                 setShowModal(true);
                 return;
             }
-            navigate('/Home');
+            // Task added successfully, show success message
+            setModalTitle('Success');
+            setModalMessage('Task added successfully!');
+            setShowModal(true);
+            // Hide success message after a few seconds
+            setTimeout(() => {
+                setShowModal(false);
+                navigate('/Home');
+            }, 3000); // Adjust the timeout duration as needed
         } catch (error) {
             console.error('Error adding task:', error);
             // Handle error, e.g., show an error message
         }
     };
+
 
     const handleChange = (event) => {
         const { name, value } = event.target;

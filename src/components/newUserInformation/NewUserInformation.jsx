@@ -1,7 +1,7 @@
-import React from 'react';
-import { useState } from "react";
+import React, { useState } from 'react';
 import { userStore } from "../../stores/UserStore";
 import { useNavigate } from "react-router-dom";
+import MessageModal from '../modal/MessageModal';
 
 const NewUserInformation = () => {
   const token = userStore((state) => state.token);
@@ -16,26 +16,41 @@ const NewUserInformation = () => {
     role: '',
     photoURL: ''
   });
+  const [showModal, setShowModal] = useState(false);
+  const [modalTitle, setModalTitle] = useState('');
+  const [modalMessage, setModalMessage] = useState('');
 
   const handleSubmit = async (event) => {
-  event.preventDefault();
+    event.preventDefault();
   
-  try {
-    const response = await fetch('http://localhost:8080/demo-1.0-SNAPSHOT/rest/users/new', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'token': token,
-        'role': role
-      },
-      body: JSON.stringify(formData)
-    });
-    const data = await response.json(); 
-    console.log(data);
-    navigate('/Home');
-  } catch (error) {
-    console.error('Error adding user:', error);
-  }
+    try {
+      const response = await fetch('http://localhost:8080/demo-1.0-SNAPSHOT/rest/users/new', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'token': token,
+          'role': role
+        },
+        body: JSON.stringify(formData)
+      });
+      const data = await response.json(); 
+      console.log(data);
+      if (response.ok) {
+        setModalTitle('Success');
+        setModalMessage('User added successfully!');
+        setShowModal(true);
+        setTimeout(() => {
+          setShowModal(false);
+          navigate('/Home');
+        }, 3000);
+      } else {
+        setModalTitle('Error');
+        setModalMessage('Failed to add user. Please try again.');
+        setShowModal(true);
+      }
+    } catch (error) {
+      console.error('Error adding user:', error);
+    }
   };
 
   const handleChange = (event) => {
@@ -47,6 +62,12 @@ const NewUserInformation = () => {
 
   return (
     <div className="text-white p-8 flex justify-center items-center">
+      <MessageModal 
+        isOpen={showModal} 
+        onClose={() => setShowModal(false)} 
+        title={modalTitle} 
+        message={modalMessage} 
+      />
     <div className="bg-cyan-900/60	border border-cyan-950 rounded-md p-12 backdrop-filter backdrop-blur-sm bg-opacity-30 relative">
             <div> 
                 <h1 className="text-4xl text-whitefont-bold text-center mb-6">New User</h1>

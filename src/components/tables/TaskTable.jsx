@@ -284,10 +284,10 @@ function TaskTable() {
                 <td className="px-6 py-2 border border-gray-300">
                   <input type="checkbox" checked={task.selected || false} onChange={() => handleCheckboxChange(task.id)} />
                 </td>
-                <td className="px-6 py-2 border border-gray-300">
-                  <div className="grid grid-cols-2 items-center">
-                    <span className="col-span-1">{task.title}</span>
-                    <span className="col-span-1 flex justify-end" title={getPriorityTooltip(task.priority)}>
+                <td className="px-6 py-2 border border-gray-300 max-w-xs">
+                  <div className="flex items-center justify-between">
+                    <span className="overflow-hidden whitespace-nowrap overflow-ellipsis">{task.title}</span>
+                    <span className="flex items-center" title={getPriorityTooltip(task.priority)}>
                       <MdPriorityHigh className={`text-white rounded-full h-4 w-4 ${getPriorityColor(task.priority)}`} />
                     </span>
                   </div>
