@@ -3,6 +3,7 @@ import React from 'react';
 import UserProfileMenu from '../userProfileMenu/UserProfileMenu';
 import { IoMenu } from 'react-icons/io5';
 import { userStore } from "../../stores/UserStore";
+import WelcomeMessage from './WelcomeMessage'; // Import the WelcomeMessage component
 
 const Header = ({ toggleSidebar, isSidebarVisible }) => {
   const username2 = userStore((state) => state.username);
@@ -14,7 +15,7 @@ const Header = ({ toggleSidebar, isSidebarVisible }) => {
           {!isSidebarVisible && ( // Render the icon only if the sidebar is not visible
             <IoMenu size={40} className='text-3xl cursor-pointer' onClick={toggleSidebar} />
           )}
-          <span className='text-lg font-bold ml-4'>Welcome, {username2}!</span>
+          <WelcomeMessage username={username2} /> {/* Pass the username as prop */}
         </div>
         <UserProfileMenu />
       </div>

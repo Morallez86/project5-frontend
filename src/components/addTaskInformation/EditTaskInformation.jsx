@@ -91,7 +91,10 @@ function EditTaskInformation() {
                 body: JSON.stringify(formData)
             });
             if (!response.ok) {
-                throw new Error('Failed to update task');
+                setModalTitle('Error');
+                setModalMessage('Try to fill all parameters for submission'); // Set modal message to error message
+                setShowModal(true);
+                return;
             }
             navigate('/Home');
         } catch (error) {

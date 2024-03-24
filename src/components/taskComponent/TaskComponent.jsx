@@ -1,11 +1,14 @@
 import React from 'react';
 import { MdPriorityHigh } from "react-icons/md";
+import { IoStarSharp } from "react-icons/io5"; // Import star icon
 import { taskStore } from "../../stores/TaskStore";
+import { userStore } from "../../stores/UserStore"; // Import userStore
 import { useNavigate } from 'react-router-dom';
 
 function TaskComponent({ id, title, priority, owner }) {
   const { updateTaskId, updateTaskOwner } = taskStore(); // Use both update functions
   const navigate = useNavigate(); // Get the navigate function
+  const { username } = userStore(); // Get username from userStore
 
   let bgColor;
   switch (priority) {
@@ -29,11 +32,14 @@ function TaskComponent({ id, title, priority, owner }) {
     updateTaskId(id);
     updateTaskOwner(owner);
     // Navigate to the EditTask component
-    navigate('/EditTask'); // Replace '/editTask' with the actual path to the EditTask component
+    navigate('/EditTask');
   };
 
+  // Check if the task owner matches the logged-in user
+  const isCurrentUserOwner = owner === username;
+
   return (
-    <div className="bg-slate-300 border border-emerald-900  rounded-md p-4 mb-4 text-black cursor-pointer" onClick={handleClick}>
+    <div className="bg-slate-300 border border-emerald-900  rounded-md p-4 mb-4 text-black cursor-pointer relative" onClick={handleClick}>
       <div className="flex items-center">
         <div>
           <MdPriorityHigh className={`text-2xl mr-2 rounded-full border border-black ${bgColor}`} />
@@ -41,6 +47,11 @@ function TaskComponent({ id, title, priority, owner }) {
         <div style={{ maxWidth: 'calc(100% - 40px)' }}>
           <p className="text-lg font-bold overflow-hidden whitespace-nowrap overflow-ellipsis">{title}</p>
         </div>
+        {isCurrentUserOwner && (
+          <div className="absolute top-2 right-2">
+            <IoStarSharp className="text-emerald-900" />
+          </div>
+        )}
       </div>
     </div>
   );

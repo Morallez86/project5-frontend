@@ -62,8 +62,10 @@ function AddTaskInformation() {
                 body: JSON.stringify(formData)
             });
             if (!response.ok) {
-                console.log(formData);
-                throw new Error('Failed to add task');
+                setModalTitle('Error');
+                setModalMessage('Try to fill all parameters for submission'); // Set modal message to error message
+                setShowModal(true);
+                return;
             }
             navigate('/Home');
         } catch (error) {
