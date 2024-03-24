@@ -12,6 +12,8 @@ const EditUserInformation = () => {
   const [oldPassword, setOldPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const userRole = userStore((state) => state.role);
+  const [showPasswordUpdated, setShowPasswordUpdated] = useState(false);
+  const [errorMsg, setErrorMsg] = useState('');
   const [formData, setFormData] = useState({
     username: '',
     firstname: '',
@@ -66,32 +68,52 @@ const EditUserInformation = () => {
   };
 
   const handlePasswordChange = async () => {
-    // Check if the new password matches the confirmed password
-    if (newPassword !== confirmPassword) {
-      setShowWarning(true); // Show warning message
-      return; // Exit the function early
-    }
+  // Check if the new password matches the confirmed password
+  if (newPassword !== confirmPassword) {
+    setShowWarning(true); // Show warning message
+    return; // Exit the function early
+  }
 
-    // Send a request to change the password
-    try {
-      const response = await fetch('http://localhost:8080/demo-1.0-SNAPSHOT/rest/users/updatePassword', {
-        method: 'PUT',
-        headers: {
-          'Content-Type': 'application/json',
-          'token': token
-        },
-        body: JSON.stringify({ oldPassword, newPassword })
-      });
-      const data = await response.json();
-      console.log(data);
+  // Send a request to change the password
+  try {
+    const response = await fetch('http://localhost:8080/demo-1.0-SNAPSHOT/rest/users/updatePassword', {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'token': token
+      },
+      body: JSON.stringify({ oldPassword, newPassword })
+    });
+    const data = await response.json();
+    console.log(data);
+    if (response.ok) {
+      // Password successfully updated
+      setShowPasswordUpdated(true); // Show success message
       setShowWarning(false);
       setShowModal(false); // Close the modal after changing the password
       setOldPassword('');
       setNewPassword('');
       setConfirmPassword('');
-    } catch (error) {
-      console.error('Error changing password:', error);
+    } else {
+      // Error updating password
+      setShowPasswordUpdated(false); // Hide success message
+      setShowWarning(false);
+      // Display the error message from the backend
+      setErrorMsg(data.message); // Assuming the error message is in the 'message' field of the response
     }
+  } catch (error) {
+    console.error('Error changing password:', error);
+  }
+};
+
+  const handleCloseModal = () => {
+    setShowModal(false);
+    setOldPassword('');
+    setNewPassword('');
+    setConfirmPassword('');
+    setShowWarning(false);
+    setErrorMsg(false);
+    setShowPasswordUpdated(false);
   };
 
   const handleChange = (event) => {
@@ -265,6 +287,20 @@ const EditUserInformation = () => {
                 >New password does not match confirmed password
               </label>
             )}
+            {showPasswordUpdated && (
+              <label 
+              htmlFor="" 
+              className="px-1 text-sm mb-4 text-green-600 text-center"
+              >Password updated successfully
+              </label>
+            )}
+            {errorMsg && (
+              <label 
+              htmlFor="" 
+              className="px-1 text-sm mb-4 text-red-600 text-center"
+              >{errorMsg}
+              </label>
+            )}
             <div className="flex justify-end">
               <button
                 className="px-4 py-2 bg-cyan-950 w-20 h-10 text-white rounded hover:bg-cyan-950 mr-2"
@@ -274,7 +310,7 @@ const EditUserInformation = () => {
               </button>
               <button
                 className="px-4 py-2 w-20 h-10 bg-slate-400 text-white rounded hover:bg-slate-500"
-                onClick={() => setShowModal(false)}
+                onClick={handleCloseModal}
               >
                 Cancel
               </button>
