@@ -89,12 +89,15 @@ const EditUserInformation = () => {
     if (response.ok) {
       // Password successfully updated
       setShowPasswordUpdated(true); // Show success message
-      setShowWarning(false);
-      setShowModal(false); // Close the modal after changing the password
-      setOldPassword('');
-      setNewPassword('');
-      setConfirmPassword('');
-    } else {
+      setErrorMsg('');
+      setTimeout(() => {
+        setShowModal(false); // Close the modal after a certain time
+        setOldPassword('');
+        setNewPassword('');
+        setConfirmPassword('');
+        setShowPasswordUpdated(false);
+        }, 3000); 
+      } else {
       // Error updating password
       setShowPasswordUpdated(false); // Hide success message
       setShowWarning(false);
