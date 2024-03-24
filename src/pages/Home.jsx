@@ -6,13 +6,14 @@ import { userStore } from "../stores/UserStore";
 import TasksListColumn from "../components/tasksListColumn/TasksListColumn";
 import TaskComponent from "../components/taskComponent/TaskComponent";
 import '../index.css';
+import { useNavigate } from "react-router-dom";
 
 function Home() {
     const [tasks, setTasks] = useState([]);
     const [isSidebarVisible, setIsSidebarVisible] = useState(false); // Initialize to false
     const username = userStore((state) => state.username);
     const token = userStore((state) => state.token); // Define token
-
+    const navigate = useNavigate();
     const toggleSidebar = () => { // Define toggleSidebar function
         setIsSidebarVisible(!isSidebarVisible);
     };
@@ -36,12 +37,15 @@ function Home() {
                     setTasks(data);
                 } catch (error) {
                     console.error('Error fetching tasks:', error);
+                    
                 }
+            }else{
+                navigate('/');
             }
         };
 
         fetchTasks();
-    }, [token]);
+    }, [token, navigate]);
 
     const filterTasksByStatus = (status) => {
         return tasks.filter(task => task.status === status);
