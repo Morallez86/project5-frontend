@@ -22,37 +22,39 @@ function Login(){
     }
 
     const handleSubmit = async (event) => {
-        event.preventDefault();
-        try {
-            // Make a request to your authentication endpoint with user credentials
-            const response = await fetch('http://localhost:8080/demo-1.0-SNAPSHOT/rest/users/login', {
+    event.preventDefault();
+    try {
+        // Make a request to your authentication endpoint with user credentials
+        const response = await fetch('http://localhost:8080/demo-1.0-SNAPSHOT/rest/users/login', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'username': inputs.username,
-                'password': inputs.password,
             },
-            body: JSON.stringify(inputs),
-            });
-            if (response.ok) {
-                const userData = await response.json();
-                // Update user information in the store
-                updateUserData(
-                    userData.username,
-                    userData.token,
-                    userData.role
-                );
-                setShowWarning(false);
-                // Navigate to the home page or another route
-                navigate('/Home', { replace: true });
+            body: JSON.stringify({
+                username: inputs.username,
+                password: inputs.password,
+            }),
+        });
+        if (response.ok) {
+            const userData = await response.json();
+            // Update user information in the store
+            updateUserData(
+                userData.username,
+                userData.token,
+                userData.role
+            );
+            setShowWarning(false);
+            // Navigate to the home page or another route
+            navigate('/Home', { replace: true });
             } else {
                 setShowWarning(true);
                 console.error('Authentication failed');
             }
-            } catch (error) {
+        } catch (error) {
             console.error('Error during authentication:', error);
         }
     };
+
 
     return(
         <div className="bg-cyan-900/60	border border-cyan-950 rounded-md p-12 backdrop-filter backdrop-blur-sm bg-opacity-30 relative">

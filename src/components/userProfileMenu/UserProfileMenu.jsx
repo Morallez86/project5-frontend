@@ -8,6 +8,7 @@ import { taskStore } from '../../stores/TaskStore';
 const UserProfileMenu = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [photoURL, setPhotoURL] = useState('');
+  const updateUserId = ProfileStore((state) => state.updateUserId);
   const clearUserId = ProfileStore((state) => state.clearUserId);
   const clearTaskData = taskStore((state) => state.clearTaskData);
   const navigate = useNavigate();
@@ -49,7 +50,7 @@ const UserProfileMenu = () => {
 
 
   const handleProfileClick = () => {
-    clearUserId();
+    updateUserId(0);
     navigate('../Profile', { replace: true });
     setIsOpen(false);
   };

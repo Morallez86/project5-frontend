@@ -1,9 +1,8 @@
-import React from 'react';
-import { useState, useEffect } from "react"
+import React, { useState, useEffect } from 'react';
 import { userStore } from "../../stores/UserStore";
 import { useNavigate } from "react-router-dom";
 
-const EditUserInformation = () => {
+const EditUserInformation = ({ userDetails }) => {
   const token = userStore((state) => state.token);
   const navigate = useNavigate();
   const [showModal, setShowModal] = useState(false);
@@ -25,31 +24,14 @@ const EditUserInformation = () => {
   });
 
   useEffect(() => {
-    const fetchUserDetails = async () => {
-      try {
-        const response = await fetch('http://localhost:8080/demo-1.0-SNAPSHOT/rest/users/profileDetails/0', {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            'token': token,
-          }
-        });
-        const userDetails = await response.json();
-        setFormData(userDetails); // Update the formData state with user details
-        console.log(userDetails);
-      } catch (error) {
-        console.error('Error fetching user details:', error);
-      }
-    };
-
-    fetchUserDetails();
-  }, [token]);
+    if (userDetails) {
+      setFormData(userDetails);
+    }
+  }, [userDetails]);
 
   const handleSubmit = async (event) => {
-  event.preventDefault();
-  
+    event.preventDefault();
     try {
-        // Make a POST request to your endpoint
         const response = await fetch('http://localhost:8080/demo-1.0-SNAPSHOT/rest/users/updateProfile/0', {
         method: 'PUT',
         headers: {
@@ -57,57 +39,50 @@ const EditUserInformation = () => {
             'token': token, 
         },
         body: JSON.stringify(formData)
-    });
-    console.log(formData)
-    const data = await response.json();
-    console.log(data); 
-    navigate('/Home');
+      });
+      const data = await response.json();
+      console.log(data); 
+      navigate('/Home');
     } catch (error) {
-    console.error('Error adding user:', error);
+      console.error('Error adding user:', error);
     }
   };
 
   const handlePasswordChange = async () => {
-  // Check if the new password matches the confirmed password
-  if (newPassword !== confirmPassword) {
-    setShowWarning(true); // Show warning message
-    return; // Exit the function early
-  }
-
-  // Send a request to change the password
-  try {
-    const response = await fetch('http://localhost:8080/demo-1.0-SNAPSHOT/rest/users/updatePassword', {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-        'token': token
-      },
-      body: JSON.stringify({ oldPassword, newPassword })
-    });
-    const data = await response.json();
-    console.log(data);
-    if (response.ok) {
-      // Password successfully updated
-      setShowPasswordUpdated(true); // Show success message
-      setErrorMsg('');
-      setTimeout(() => {
-        setShowModal(false); // Close the modal after a certain time
-        setOldPassword('');
-        setNewPassword('');
-        setConfirmPassword('');
-        setShowPasswordUpdated(false);
+    if (newPassword !== confirmPassword) {
+      setShowWarning(true);
+      return;
+    }
+    try {
+      const response = await fetch('http://localhost:8080/demo-1.0-SNAPSHOT/rest/users/updatePassword', {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          'token': token
+        },
+        body: JSON.stringify({ oldPassword, newPassword })
+      });
+      const data = await response.json();
+      console.log(data);
+      if (response.ok) {
+        setShowPasswordUpdated(true);
+        setErrorMsg('');
+        setTimeout(() => {
+          setShowModal(false);
+          setOldPassword('');
+          setNewPassword('');
+          setConfirmPassword('');
+          setShowPasswordUpdated(false);
         }, 3000); 
       } else {
-      // Error updating password
-      setShowPasswordUpdated(false); // Hide success message
-      setShowWarning(false);
-      // Display the error message from the backend
-      setErrorMsg(data.message); // Assuming the error message is in the 'message' field of the response
+        setShowPasswordUpdated(false);
+        setShowWarning(false);
+        setErrorMsg(data.message);
+      }
+    } catch (error) {
+      console.error('Error changing password:', error);
     }
-  } catch (error) {
-    console.error('Error changing password:', error);
-  }
-};
+  };
 
   const handleCloseModal = () => {
     setShowModal(false);
