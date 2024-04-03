@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 
 const EditUserInformation = ({ userDetails }) => {
   const token = userStore((state) => state.token);
+  const usernameProfile = userStore((state) => state.username);
   const navigate = useNavigate();
   const [showModal, setShowModal] = useState(false);
   const [showWarning, setShowWarning] = useState(false);
@@ -13,6 +14,8 @@ const EditUserInformation = ({ userDetails }) => {
   const userRole = userStore((state) => state.role);
   const [showPasswordUpdated, setShowPasswordUpdated] = useState(false);
   const [errorMsg, setErrorMsg] = useState('');
+  const [copied, setCopied] = useState(false);
+  const profileURL = `http://localhost:3000/Profile/${usernameProfile}`;
   const [formData, setFormData] = useState({
     username: '',
     firstname: '',
@@ -99,6 +102,15 @@ const EditUserInformation = ({ userDetails }) => {
       ...formData,
       [event.target.name]: event.target.value
     });
+  };
+
+  const copyToClipboard = () => {
+    navigator.clipboard.writeText(profileURL)
+      .then(() => {
+        setCopied(true);
+        setTimeout(() => setCopied(false), 3000); // Reset copied state after 3 seconds
+      })
+      .catch((error) => console.error('Error copying to clipboard:', error));
   };
 
   return (
@@ -230,6 +242,12 @@ const EditUserInformation = ({ userDetails }) => {
                     onClick={() => setShowModal(true)}
                     >Change Password
                 </button>
+                <button 
+                  className="w-full mb-4 text-[18px] mt-6 rounded-full bg-white text-teal-900 hover:bg-teal-950 hover:text-white py-2 transition-colors duration-300" 
+                  type="button"
+                  onClick={copyToClipboard}>
+                {copied ? 'Copied!' : 'Share Profile'}
+              </button>
             </div>
       </div>
       {showModal && (

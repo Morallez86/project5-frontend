@@ -15,6 +15,7 @@ import ManagingUsers from './pages/ManagingUsers';
 import ManagingTasks from './pages/ManagingTasks';
 import EditTask from './pages/EditTask';
 import Layout from './pages/Layout';
+import UserProfile from './pages/UserProfile';
 
 
 ReactDOM.createRoot(document.getElementById("root")).render(
@@ -32,6 +33,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         <Route path="/managingUsers" element={<ManagingUsers />} />
         <Route path="managingTasks" element={<ManagingTasks />} />
         <Route path="/editTask" element={<EditTask />} />
+        <Route path="/profile/:username" element={<UserProfile />} />
       </Routes>
     </Router>
   </React.StrictMode>
