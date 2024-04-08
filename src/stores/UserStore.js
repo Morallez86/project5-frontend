@@ -13,10 +13,13 @@ export const userStore = create(
             updateUserData: (username, token, role) =>
             set({ username, token, role }),
             clearUserData: () => set({ username: null, token: null, role: null }), // Clear user data
+
+            locale: "en",
+            updateLocale : (locale) => set({locale})
         }),
     {
         name: "userStore", // The name to use for the persisted data
         storage: createJSONStorage(() => sessionStorage),
-    }
+    },
     )
 );

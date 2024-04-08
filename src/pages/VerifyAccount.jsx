@@ -1,6 +1,4 @@
 import React, { useState } from "react";
-import { BiUser } from "react-icons/bi";
-import { AiOutlineUnlock } from "react-icons/ai";
 import { useParams, useNavigate } from "react-router-dom";
 import Footer from "../components/footer/footer";
 

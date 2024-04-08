@@ -18,6 +18,7 @@ import Layout from './pages/Layout';
 import UserProfile from './pages/UserProfile';
 import Dashboard from './pages/Dashboard';
 import VerifyAccount from './pages/VerifyAccount';
+import Chat from './pages/Chat';
 
 
 ReactDOM.createRoot(document.getElementById("root")).render(
@@ -38,6 +39,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         <Route path="/profile/:username" element={<UserProfile />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/verify-account/:token" element={<VerifyAccount/>} />
+        <Route path="/chat" element={<Chat />} />
       </Routes>
     </Router>
   </React.StrictMode>
