@@ -12,7 +12,7 @@ const UserProfileMenu = () => {
   const clearUserId = ProfileStore((state) => state.clearUserId);
   const clearTaskData = taskStore((state) => state.clearTaskData);
   const navigate = useNavigate();
-  const { token, clearUserData } = userStore.getState();
+  const { token, username, clearUserData } = userStore.getState();
   const menuRef = useRef();
 
   useEffect(() => {
@@ -25,7 +25,7 @@ const UserProfileMenu = () => {
           headers: {
             'Content-Type': 'application/json',
             'token': token,
-            'username': userStore.getState().username, // Replace with the actual username from your state/store
+            'username': userStore.getState().username,
           },
         });
 
@@ -33,6 +33,7 @@ const UserProfileMenu = () => {
           // Photo URL successfully fetched
           const photoURL = await response.json();
           setPhotoURL(photoURL);
+          console.log(token);
         } else {
           // Fetching photo URL failed
           console.error('Fetching photo URL failed');
@@ -56,33 +57,34 @@ const UserProfileMenu = () => {
   };
 
   const handleLogoutClick = async () => {
-    try {
-      // Make a request to your logout endpoint with the user's token
-      const response = await fetch('http://localhost:8080/demo-1.0-SNAPSHOT/rest/users/logout', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'token': token,
-        },
-      });
-
-      if (response.ok) {
-        // Logout successful
-        // You may want to clear user information from your state/store here
-        clearUserData();
-        clearTaskData();
-        clearUserId();
-        navigate('/', { replace: true });
-        setIsOpen(false);
-        
-      } else {
-        // Logout failed
-        console.error('Logout failed');
+      try {
+          // Make a request to your logout endpoint with the user's token
+          const response = await fetch('http://localhost:8080/demo-1.0-SNAPSHOT/rest/users/logout', {
+              method: 'POST',
+              headers: {
+                  'Content-Type': 'application/json',
+              },
+              body: JSON.stringify({
+                  username: username,
+                  token: token,
+              }),
+          });
+          if (response.ok) {
+              // Logout successful
+              clearUserData();
+              clearTaskData();
+              clearUserId();
+              navigate('/', { replace: true });
+              setIsOpen(false);
+          } else {
+              // Logout failed
+              console.error('Logout failed');
+          }
+      } catch (error) {
+          console.error('Error during logout:', error);
       }
-    } catch (error) {
-      console.error('Error during logout:', error);
-    }
   };
+
 
   const toggleMenu = () => {
     setIsOpen(!isOpen);

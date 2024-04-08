@@ -64,6 +64,13 @@ const Sidebar = ({ toggleSidebar, isSidebarVisible }) => {
           </button>
         </li>
         )}
+        {(role === "po") && (
+        <li className='p-2 text-center'>
+          <button className="focus:outline-none" onClick={() => handleNavigation('/Dashboard')}>
+            Dashboard
+          </button>
+        </li>
+        )}
       </ul>
     </div>
   );
