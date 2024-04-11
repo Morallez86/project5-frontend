@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Layout from './Layout';
 import SearchChatRows from '../components/chatComponents/SearchChatRows';
 import { userStore } from '../stores/UserStore';
@@ -7,6 +7,8 @@ import { ReactSearchAutocomplete } from 'react-search-autocomplete';
 function Chat() {
     const [searchResults, setSearchResults] = useState([]);
     const token = userStore((state) => state.token);
+    const [socket, setSocket] = useState(null);
+    const [messages, setMessages] = useState([]);
 
     const handleOnHover = (result) => {
 
@@ -28,6 +30,42 @@ function Chat() {
         );
     };
 
+    useEffect(() => {
+        const newSocket = new WebSocket(`ws://localhost:8080/demo-1.0-SNAPSHOT/websocket/notifier/${token}`);
+
+        newSocket.onopen = () => {
+            console.log('WebSocket connection established.');
+            setSocket(newSocket); // Set the WebSocket connection in state
+        };
+
+        newSocket.onmessage = (event) => {
+                console.log(event.data);
+                const messageData = JSON.parse(event.data);
+                setMessages((prevMessages) => [...prevMessages, messageData]);
+                console.log(messages);
+            };
+
+        newSocket.onclose = () => {
+            console.log('WebSocket connection closed.');
+            setSocket(null); // Clear WebSocket connection from state on close
+        };
+
+        return () => {
+            // Clean up WebSocket connection on component unmount
+            if (newSocket) {
+                newSocket.close();
+            }
+        };
+    }, [token, messages]);
+
+    const handleSendMessage = (message) => {
+        if (socket && socket.readyState === WebSocket.OPEN) {
+            console.log(message);
+            socket.send(message);
+        } else {
+            console.error('WebSocket connection not established.');
+        }
+    };
 
     const handleSearch = (string) => {
 
@@ -86,6 +124,7 @@ function Chat() {
                 />
                 </div>
                 <SearchChatRows></SearchChatRows>
+                
                 <div
                 className="flex flex-row py-4 px-2 items-center border-b-2 border-l-4 border-blue-400"
                 >
@@ -169,10 +208,19 @@ function Chat() {
                 </div>
                 <div className="py-5">
                 <input
-                    className="w-full bg-gray-300 py-5 px-3 rounded-xl"
-                    type="text"
-                    placeholder="type your message here..."
-                />
+                        className="w-full bg-gray-300 py-5 px-3 rounded-xl"
+                        type="text"
+                        placeholder="type your message here..."
+                        onKeyDown={(e) => {
+                            if (e.key === 'Enter') {
+                                const message = e.target.value.trim();
+                                if (message) {
+                                    handleSendMessage(message);
+                                    e.target.value = ''; // Clear input field after sending
+                                }
+                            }
+                        }}
+                    />
                 </div>
             </div>
             </div>
