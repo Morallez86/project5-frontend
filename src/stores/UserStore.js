@@ -5,21 +5,23 @@ import { persist, createJSONStorage } from "zustand/middleware";
 export const userStore = create(
     persist(
         (set) => ({
-            username: null, // State variable
-            token: null,    // Additional state variable for token
-            role: null,     // Additional state variable for role
+            username: null,
+            token: null,
+            role: null,
+            userId: null, // New state variable for user ID
 
             // Function to update the state variables
-            updateUserData: (username, token, role) =>
-            set({ username, token, role }),
-            clearUserData: () => set({ username: null, token: null, role: null }), // Clear user data
+            updateUserData: (username, token, role, userId) =>
+                set({ username, token, role, userId }),
+
+            clearUserData: () => set({ username: null, token: null, role: null, userId: null }),
 
             locale: "en",
-            updateLocale : (locale) => set({locale})
+            updateLocale: (locale) => set({ locale }),
         }),
-    {
-        name: "userStore", // The name to use for the persisted data
-        storage: createJSONStorage(() => sessionStorage),
-    },
+        {
+            name: "userStore",
+            storage: createJSONStorage(() => sessionStorage),
+        }
     )
 );

@@ -38,7 +38,7 @@ const handleAccountRegistration = async (event) => {
       const data = await response.json();
       console.log(data);
       if (response.ok) {
-        navigate('/App', { replace: true });
+        navigate('/', { replace: true });
       } else {
         // Handle other response scenarios if needed
       }
