@@ -2,13 +2,13 @@ import React, { useEffect, useState } from 'react';
 import { IntlProvider } from 'react-intl';
 import UserProfileMenu from '../userProfileMenu/UserProfileMenu';
 import WelcomeMessage from './WelcomeMessage';
-import { IoIosNotificationsOutline } from 'react-icons/io';
 import { MdOutlineMessage } from 'react-icons/md';
 import languages from '../../translations';
 import { userStore } from '../../stores/UserStore';
 import { IoMenu } from 'react-icons/io5';
 import { useNavigate } from 'react-router-dom';
 import { notificationsStore } from '../../stores/NotificationsStore';
+import NotificationMenu from '../userProfileMenu/NotificationMenu';
 
 const Header = ({ toggleSidebar, isSidebarVisible }) => {
   const userId = userStore((state) => state.userId);
@@ -19,34 +19,7 @@ const Header = ({ toggleSidebar, isSidebarVisible }) => {
   const [unreadMessagesCount, setUnreadMessagesCount] = useState(0);
 
   useEffect(() => {
-    const fetchUnreadMessages = async () => {
-      try {
-        const response = await fetch(`http://localhost:8080/demo-1.0-SNAPSHOT/rest/messages/unread/${userId}`, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            'token': token
-          }
-        });
-
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-
-        const data = await response.json();
-
-        notificationsStore.setState((state) => ({
-          ...state,
-          unreadMessages: data || [],  // Use the response data directly
-        }));
-      } catch (error) {
-        console.error('Error fetching unread messages:', error);
-      }
-    };
-
-    fetchUnreadMessages();
-
-    const ws = new WebSocket(`ws://localhost:8080/demo-1.0-SNAPSHOT/websocket/notifications/${userId}`);
+    const ws = new WebSocket(`ws://localhost:8080/demo-1.0-SNAPSHOT/websocket/notifications/${token}`);
 
     ws.onopen = () => {
       console.log('WebSocket connected for notifications and unread messages');
@@ -66,6 +39,77 @@ const Header = ({ toggleSidebar, isSidebarVisible }) => {
     return () => {
       ws.close();
     };
+  }, [token, userId]);
+
+  useEffect(() => {
+    const handleUnreadMessagesChange = (state) => {
+      setUnreadMessagesCount(state.unreadMessages.length);
+    };
+
+
+    const unsubscribeMessages = notificationsStore.subscribe(
+      handleUnreadMessagesChange,
+      (state) => state.unreadMessages.length
+    );
+
+
+
+    const fetchUnreadMessages = async () => {
+      try {
+        const response = await fetch(`http://localhost:8080/demo-1.0-SNAPSHOT/rest/messages/unread/${userId}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'token': token
+          }
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        notificationsStore.setState((state) => ({
+          ...state,
+          unreadMessages: data || [],
+        }));
+      } catch (error) {
+        console.error('Error fetching unread messages:', error);
+      }
+    };
+
+    const fetchUnreadNotifications = async () => {
+      try {
+        const response = await fetch(`http://localhost:8080/demo-1.0-SNAPSHOT/rest/notifications/unread/${userId}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'token': token
+          }
+        });
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! Status: ${response.status}`);
+        }
+
+        const data = await response.json();
+
+        notificationsStore.setState((state) => ({
+          ...state,
+          unreadNotifications: data || [],
+        }));
+      } catch (error) {
+        console.error('Error fetching unread notifications:', error);
+      }
+    };
+
+    fetchUnreadMessages();
+    fetchUnreadNotifications();
+
+    return () => {
+      unsubscribeMessages();
+    };
   }, [userId, token]);
 
   const handleSelect = (event) => {
@@ -75,19 +119,6 @@ const Header = ({ toggleSidebar, isSidebarVisible }) => {
   const handleNavigation = (path) => {
     navigate(path);
   };
-
-  useEffect(() => {
-    // Subscribe to changes in unreadMessages from notificationsStore
-    const unsubscribe = notificationsStore.subscribe(
-      (state) => {
-        setUnreadMessagesCount(state.unreadMessages.length);
-      },
-      (state) => state.unreadMessages.length
-    );
-
-    // Clean up subscription on component unmount
-    return unsubscribe;
-  }, []);
 
   return (
     <IntlProvider locale={locale} messages={languages[locale]}>
@@ -117,14 +148,7 @@ const Header = ({ toggleSidebar, isSidebarVisible }) => {
                 <div className="w-4 h-4 bg-red-500 rounded-full absolute -top-1 -right-2"></div>
               )}
             </div>
-            <div className="relative">
-              <IoIosNotificationsOutline size={25} className="text-3xl cursor-pointer" />
-              {notificationsStore.getState().unreadNotifications.length > 0 && (
-                <div className="w-4 h-4 bg-red-500 rounded-full absolute -top-1 -right-1 flex justify-center items-center">
-                  <span className="text-white text-xs">{notificationsStore.getState().unreadNotifications.length}</span>
-                </div>
-              )}
-            </div>
+            <NotificationMenu />
             <UserProfileMenu />
           </div>
         </div>
