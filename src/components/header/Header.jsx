@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { IntlProvider } from 'react-intl';
 import UserProfileMenu from '../userProfileMenu/UserProfileMenu';
 import WelcomeMessage from './WelcomeMessage';
@@ -11,106 +11,15 @@ import { notificationsStore } from '../../stores/NotificationsStore';
 import NotificationMenu from '../userProfileMenu/NotificationMenu';
 
 const Header = ({ toggleSidebar, isSidebarVisible }) => {
-  const userId = userStore((state) => state.userId);
-  const token = userStore((state) => state.token);
   const locale = userStore((state) => state.locale);
   const updateLocale = userStore((state) => state.updateLocale);
   const navigate = useNavigate();
-  const [unreadMessagesCount, setUnreadMessagesCount] = useState(0);
 
-  useEffect(() => {
-    const ws = new WebSocket(`ws://localhost:8080/demo-1.0-SNAPSHOT/websocket/notifications/${token}`);
+  // Get all notifications from notificationsStore
+  const notifications = notificationsStore((state) => state.notifications);
 
-    ws.onopen = () => {
-      console.log('WebSocket connected for notifications and unread messages');
-    };
-
-    ws.onmessage = (event) => {
-      const message = JSON.parse(event.data);
-      if (message.type === 'newMessage') {
-        if (message.recipient === userId) {
-          notificationsStore.addUnreadMessage(message);
-        }
-      } else if (message.type === 'newNotification') {
-        notificationsStore.addUnreadNotification(message);
-      }
-    };
-
-    return () => {
-      ws.close();
-    };
-  }, [token, userId]);
-
-  useEffect(() => {
-    const handleUnreadMessagesChange = (state) => {
-      setUnreadMessagesCount(state.unreadMessages.length);
-    };
-
-
-    const unsubscribeMessages = notificationsStore.subscribe(
-      handleUnreadMessagesChange,
-      (state) => state.unreadMessages.length
-    );
-
-
-
-    const fetchUnreadMessages = async () => {
-      try {
-        const response = await fetch(`http://localhost:8080/demo-1.0-SNAPSHOT/rest/messages/unread/${userId}`, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            'token': token
-          }
-        });
-
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-
-        const data = await response.json();
-
-        notificationsStore.setState((state) => ({
-          ...state,
-          unreadMessages: data || [],
-        }));
-      } catch (error) {
-        console.error('Error fetching unread messages:', error);
-      }
-    };
-
-    const fetchUnreadNotifications = async () => {
-      try {
-        const response = await fetch(`http://localhost:8080/demo-1.0-SNAPSHOT/rest/notifications/unread/${userId}`, {
-          method: 'GET',
-          headers: {
-            'Content-Type': 'application/json',
-            'token': token
-          }
-        });
-
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-
-        const data = await response.json();
-
-        notificationsStore.setState((state) => ({
-          ...state,
-          unreadNotifications: data || [],
-        }));
-      } catch (error) {
-        console.error('Error fetching unread notifications:', error);
-      }
-    };
-
-    fetchUnreadMessages();
-    fetchUnreadNotifications();
-
-    return () => {
-      unsubscribeMessages();
-    };
-  }, [userId, token]);
+  // Calculate the number of unread notifications
+  const unreadNotificationsCount = notifications.filter(notification => !notification.read).length;
 
   const handleSelect = (event) => {
     updateLocale(event.target.value);
@@ -144,8 +53,8 @@ const Header = ({ toggleSidebar, isSidebarVisible }) => {
                 className="text-3xl cursor-pointer"
                 onClick={() => handleNavigation('/Chat')}
               />
-              {unreadMessagesCount > 0 && (
-                <div className="w-4 h-4 bg-red-500 rounded-full absolute -top-1 -right-2"></div>
+              {unreadNotificationsCount > 0 && (
+                <div className="w-4 h-4 bg-red-500 rounded-full absolute -top-1 -right-2">{unreadNotificationsCount}</div>
               )}
             </div>
             <NotificationMenu />

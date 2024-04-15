@@ -5,13 +5,13 @@ export const notificationsStore = create(
     persist(
         (set) => ({
             unreadMessages: [], // Array to store unread messages
-            unreadNotifications: [], // Array to store unread notifications
+            notifications: [], // Array to store all notifications
 
             // Function to add an unread message
             addUnreadMessage: (message) => set((state) => ({ unreadMessages: [...state.unreadMessages, message] })),
 
-            // Function to add an unread notification
-            addUnreadNotification: (notification) => set((state) => ({ unreadNotifications: [...state.unreadNotifications, notification] })),
+            // Function to add a notification
+            addNotification: (notification) => set((state) => ({ notifications: [...state.notifications, notification] })),
 
             // Function to remove an unread message by messageId
             removeUnreadMessage: (messageId) => {
@@ -20,8 +20,11 @@ export const notificationsStore = create(
                 }));
             },
 
-            // Function to clear all unread messages and notifications
-            clearUnreadItems: () => set({ unreadMessages: [], unreadNotifications: [] }),
+            // Function to clear all unread messages
+            clearUnreadMessages: () => set({ unreadMessages: [] }),
+
+            // Function to clear all notifications
+            clearNotifications: () => set({ notifications: [] }),
         }),
         {
             name: "notificationsStore",
