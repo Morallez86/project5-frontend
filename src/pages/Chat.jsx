@@ -1,9 +1,10 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect, useCallback, useRef } from 'react';
 import Layout from './Layout';
 import { userStore } from '../stores/UserStore';
 import { ReactSearchAutocomplete } from 'react-search-autocomplete';
 import { format } from 'date-fns';
 import { IoIosCheckmarkCircle } from "react-icons/io";
+import { notificationsStore } from '../stores/NotificationsStore';
 
 
 function Chat() {
@@ -13,6 +14,7 @@ function Chat() {
     const [messages, setMessages] = useState([]);
     const [receiverId, setReceiverId] = useState(null);
     const [users, setUsers] = useState([]);
+    const messagesEndRef = useRef(null);
 
     const fetchMessages = useCallback((recipientId) => {
         fetch(`http://localhost:8080/demo-1.0-SNAPSHOT/rest/messages?recipientId=${recipientId}`, {
@@ -121,6 +123,24 @@ function Chat() {
         }
     }, [receiverId]);
 
+    const scrollToBottom = () => {
+        if (messagesEndRef.current) {
+            messagesEndRef.current.scrollIntoView({ behavior: 'smooth' });
+        }
+    };
+
+    useEffect(() => {
+        scrollToBottom(); // Scroll to bottom when component mounts
+    }, []);
+
+    useEffect(() => {
+        scrollToBottom(); // Scroll to bottom when messages update
+    }, [messages]);
+
+    useEffect(() => {
+        // WebSocket connection and handling logic
+    }, [receiverId]);
+
 
     const handleUserClick = (userId) => {
         setReceiverId(userId);
@@ -212,12 +232,20 @@ const handleSendMessage = (message) => {
         })
         .then((response) => {
             if (response.ok) {
-                // Find the message in the messages array and update its read status
-                const updatedMessages = messages.map((message) =>
-                    message.id === messageId ? { ...message, read: true } : message
-                );
-                setMessages(updatedMessages);
-                console.log(`Message ${messageId} marked as seen`);
+            // Find the message in the messages array and update its read status
+            const updatedMessages = messages.map((message) =>
+                message.id === messageId ? { ...message, read: true } : message
+            );
+            setMessages(updatedMessages);
+            notificationsStore.removeUnreadMessage(updatedMessages);
+
+            // If backend response indicates a broader update, fetch updated messages
+            // Example: Fetch all messages for the receiverId to reflect updated read status
+            if (response.status === 200) {
+                fetchMessages(receiverId); // Update all messages for the current receiverId
+            }
+
+            console.log(`Message ${messageId} marked as seen`);
             } else {
                 throw new Error('Failed to mark message as seen');
             }
@@ -298,6 +326,7 @@ const handleSendMessage = (message) => {
                     <div className="w-full px-5 flex flex-col justify-between">
                         <div className="flex flex-col mt-5 space-y-2" style={{ maxHeight: '60vh', overflowY: 'auto' }}>
                             {messages.map((message) => renderMessageContainer(message))}
+                            <div ref={messagesEndRef} /> {/* Ref for scrolling to the end */}
                         </div>
                         <div className="py-5">
                             <input
