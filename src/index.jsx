@@ -14,7 +14,6 @@ import ManagingCategories from './pages/ManagingCategories';
 import ManagingUsers from './pages/ManagingUsers';
 import ManagingTasks from './pages/ManagingTasks';
 import EditTask from './pages/EditTask';
-import Layout from './pages/Layout';
 import UserProfile from './pages/UserProfile';
 import Dashboard from './pages/Dashboard';
 import VerifyAccount from './pages/VerifyAccount';
@@ -22,12 +21,10 @@ import Chat from './pages/Chat';
 
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  <React.StrictMode>
     <Router>
       <Routes>
         <Route index element={<App />} />
         <Route path="/home" element={<Home />} />
-        <Route path="/layout" element={<Layout />} />
         <Route path="/profile" element={<Profile />} />
         <Route path="/login" element={<Login />} />
         <Route path="/addUser" element={<AddUser />} />
@@ -42,7 +39,6 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         <Route path="/chat" element={<Chat />} />
       </Routes>
     </Router>
-  </React.StrictMode>
 );
 
 // If you want to start measuring performance in your app, pass a function

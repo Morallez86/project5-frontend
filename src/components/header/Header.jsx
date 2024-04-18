@@ -15,11 +15,11 @@ const Header = ({ toggleSidebar, isSidebarVisible }) => {
   const updateLocale = userStore((state) => state.updateLocale);
   const navigate = useNavigate();
 
-  // Get all notifications from notificationsStore
-  const notifications = notificationsStore((state) => state.notifications);
+  // Get all unread messages from notificationsStore
+  const unreadMessages = notificationsStore((state) => state.unreadMessages);
 
-  // Calculate the number of unread notifications
-  const unreadNotificationsCount = notifications.filter(notification => !notification.read).length;
+  // Calculate the number of unread messages
+  const unreadMessagesCount = unreadMessages.length;
 
   const handleSelect = (event) => {
     updateLocale(event.target.value);
@@ -53,8 +53,8 @@ const Header = ({ toggleSidebar, isSidebarVisible }) => {
                 className="text-3xl cursor-pointer"
                 onClick={() => handleNavigation('/Chat')}
               />
-              {unreadNotificationsCount > 0 && (
-                <div className="w-4 h-4 bg-red-500 rounded-full absolute -top-1 -right-2">{unreadNotificationsCount}</div>
+              {unreadMessagesCount > 0 && (
+                <div className="w-4 h-4 bg-red-500 rounded-full absolute -top-1 -right-2">{unreadMessagesCount}</div>
               )}
             </div>
             <NotificationMenu />

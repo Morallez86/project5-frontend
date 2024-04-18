@@ -8,6 +8,13 @@ export const taskStore = create(
         (set) => ({
             taskId: null, // State variable to store a single task ID
             taskOwner: null, // State variable to store the owner of the task
+            tasks: [],
+            
+            addTask: (newTask) => {
+                set((state) => ({
+                    tasks: [...state.tasks, newTask],
+                }));
+            },
 
             // Function to update the task ID
             updateTaskId: (newTaskId) => {
@@ -19,6 +26,9 @@ export const taskStore = create(
             },
             clearTaskData: () => {
                 set({ taskId: null, taskOwner: null }); // Clear the task ID and task owner
+            },
+            clearTasks: () => {
+                set({ tasks: [] }); // Clear only the tasks array
             },
         }),
         {

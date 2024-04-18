@@ -15,8 +15,10 @@ function Chat() {
     const [receiverId, setReceiverId] = useState(null);
     const [users, setUsers] = useState([]);
     const messagesEndRef = useRef(null);
+    const removeReadMessages = notificationsStore ((state) => state.removeReadMessages);
 
     const fetchMessages = useCallback((recipientId) => {
+        console.log(recipientId)
         fetch(`http://localhost:8080/demo-1.0-SNAPSHOT/rest/messages?recipientId=${recipientId}`, {
             method: 'GET',
             headers: {
@@ -26,6 +28,7 @@ function Chat() {
         })
         .then((response) => {
             if (response.ok) {
+                console.log(response)
                 return response.json();
             } else {
                 throw new Error('Failed to fetch messages');
@@ -232,15 +235,20 @@ const handleSendMessage = (message) => {
         })
         .then((response) => {
             if (response.ok) {
-            // Find the message in the messages array and update its read status
-            const updatedMessages = messages.map((message) =>
-                message.id === messageId ? { ...message, read: true } : message
-            );
+                const updatedMessages = messages.map((message) => {
+                // Check if the message's id is less than or equal to the target messageId
+                if (message.id <= messageId) {
+                    // If the message's id is less than or equal to the target messageId, return a new message object with the 'read' property set to true
+                    return { ...message, read: true };
+                } else {
+                    // If the message's id is greater than the target message, return the original message object without modification
+                    return message;
+                }
+            });
             setMessages(updatedMessages);
-            notificationsStore.removeUnreadMessage(updatedMessages);
+            
+            removeReadMessages();
 
-            // If backend response indicates a broader update, fetch updated messages
-            // Example: Fetch all messages for the receiverId to reflect updated read status
             if (response.status === 200) {
                 fetchMessages(receiverId); // Update all messages for the current receiverId
             }

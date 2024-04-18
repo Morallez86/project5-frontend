@@ -2,28 +2,34 @@ import React, { useState, useEffect, useRef } from 'react';
 import { IoIosNotificationsOutline } from 'react-icons/io';
 import { useNavigate } from 'react-router-dom';
 import { notificationsStore } from '../../stores/NotificationsStore';
+import { userStore } from '../../stores/UserStore';
 
 const NotificationMenu = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [notifications, setNotifications] = useState([]);
+  const [notifications, setNotifications] = useState(notificationsStore.getState().notifications || []);
   const navigate = useNavigate();
   const menuRef = useRef();
-  
+  const userId = userStore((state) => state.userId); 
+  const token = userStore((state) => state.token); 
 
   useEffect(() => {
-    const handleUnreadChange = (state) => {
-      setNotifications(state.unreadNotifications);
+    const handleNotificationsChange = (state) => {
+      setNotifications(state.notifications || []);
     };
 
-    const unsubscribe = notificationsStore.subscribe(handleUnreadChange, (state) => state.unreadNotifications);
+    // Subscribe to changes in notificationsStore
+    const unsubscribe = notificationsStore.subscribe(handleNotificationsChange);
 
+    // Cleanup function to unsubscribe when component unmounts
     return () => {
       unsubscribe();
     };
   }, []);
 
-  const handleNavigate = (notification) => {
-    navigate(`/notifications/${notification.id}`);
+  const handleNavigate = () => {
+    // Mark notifications as read before navigating
+    markNotificationsAsRead();
+    navigate(`/chat`);
     setIsOpen(false);
   };
 
@@ -31,19 +37,41 @@ const NotificationMenu = () => {
     setIsOpen(!isOpen);
   };
 
-  useEffect(() => {
-    const handleOutsideClick = (event) => {
-      if (menuRef.current && !menuRef.current.contains(event.target)) {
-        setIsOpen(false);
-      }
-    };
+  const handleOutsideClick = (event) => {
+    if (menuRef.current && !menuRef.current.contains(event.target)) {
+      // Mark notifications as read when clicking outside
+      setIsOpen(false);
+    }
+  };
 
+  useEffect(() => {
     document.addEventListener('click', handleOutsideClick);
 
     return () => {
       document.removeEventListener('click', handleOutsideClick);
     };
   }, []);
+
+  const markNotificationsAsRead = () => {
+    fetch(`http://localhost:8080/demo-1.0-SNAPSHOT/rest/notifications/read/${userId}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        'token': token,
+      },
+    })
+    .then((response) => {
+      if (response.ok) {
+        // Clear notifications if the response is ok
+        notificationsStore.getState().clearNotifications();
+      } else {
+        console.error('Failed to mark notifications as read.');
+      }
+    })
+    .catch((error) => {
+      console.error('Error marking notifications as read:', error);
+    });
+  };
 
   return (
     <div className="relative inline-block text-left" ref={menuRef}>
@@ -63,10 +91,10 @@ const NotificationMenu = () => {
             {notifications.map((notification) => (
               <button
                 key={notification.id}
-                onClick={() => handleNavigate(notification)}
+                onClick={() => handleNavigate()}
                 className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 w-full text-left"
               >
-                {notification.message} - From: {notification.senderId}
+                {notification.message}
               </button>
             ))}
           </div>

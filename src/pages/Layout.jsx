@@ -4,15 +4,21 @@ import Header from '../components/header/Header';
 import Footer from '../components/footer/footer';
 import { userStore } from "../stores/UserStore";
 import { notificationsStore } from '../stores/NotificationsStore';
+import { taskStore } from "../stores/TaskStore";
 
 const Layout = ({ children }) => {
     const [isSidebarVisible, setIsSidebarVisible] = useState(false);
     const username = userStore((state) => state.username);
     const token = userStore((state) => state.token);
     const userId = userStore((state) => state.userId);
+    const addNotification = notificationsStore ((state) => state.addNotification);
+    const addUnreadMessage = notificationsStore ((state) => state.addUnreadMessage);
+    const addTask = taskStore ((state) => state.addTask);
+    const clearTasks = taskStore ((state) => state.clearTasks);
 
     // WebSocket setup and message handling
     useEffect(() => {
+        console.log("just mount")
         const ws = new WebSocket(`ws://localhost:8080/demo-1.0-SNAPSHOT/websocket/application/${token}`);
 
         ws.onopen = () => {
@@ -22,12 +28,24 @@ const Layout = ({ children }) => {
         ws.onmessage = (event) => {
             try {
                 const message = JSON.parse(event.data);
-                if (message.type === 'newMessage') {
-                    if (message.recipient === userId) {
-                        notificationsStore.addUnreadMessage(message);
-                    }
-                } else if (message.type === 'newNotification') {
-                    notificationsStore.addNotification(message);
+                console.log("111111")
+
+                // Check if the message is a new message
+                if (message.recipient === userId) {
+                    addUnreadMessage(message);
+                    console.log("222222")
+                } else if (message[0].finalDate){
+                    clearTasks();
+                    message.forEach((task) => {
+                    addTask(task); // Add each task to the tasks list
+                });
+                    console.log("33333")
+                } else {
+                    // If not a new message, assume it's a new notification
+                    console.log(message)
+                    addNotification(message);
+                    console.log("ON MESSAGE")
+                    
                 }
             } catch (error) {
                 console.error('Error parsing WebSocket message:', error);
@@ -37,7 +55,8 @@ const Layout = ({ children }) => {
         return () => {
             ws.close();
         };
-    }, [token, userId]);
+    }, []);
+
 
     // Fetch unread messages and notifications when userId or token changes
     useEffect(() => {
@@ -51,7 +70,7 @@ const Layout = ({ children }) => {
                             'token': token
                         }
                     }),
-                    fetch(`http://localhost:8080/demo-1.0-SNAPSHOT/rest/notifications/${userId}`, {
+                    fetch(`http://localhost:8080/demo-1.0-SNAPSHOT/rest/notifications/unread/${userId}`, {
                         method: 'GET',
                         headers: {
                             'Content-Type': 'application/json',
@@ -67,7 +86,7 @@ const Layout = ({ children }) => {
                 if (!notificationsResponse.ok) {
                     throw new Error(`Error fetching unread notifications! Status: ${notificationsResponse.status}`);
                 }
-
+                console.log("FETCH NOtificações")
                 const messagesData = await messagesResponse.json();
                 const notificationsData = await notificationsResponse.json();
 
