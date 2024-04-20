@@ -54,7 +54,7 @@ const Header = ({ toggleSidebar, isSidebarVisible }) => {
                 onClick={() => handleNavigation('/Chat')}
               />
               {unreadMessagesCount > 0 && (
-                <div className="w-4 h-4 bg-red-500 rounded-full absolute -top-1 -right-2">{unreadMessagesCount}</div>
+                <div className="w-4 h-4 bg-red-500 rounded-full flex items-center justify-center absolute -top-1 -right-2">{unreadMessagesCount}</div>
               )}
             </div>
             <NotificationMenu />

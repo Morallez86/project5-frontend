@@ -3,7 +3,6 @@ import Layout from './Layout';
 import { userStore } from "../stores/UserStore";
 import { useNavigate } from "react-router-dom";
 import DashboardStatsGrid from '../components/dashboard/DashboardStatsGrid';
-import TransactionChart from '../components/dashboard/TransactionChart';
 
 function Dashboard() {
     const token = userStore((state) => state.token);
@@ -20,7 +19,6 @@ function Dashboard() {
         <Layout>
             <div className='flex flex-col gap-8 p-8'>
                 <DashboardStatsGrid />
-                <TransactionChart/>
             </div>
         </Layout>
     );
