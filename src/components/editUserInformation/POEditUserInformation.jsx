@@ -26,22 +26,26 @@ const POEditUserInformation = ({ userDetails }) => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-  
+
+    // Create a new object with filtered fields from formData
+    const { taskCounts, totalTasks, ...filteredFormData } = formData;
+    console.log(filteredFormData);
+
     try {
-        const response = await fetch(`http://localhost:8080/demo-1.0-SNAPSHOT/rest/users/updateProfile/${selectedUserId}`, {
+      const response = await fetch(`http://localhost:8080/demo-1.0-SNAPSHOT/rest/users/updateProfile/${selectedUserId}`, {
         method: 'PUT',
         headers: {
-            'Content-Type': 'application/json',
-            'token': token, 
+          'Content-Type': 'application/json',
+          'token': token,
         },
-        body: JSON.stringify(formData)
-    });
-    console.log(formData)
-    const data = await response.json();
-    console.log(data);
-    navigate('/Home');
+        body: JSON.stringify(filteredFormData) // Send the filteredFormData in the request body
+      });
+
+      const data = await response.json();
+      console.log(data);
+      navigate('/Home');
     } catch (error) {
-    console.error('Error adding user:', error);
+      console.error('Error updating user profile:', error);
     }
   };
 

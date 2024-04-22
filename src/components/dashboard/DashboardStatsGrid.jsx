@@ -5,7 +5,7 @@ import { ReactSearchAutocomplete } from 'react-search-autocomplete';
 import { userStore } from '../../stores/UserStore';
 import { BiSolidCategory } from "react-icons/bi";
 
-export default function DashboardStatsGrid({averageTaskCompletionTime}) {
+export default function DashboardStatsGrid({averageTaskCompletionTime, webSocketupdateUserDashboardStats}) {
 	const [searchResults, setSearchResults] = useState([]);
     const [dashboardStats, setDashboardStats] = useState(null);
 	const token = userStore((state) => state.token);
@@ -18,6 +18,12 @@ export default function DashboardStatsGrid({averageTaskCompletionTime}) {
     const tasksDoingUser = taskCounts[200] || 0;
     const tasksDoneUser = taskCounts[300] || 0;
     const [categoryStats, SetCategoryStats] = useState([]);
+
+    useEffect(() => {
+        if (webSocketupdateUserDashboardStats) {
+            setDashboardStats(webSocketupdateUserDashboardStats);
+        }
+    }, [webSocketupdateUserDashboardStats]);
 
     // Fetch dashboard statistics
     useEffect(() => {
@@ -34,6 +40,7 @@ export default function DashboardStatsGrid({averageTaskCompletionTime}) {
                 if (response.ok) {
                     const data = await response.json();
                     setDashboardStats(data);
+                    console.log(data);
                 } else {
                     throw new Error('Failed to fetch dashboard statistics');
                 }

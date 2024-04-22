@@ -34,6 +34,10 @@ const EditUserInformation = ({ userDetails }) => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    event.preventDefault();
+
+    // Create a new object with filtered fields from formData
+    const { taskCounts, totalTasks, ...filteredFormData } = formData;
     try {
         const response = await fetch('http://localhost:8080/demo-1.0-SNAPSHOT/rest/users/updateProfile/0', {
         method: 'PUT',
@@ -41,7 +45,7 @@ const EditUserInformation = ({ userDetails }) => {
             'Content-Type': 'application/json',
             'token': token, 
         },
-        body: JSON.stringify(formData)
+        body: JSON.stringify(filteredFormData)
       });
       const data = await response.json();
       console.log(data); 

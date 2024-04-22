@@ -11,6 +11,7 @@ function Dashboard() {
     const [userRegistrationData, setUserRegistrationData] = useState([]);
     const [tasksFinalDate, setTasksFinalDate] = useState([]);
     const [averageTaskCompletionTime, setAverageTaskCompletionTime] = useState(0);
+    const [dashboardStats, setDashboardStats] = useState(null);
     
 
     useEffect(() => {
@@ -31,6 +32,7 @@ function Dashboard() {
 
                 const formattedRegistrations = formatRegistrationData(data);
                 setUserRegistrationData(formattedRegistrations);
+                console.log(formattedRegistrations);
 
                 const taskFinalDates = formatFinalDatesData(data);
                 setTasksFinalDate(taskFinalDates);
@@ -134,9 +136,36 @@ const calculateAverageTaskCompletionTime = (data) => {
     const formattedAverageDuration = averageDurationInDays.toFixed(2);
 
     return formattedAverageDuration;
-};
+    };
 
+    useEffect(() => {
+        const ws = new WebSocket(`ws://localhost:8080/demo-1.0-SNAPSHOT/websocket/dashboard/${token}`);
 
+        ws.onopen = () => {
+            console.log('WebSocket connected');
+        };
+
+        ws.onclose = () => {
+            console.log('WebSocket disconnected');
+        };
+
+        ws.onmessage = (event) => {
+            try {
+                const newMessage = JSON.parse(event.data);
+                console.log(newMessage);
+                if(newMessage.totalUsers){
+                    setDashboardStats(newMessage);
+                }
+            } catch (error) {
+                console.error('Error parsing or processing message:', error);
+            }
+        };
+        return () => {
+            // Cleanup: close WebSocket connection when component unmounts or receiverId changes
+            ws.close();
+        };
+        
+    }, [token]);
 
     useEffect(() => {
         // Check if there is no token or if the token is invalid
@@ -149,7 +178,9 @@ const calculateAverageTaskCompletionTime = (data) => {
         <Layout>
         <div className='flex flex-col overflow-auto gap-8 p-8'>
             <DashboardStatsGrid 
-                averageTaskCompletionTime={averageTaskCompletionTime}/>
+                averageTaskCompletionTime={averageTaskCompletionTime}
+                webSocketupdateUserDashboardStats = {dashboardStats}
+                />
             <LineChartComponent 
                 userRegistrationData={userRegistrationData}
                 tasksFinalDate={tasksFinalDate}
