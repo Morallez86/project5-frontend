@@ -5,7 +5,7 @@ import { ReactSearchAutocomplete } from 'react-search-autocomplete';
 import { userStore } from '../../stores/UserStore';
 import { BiSolidCategory } from "react-icons/bi";
 
-export default function DashboardStatsGrid() {
+export default function DashboardStatsGrid({averageTaskCompletionTime}) {
 	const [searchResults, setSearchResults] = useState([]);
     const [dashboardStats, setDashboardStats] = useState(null);
 	const token = userStore((state) => state.token);
@@ -240,6 +240,10 @@ export default function DashboardStatsGrid() {
                     <span className="text-sm text-gray-500 font-light">Average Tasks/User</span>
                     <div className="flex items-center justify-center">
                         <strong className="text-xl text-gray-700 font-semibold">{averageTasksPerUser}</strong>
+                    </div>
+                    <span className="text-sm text-gray-500 font-light">Avarage Task Completion</span>
+                    <div className="flex items-center justify-center">
+                        <strong className="text-xl text-gray-700 font-semibold">{averageTaskCompletionTime}</strong>
                     </div>
                     <span className="text-sm text-gray-500 font-light">To Do Tasks</span>
                     <div className="flex items-center justify-center">
