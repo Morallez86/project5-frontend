@@ -4,7 +4,6 @@ import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, Responsi
 
 function LineChartComponent({ userRegistrationData, tasksFinalDate }) {
 
-
   return (
     <div className="flex flex-col gap-8 sm:flex-row sm:gap-12">
       <BoxWrapper>
@@ -26,7 +25,7 @@ function LineChartComponent({ userRegistrationData, tasksFinalDate }) {
           <ResponsiveContainer width="100%" height={400}>
             <LineChart data={tasksFinalDate}>
               <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="name" />
+              <XAxis dataKey="name" tick={{ fontSize: 10 }}/>
               <YAxis />
               <Tooltip />
               <Legend />

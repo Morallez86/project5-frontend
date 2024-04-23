@@ -12,6 +12,7 @@ function Dashboard() {
     const [tasksFinalDate, setTasksFinalDate] = useState([]);
     const [averageTaskCompletionTime, setAverageTaskCompletionTime] = useState(0);
     const [dashboardStats, setDashboardStats] = useState(null);
+    const [categoryStats, SetCategoryStats] = useState([]);
     
 
     useEffect(() => {
@@ -29,13 +30,14 @@ function Dashboard() {
                 }
 
                 const data = await response.json();
-
+                console.log(data);
                 const formattedRegistrations = formatRegistrationData(data);
                 setUserRegistrationData(formattedRegistrations);
                 console.log(formattedRegistrations);
 
                 const taskFinalDates = formatFinalDatesData(data);
                 setTasksFinalDate(taskFinalDates);
+                console.log(taskFinalDates);
 
                 const averageTime = calculateAverageTaskCompletionTime(data);
                 setAverageTaskCompletionTime(averageTime);
@@ -54,16 +56,24 @@ function Dashboard() {
         const registrationCountsByDate = {};
 
         data.forEach((entry) => {
-            const { registTime } = entry;
+            let formattedDate = null;
 
-            // Check if registTime is defined and is a valid date string
-            if (registTime && new Date(registTime).toString() !== 'Invalid Date') {
-                const formattedDate = new Date(registTime).toISOString().split('T')[0];
+            if (entry.registTime) {
+                if (Array.isArray(entry.registTime)) {
+                    // WebSocket data format (array of numbers)
+                    const [year, month, day] = entry.registTime.slice(0, 3); // Extract year, month, day
+                    formattedDate = new Date(year, month - 1, day).toISOString().split('T')[0];
+                } else if (typeof entry.registTime === 'string') {
+                    // Fetch data format (ISO string)
+                    formattedDate = new Date(entry.registTime).toISOString().split('T')[0];
+                }
 
-                if (registrationCountsByDate[formattedDate]) {
-                    registrationCountsByDate[formattedDate]++;
-                } else {
-                    registrationCountsByDate[formattedDate] = 1;
+                if (formattedDate) {
+                    if (registrationCountsByDate[formattedDate]) {
+                        registrationCountsByDate[formattedDate]++;
+                    } else {
+                        registrationCountsByDate[formattedDate] = 1;
+                    }
                 }
             }
         });
@@ -76,18 +86,28 @@ function Dashboard() {
         return chartData;
     };
 
-
     const formatFinalDatesData = (data) => {
         const finalDateCountsByDate = {};
 
         data.forEach((entry) => {
-            const { finalDate } = entry;
-            if (finalDate) {
-                const formattedDate = finalDate.toString(); // Assuming finalDate is already a LocalDate
-                if (finalDateCountsByDate[formattedDate]) {
-                    finalDateCountsByDate[formattedDate]++;
-                } else {
-                    finalDateCountsByDate[formattedDate] = 1;
+            let formattedDate = null;
+
+            if (entry.finalDate) {
+                if (Array.isArray(entry.finalDate)) {
+                    // WebSocket data format (array of numbers)
+                    const [year, month, day] = entry.finalDate.slice(0, 3); // Extract year, month, day
+                    formattedDate = new Date(year, month - 1, day).toISOString().split('T')[0];
+                } else if (typeof entry.finalDate === 'string') {
+                    // Fetch data format (LocalDate string)
+                    formattedDate = new Date(entry.finalDate).toISOString().split('T')[0];
+                }
+
+                if (formattedDate) {
+                    if (finalDateCountsByDate[formattedDate]) {
+                        finalDateCountsByDate[formattedDate]++;
+                    } else {
+                        finalDateCountsByDate[formattedDate] = 1;
+                    }
                 }
             }
         });
@@ -109,14 +129,31 @@ function Dashboard() {
         return chartData;
     };
 
-const calculateAverageTaskCompletionTime = (data) => {
+
+    const calculateAverageTaskCompletionTime = (data) => {
     // Filter out entries where finalDate and initialDate are both defined
     const filteredData = data.filter((entry) => entry.finalDate && entry.initialDate);
 
     // Map filtered entries to calculate task durations in days
     const taskDurations = filteredData.map((entry) => {
-        const initialDateTime = new Date(entry.initialDate);
-        const finalDateTime = new Date(entry.finalDate);
+        let initialDateTime, finalDateTime;
+
+        if (Array.isArray(entry.initialDate)) {
+            // WebSocket data format (array of numbers)
+            const [initialYear, initialMonth, initialDay] = entry.initialDate.slice(0, 3);
+            initialDateTime = new Date(initialYear, initialMonth - 1, initialDay);
+        } else if (typeof entry.initialDate === 'string') {
+            // Fetch data format ISO string
+            initialDateTime = new Date(entry.initialDate);
+        }
+
+        if (Array.isArray(entry.finalDate)) {
+            // WebSocket data format (array of numbers)
+            const [finalYear, finalMonth, finalDay] = entry.finalDate.slice(0, 3);
+            finalDateTime = new Date(finalYear, finalMonth - 1, finalDay);
+        } else if (typeof entry.finalDate === 'string') {
+            finalDateTime = new Date(entry.finalDate);
+        }
 
         // Calculate the difference in days between finalDateTime and initialDateTime
         const durationInDays = (finalDateTime - initialDateTime) / (1000 * 60 * 60 * 24); // Convert milliseconds to days
@@ -136,7 +173,8 @@ const calculateAverageTaskCompletionTime = (data) => {
     const formattedAverageDuration = averageDurationInDays.toFixed(2);
 
     return formattedAverageDuration;
-    };
+};
+
 
     useEffect(() => {
         const ws = new WebSocket(`ws://localhost:8080/demo-1.0-SNAPSHOT/websocket/dashboard/${token}`);
@@ -155,6 +193,19 @@ const calculateAverageTaskCompletionTime = (data) => {
                 console.log(newMessage);
                 if(newMessage.totalUsers){
                     setDashboardStats(newMessage);
+                }else if(newMessage[0].registTime){
+                    const formattedRegistrations = formatRegistrationData(newMessage);
+                    console.log(formattedRegistrations)
+                    setUserRegistrationData(formattedRegistrations);
+                }else if(newMessage[0].initialDate){
+                    const formattedFinalDatesData = formatFinalDatesData(newMessage);
+                    console.log(formattedFinalDatesData);
+                    setTasksFinalDate(formattedFinalDatesData);
+
+                    const averageTime = calculateAverageTaskCompletionTime(newMessage);
+                    setAverageTaskCompletionTime(averageTime);
+                }else if(newMessage[0].categoryTitle){
+                    SetCategoryStats(newMessage)
                 }
             } catch (error) {
                 console.error('Error parsing or processing message:', error);
@@ -180,6 +231,7 @@ const calculateAverageTaskCompletionTime = (data) => {
             <DashboardStatsGrid 
                 averageTaskCompletionTime={averageTaskCompletionTime}
                 webSocketupdateUserDashboardStats = {dashboardStats}
+                webSocketcategoryStats ={categoryStats}
                 />
             <LineChartComponent 
                 userRegistrationData={userRegistrationData}

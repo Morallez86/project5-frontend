@@ -5,7 +5,7 @@ import { ReactSearchAutocomplete } from 'react-search-autocomplete';
 import { userStore } from '../../stores/UserStore';
 import { BiSolidCategory } from "react-icons/bi";
 
-export default function DashboardStatsGrid({averageTaskCompletionTime, webSocketupdateUserDashboardStats}) {
+export default function DashboardStatsGrid({averageTaskCompletionTime, webSocketupdateUserDashboardStats, webSocketcategoryStats}) {
 	const [searchResults, setSearchResults] = useState([]);
     const [dashboardStats, setDashboardStats] = useState(null);
 	const token = userStore((state) => state.token);
@@ -24,6 +24,12 @@ export default function DashboardStatsGrid({averageTaskCompletionTime, webSocket
             setDashboardStats(webSocketupdateUserDashboardStats);
         }
     }, [webSocketupdateUserDashboardStats]);
+
+    useEffect(() => {
+    if (webSocketcategoryStats) {
+        SetCategoryStats(webSocketcategoryStats);
+    }
+    }, [webSocketcategoryStats]);
 
     // Fetch dashboard statistics
     useEffect(() => {
