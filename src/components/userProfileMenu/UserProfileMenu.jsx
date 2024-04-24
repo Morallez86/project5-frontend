@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { BiUser } from 'react-icons/bi';
 import { useNavigate } from "react-router-dom";
 import { userStore } from "../../stores/UserStore";
 import { ProfileStore } from "../../stores/ProfileStore";
 import { taskStore } from '../../stores/TaskStore';
+import { FaRegSave } from "react-icons/fa";
+
 
 const UserProfileMenu = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -14,39 +15,59 @@ const UserProfileMenu = () => {
   const navigate = useNavigate();
   const { token, username, clearUserData } = userStore.getState();
   const menuRef = useRef();
+  const [showSubmenu, setShowSubmenu] = useState(false);
+  const [currentTokenExpirationTime, setCurrentTokenExpirationTime] = useState(null);
+  
 
   useEffect(() => {
-  const fetchPhoto = async () => {
-    if (token !== null && userStore.getState().username !== null) {
+    const fetchPhoto = async () => {
+      if (token !== null && userStore.getState().username !== null) {
+        try {
+          const response = await fetch('http://localhost:8080/demo-1.0-SNAPSHOT/rest/users/photo', {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+              'token': token,
+              'username': userStore.getState().username,
+            },
+          });
+
+          if (response.ok) {
+            const photoURL = await response.json();
+            setPhotoURL(photoURL);
+          } else {
+            console.error('Fetching photo URL failed');
+          }
+        } catch (error) {
+          console.error('Error during fetching photo URL:', error);
+        }
+      }
+    };
+
+    const fetchCurrentTokenExpirationTime = async () => {
       try {
-        // Make a request to your getPhoto endpoint with the user's token and username
-        const response = await fetch('http://localhost:8080/demo-1.0-SNAPSHOT/rest/users/photo', {
+        const response = await fetch('http://localhost:8080/demo-1.0-SNAPSHOT/rest/configurations/currentTokenExpirationTime', {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
             'token': token,
-            'username': userStore.getState().username,
           },
         });
 
         if (response.ok) {
-          // Photo URL successfully fetched
-          const photoURL = await response.json();
-          setPhotoURL(photoURL);
-          console.log(token);
+          const { tokenExpirationTime } = await response.json();
+          setCurrentTokenExpirationTime(tokenExpirationTime);
         } else {
-          // Fetching photo URL failed
-          console.error('Fetching photo URL failed');
+          console.error('Failed to fetch current token expiration time');
         }
       } catch (error) {
-        console.error('Error during fetching photo URL:', error);
+        console.error('Error fetching current token expiration time:', error);
       }
-    }
-  };
+    };
 
-  // Fetch photo URL when the component mounts
-  fetchPhoto();
-}, [token]);
+    fetchPhoto();
+    fetchCurrentTokenExpirationTime();
+  }, [token]);
 
 
 
@@ -104,6 +125,42 @@ const UserProfileMenu = () => {
     };
   }, []);
 
+  const handleSettingsClick = (event) => {
+    if(!showSubmenu){
+      setShowSubmenu(true);
+    }else{
+      setShowSubmenu(false);
+    }
+  };
+
+  const handleSaveChanges = async () => {
+    // Ensure currentTokenExpirationTime is converted to an integer before sending
+    const newTokenExpirationTime = parseInt(currentTokenExpirationTime, 10);
+    console.log(newTokenExpirationTime)
+    if (!isNaN(newTokenExpirationTime)) {
+      try {
+        const response = await fetch('http://localhost:8080/demo-1.0-SNAPSHOT/rest/configurations/updateTokenExpirationTime', {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            'token': token
+          },
+          body: newTokenExpirationTime
+        });
+
+        if (response.ok) {
+          console.log('Token expiration time updated successfully');
+        } else {
+          console.error('Failed to update token expiration time');
+        }
+      } catch (error) {
+        console.error('Error updating token expiration time:', error);
+      }
+    } else {
+      console.error('Invalid token expiration time format');
+    }
+  };
+
   return (
     <div className="relative inline-block text-left" ref={menuRef}>
       <div>
@@ -115,24 +172,58 @@ const UserProfileMenu = () => {
           {photoURL ? (
             <img src={photoURL} alt="User" className="w-11 h-11 rounded-full border-black border-2 bg-white" />
           ) : (
-            <BiUser className="text-2xl" />
+            <FaRegSave className="text-sm" />
           )}
         </button>
       </div>
       {isOpen && (
-        <div className="origin-top-right absolute right-0 -mr-4 mt-4 w-32 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-10">
-          <div className="flex flex-col items-center py-1">
+        <div className="origin-top-right absolute right-0 -mr-4 mt-4 w-32 rounded-md shadow-lg  bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-10">
+          <div className="flex flex-col  items-center py-1 border rounded border-black">
             <button
-              href="#"
               onClick={handleProfileClick}
-              className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+              className="block px-4 py-2 w-full text-sm text-gray-700 hover:bg-gray-400"
             >
               Profile
             </button>
             <button
-              href="#"
+              onClick={handleSettingsClick}
+              className="block px-4 py-2 w-full text-sm text-gray-700 hover:bg-gray-400"
+            >
+              Settings
+            </button>
+            {showSubmenu && (
+              <div
+                className="origin-top-left flex items-center flex-col border border-black absolute z-10 w-36 p-1 py-2 mt-2 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
+                style={{ top: 29, right: 128}}
+              >
+                <label className="block px-4  py-b-2 w-full text-sm text-gray-700 hover:bg-gray-100">
+                  Token Timeout
+                </label>
+                <div className="flex flex-row justify-between  items-center w-full mt-2">
+                  <div className='flex'>
+                  <input
+                    type="text"
+                    className="block w-1/3 h-6 py-2 text-xs text-black border border-gray-300 focus:border-cyan-950"
+                    name="tokenTimeout"
+                    value={currentTokenExpirationTime}
+                    onChange={(e) => setCurrentTokenExpirationTime(e.target.value)}
+                  />
+                  <p className='text-black ml-1 w-1/3 text-sm'>hours</p>
+                  </div>
+                  <div className='flex place-item-end'>
+                    <button
+                      className="py-1 w-6 text-sm text-white bg-gray-600 hover:bg-cyan-950 rounded-md flex items-center justify-center"
+                      onClick={handleSaveChanges}
+                    >
+                      <FaRegSave className="w-3" />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            )}
+            <button
               onClick={handleLogoutClick}
-              className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+              className="block px-4 py-2 w-full text-sm text-gray-700 hover:bg-gray-400"
             >
               Logout
             </button>

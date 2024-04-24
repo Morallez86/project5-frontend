@@ -18,6 +18,7 @@ import UserProfile from './pages/UserProfile';
 import Dashboard from './pages/Dashboard';
 import VerifyAccount from './pages/VerifyAccount';
 import Chat from './pages/Chat';
+import Notifications from './pages/Notifications';
 
 
 ReactDOM.createRoot(document.getElementById("root")).render(
@@ -37,6 +38,7 @@ ReactDOM.createRoot(document.getElementById("root")).render(
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/verify-account/:token" element={<VerifyAccount/>} />
         <Route path="/chat" element={<Chat />} />
+        <Route path="/notifications" element={<Notifications/>} />
       </Routes>
     </Router>
 );
