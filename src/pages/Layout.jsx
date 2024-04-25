@@ -29,23 +29,23 @@ const Layout = ({ children }) => {
             try {
                 const message = JSON.parse(event.data);
                 console.log("111111")
+                console.log(message)
 
                 // Check if the message is a new message
                 if (message.recipient === userId) {
                     addUnreadMessage(message);
                     console.log("222222")
-                } else if (message[0].finalDate){
-                    clearTasks();
-                    message.forEach((task) => {
-                    addTask(task); // Add each task to the tasks list
-                });
-                    console.log("33333")
-                } else {
+                } else if(message.notificationType) {
                     // If not a new message, assume it's a new notification
                     console.log(message)
                     addNotification(message);
                     console.log("ON MESSAGE")
                     
+                }else{
+                    clearTasks();
+                    message.forEach((task) => {
+                        addTask(task); // Add each task to the tasks list
+                    });
                 }
             } catch (error) {
                 console.error('Error parsing WebSocket message:', error);
