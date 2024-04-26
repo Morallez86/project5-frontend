@@ -53,7 +53,7 @@ const handleAccountRegistration = async (event) => {
             <div className="text-white min-h-screen flex justify-center items-center">
                 <div className="bg-cyan-900/60	border border-cyan-950 rounded-md p-12 backdrop-filter backdrop-blur-sm bg-opacity-30 relative w-full max-w-md">
                     <div> 
-                        <h1 className="text-3xl w-full text-whitefont-bold text-center px-1 mb-6">Account Verification</h1>
+                        <h1 className="text-3xl w-full text-whitefont-bold text-center px-1 mb-6">New Password</h1>
                         <form onSubmit={handleAccountRegistration}>
                         <div className="relative my-4">
                             <input 
@@ -94,7 +94,7 @@ const handleAccountRegistration = async (event) => {
                         <button 
                             className="w-full mb-4 text-[18px] mt-6 rounded-full bg-white text-teal-900 hover:bg-teal-950 hover:text-white py-2 transition-colors duration-300" 
                             type="submit"
-                            >Verify Account
+                            >Change Password
                         </button>
                         </form>
                     </div>

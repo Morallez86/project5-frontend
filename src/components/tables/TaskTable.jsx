@@ -5,8 +5,11 @@ import { useNavigate } from 'react-router-dom';
 import { MdPriorityHigh } from "react-icons/md";
 import { taskStore } from "../../stores/TaskStore";
 import WarningModal from '../modal/WarningModal';
+import languages from '../../translations';
+import { FormattedMessage, IntlProvider } from 'react-intl';
 
 function TaskTable() {
+  const locale = userStore((state) => state.locale);
   const [tasks, setTasks] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
   const token = userStore((state) => state.token);
@@ -237,6 +240,7 @@ function TaskTable() {
   };
 
   return (
+    <IntlProvider locale={locale} messages={languages[locale]}>
     <div className='p-8'>
     <div className="text-white flex justify-center items-center">
       <WarningModal
@@ -250,17 +254,27 @@ function TaskTable() {
     <div className="bg-cyan-900/60 border border-cyan-950 rounded-md p-14 backdrop-filter backdrop-blur-sm bg-opacity-30 text-center">
       
       <div>
-        <h1 className="text-2xl font-bold mb-4">Managing Tasks</h1>
+        <h1 className="text-2xl font-bold mb-4">
+          <FormattedMessage id="managingTasks" defaultMessage="Managing Tasks" />
+        </h1>
         <div className="flex justify-between">
           <div className="flex space-x-1 mr-4">
-            <input type="text" placeholder="Category" value={category} onChange={(e) => setCategory(e.target.value)} className="px-2 py-1 border rounded border-gray-300 text-black" />
-            <button onClick={handleCategorySearch} className="px-4 py-1 bg-slate-400 text-white rounded hover:bg-slate-500">Search</button>
-            <input type="text" placeholder="Owner" value={owner} onChange={(e) => setOwner(e.target.value)} className="px-2 py-1 border rounded border-gray-300 text-black" />
-            <button onClick={handleOwnerSearch} className="px-4 py-1 bg-slate-400 text-white rounded hover:bg-slate-500">Search</button>
+            <input type="text" placeholder={languages[locale].categoryT}  value={category} onChange={(e) => setCategory(e.target.value)} className="px-2 py-1 border rounded border-gray-300 text-black" />
+            <button onClick={handleCategorySearch} className="px-4 py-1 bg-slate-400 text-white rounded hover:bg-slate-500">
+              <FormattedMessage id="searchButton" defaultMessage="Search" />
+            </button>
+            <input type="text" placeholder={languages[locale].owner}  value={owner} onChange={(e) => setOwner(e.target.value)} className="px-2 py-1 border rounded border-gray-300 text-black" />
+            <button onClick={handleOwnerSearch} className="px-4 py-1 bg-slate-400 text-white rounded hover:bg-slate-500">
+              <FormattedMessage id="searchButton" defaultMessage="Search" />
+            </button>
           </div>
           <div className="flex space-x-1">
-            <button onClick={handleInactiveSearch} className="px-4 py-1 bg-cyan-900 text-white rounded hover:bg-cyan-950">Inactive Tasks</button>
-            <button onClick={fetchTasks} className="px-4 py-1 bg-cyan-900 text-white rounded hover:bg-cyan-950">Reset</button>
+            <button onClick={handleInactiveSearch} className="px-4 py-1 bg-cyan-900 text-white rounded hover:bg-cyan-950">
+              <FormattedMessage id="inactiveTasksButton" defaultMessage="Inactive Tasks" />
+            </button>
+            <button onClick={fetchTasks} className="px-4 py-1 bg-cyan-900 text-white rounded hover:bg-cyan-950">
+              <FormattedMessage id="resetButton" defaultMessage="Reset" />
+            </button>
           </div>
         </div>
         <div className='overflow-y-auto max-h-96 border-b border-t mt-1'>
@@ -270,12 +284,12 @@ function TaskTable() {
               <th className="px-6 py-2 border border-gray-300">
                 <input type="checkbox" checked={selectAll || false} onChange={handleSelectAll} />
               </th>
-              <th className="px-6 py-2 border border-gray-300">Title</th>
-              <th className="px-6 py-2 border border-gray-300">Owner</th>
-              <th className="px-6 py-2 border border-gray-300">Category</th>
-              <th className="px-6 py-2 border border-gray-300">Status</th>
-              <th className="px-6 py-2 border border-gray-300">State</th>
-              <th className="px-6 py-2 border border-gray-300">Edit</th>
+              <th className="px-6 py-2 border border-gray-300"><FormattedMessage id="title" defaultMessage="Title" /></th>
+              <th className="px-6 py-2 border border-gray-300"><FormattedMessage id="owner" defaultMessage="Owner" /></th>
+              <th className="px-6 py-2 border border-gray-300"><FormattedMessage id="categoryT" defaultMessage="Category"/></th>
+              <th className="px-6 py-2 border border-gray-300"><FormattedMessage id="statusT" defaultMessage="Status"/></th>
+              <th className="px-6 py-2 border border-gray-300"><FormattedMessage id="stateT" defaultMessage="State"/></th>
+              <th className="px-6 py-2 border border-gray-300"><FormattedMessage id="editT" defaultMessage="Edit"/></th>
             </tr>
           </thead>
           <tbody>
@@ -320,15 +334,15 @@ function TaskTable() {
         <div className="flex mt-4 justify-between">
           <div>
             <button type="button" onClick={handleSetActive} className="px-4 py-2 bg-cyan-900 text-white rounded hover:bg-cyan-950 mr-2">
-              Set Active
+              <FormattedMessage id="setActiveButton" defaultMessage="Set Active"/>
             </button>
             <button type="button" onClick={handleSetInactive} className="px-4 py-2 bg-cyan-900 text-white rounded hover:bg-cyan-950 mr-2">
-              Set Inactive
+              <FormattedMessage id="setInactiveButton" defaultMessage="inactive"/>
             </button>
           </div>
           {userRole === "po" && (
             <button type="button" onClick={handleDeleteButtonClick} className="px-4 py-2 bg-red-900 text-white rounded hover:bg-red-950">
-            Delete
+            <FormattedMessage id="deleteButton" defaultMessage="delete"/>
             </button>
           )}
         </div>
@@ -336,6 +350,7 @@ function TaskTable() {
     </div>
     </div>
     </div>
+    </IntlProvider>
   );
 }
 

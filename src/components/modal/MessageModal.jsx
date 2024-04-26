@@ -1,8 +1,14 @@
 import React from 'react';
+import languages from '../../translations';
+import { FormattedMessage, IntlProvider } from 'react-intl';
+import { userStore } from "../../stores/UserStore";
 
 const MessageModal = ({ isOpen, onClose, title, message}) => {
+  const locale = userStore((state) => state.locale);
+
   return (
     <>
+    <IntlProvider locale={locale} messages={languages[locale]}>
       {isOpen && (
         <div className=" inset-0 z-10 flex">
           <div className="fixed inset-0 bg-black opacity-75"></div>
@@ -14,12 +20,13 @@ const MessageModal = ({ isOpen, onClose, title, message}) => {
                 className="px-4 py-2 bg-slate-400 text-white rounded hover:bg-slate-500"
                 onClick={onClose}
               >
-                Cancel
+                <FormattedMessage id="cancelButton" defaultMessage="Cancel" />
               </button>
             </div>
           </div>
         </div>
       )}
+      </IntlProvider>
     </>
   );
 };

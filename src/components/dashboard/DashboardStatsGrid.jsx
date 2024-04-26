@@ -4,9 +4,12 @@ import { FaTasks } from "react-icons/fa";
 import { ReactSearchAutocomplete } from 'react-search-autocomplete';
 import { userStore } from '../../stores/UserStore';
 import { BiSolidCategory } from "react-icons/bi";
+import { FormattedMessage, IntlProvider } from 'react-intl';
+import languages from '../../translations';
 
 export default function DashboardStatsGrid({averageTaskCompletionTime, webSocketupdateUserDashboardStats, webSocketcategoryStats}) {
-	const [searchResults, setSearchResults] = useState([]);
+	const locale = userStore((state) => state.locale);
+    const [searchResults, setSearchResults] = useState([]);
     const [dashboardStats, setDashboardStats] = useState(null);
 	const token = userStore((state) => state.token);
     const [userDetails, setUserDetails] = useState(null);
@@ -179,6 +182,7 @@ export default function DashboardStatsGrid({averageTaskCompletionTime, webSocket
     : 0;
 
 	return (
+        <IntlProvider locale={locale} messages={languages[locale]}>
     <div className="flex flex-col gap-8 sm:flex-row sm:gap-12">
         <BoxWrapper>
             <div className="grid grid-cols-2 h-full">
@@ -190,15 +194,21 @@ export default function DashboardStatsGrid({averageTaskCompletionTime, webSocket
                         </div>
 						</div>
                     <div className="p-2 text-center">
-                        <span className="text-sm text-gray-500 font-light">Total Users</span>
+                        <span className="text-sm text-gray-500 font-light">
+                            <FormattedMessage id="totalUsers" defaultMessage="Total Users" />
+                        </span>
                         <div className="flex items-center justify-center">
                             <strong className="text-xl text-gray-700 font-semibold">{dashboardStats.totalUsers}</strong>
                         </div>
-                        <span className="text-sm text-gray-500 font-light">Confirmed Users</span>
+                        <span className="text-sm text-gray-500 font-light">
+                            <FormattedMessage id="confirmedUsers" defaultMessage="Confirmed Users" />
+                        </span>
                         <div className="flex items-center justify-center">
                             <strong className="text-xl text-gray-700 font-semibold">{dashboardStats.totalActiveUsers}</strong>
                         </div>
-                        <span className="text-sm text-gray-500 font-light">Pending Users</span>
+                        <span className="text-sm text-gray-500 font-light">
+                            <FormattedMessage id="pendingUsers" defaultMessage="Pending Users" />
+                        </span>
                         <div className="flex items-center justify-center">
                             <strong className="text-xl text-gray-700 font-semibold">{dashboardStats.totalPendingUsers}</strong>
                         </div>
@@ -220,19 +230,27 @@ export default function DashboardStatsGrid({averageTaskCompletionTime, webSocket
                         formatResult={formatResult}
                     />
                     <div className="p-2 text-center">
-                        <span className="text-sm text-gray-500 font-light">Total Tasks</span>
+                        <span className="text-sm text-gray-500 font-light">
+                            <FormattedMessage id="totalTasks" defaultMessage="Total Tasks" />
+                        </span>
                         <div className="flex items-center justify-center">
                             <strong className="text-xl text-gray-700 font-semibold">{totalTasks}</strong>
                         </div>
-                        <span className="text-sm text-gray-500 font-light">To Do Tasks</span>
+                        <span className="text-sm text-gray-500 font-light">
+                            <FormattedMessage id="toDoTasks" defaultMessage="To Do Tasks" />
+                        </span>
                         <div className="flex items-center justify-center">
                             <strong className="text-xl text-gray-700 font-semibold">{tasksTodoUser}</strong>
                         </div>
-                        <span className="text-sm text-gray-500 font-light">Doing Tasks</span>
+                        <span className="text-sm text-gray-500 font-light">
+                            <FormattedMessage id="doingTasks" defaultMessage="Doing Tasks" />
+                        </span>
                         <div className="flex items-center justify-center">
                             <strong className="text-xl text-gray-700 font-semibold">{tasksDoingUser}</strong>
                         </div>
-                        <span className="text-sm text-gray-500 font-light">Done Tasks</span>
+                        <span className="text-sm text-gray-500 font-light">
+                            <FormattedMessage id="doneTasks" defaultMessage="Done Tasks" />
+                        </span>
                         <div className="flex items-center justify-center">
                             <strong className="text-xl text-gray-700 font-semibold">{tasksDoneUser}</strong>
                         </div>
@@ -250,23 +268,33 @@ export default function DashboardStatsGrid({averageTaskCompletionTime, webSocket
                         </div>
 						</div>
 						<div className="p-2 text-center">
-                    <span className="text-sm text-gray-500 font-light">Average Tasks/User</span>
+                    <span className="text-sm text-gray-500 font-light">
+                        <FormattedMessage id="averageTasksUser" defaultMessage="Average Tasks/User" />
+                    </span>
                     <div className="flex items-center justify-center">
                         <strong className="text-xl text-gray-700 font-semibold">{averageTasksPerUser}</strong>
                     </div>
-                    <span className="text-sm text-gray-500 font-light">Avarage Task Completion</span>
+                    <span className="text-sm text-gray-500 font-light">
+                        <FormattedMessage id="avarageTaskCompletion" defaultMessage="Avarage Task Completion" />
+                    </span>
                     <div className="flex items-center justify-center">
                         <strong className="text-xl text-gray-700 font-semibold">{averageTaskCompletionTime}</strong>
                     </div>
-                    <span className="text-sm text-gray-500 font-light">To Do Tasks</span>
+                    <span className="text-sm text-gray-500 font-light">
+                        <FormattedMessage id="toDoTasks" defaultMessage="To Do Tasks" />
+                    </span>
                     <div className="flex items-center justify-center">
                         <strong className="text-xl text-gray-700 font-semibold">{dashboardStats.taskCountsByStatus[100]}</strong>
                     </div>
-                    <span className="text-sm text-gray-500 font-light">Doing Tasks</span>
+                    <span className="text-sm text-gray-500 font-light">
+                        <FormattedMessage id="doingTasks" defaultMessage="Doing Tasks" />
+                    </span>
                     <div className="flex items-center justify-center">
                         <strong className="text-xl text-gray-700 font-semibold">{dashboardStats.taskCountsByStatus[200]}</strong>
                     </div>
-                    <span className="text-sm text-gray-500 font-light">Done Tasks</span>
+                    <span className="text-sm text-gray-500 font-light">
+                        <FormattedMessage id="doneTasks" defaultMessage="Done Tasks" />
+                    </span>
                     <div className="flex items-center justify-center">
                         <strong className="text-xl text-gray-700 font-semibold">{dashboardStats.taskCountsByStatus[300]}</strong>
                     </div>
@@ -280,7 +308,9 @@ export default function DashboardStatsGrid({averageTaskCompletionTime, webSocket
                             <BiSolidCategory className="text-2xl text-white" />
                         </div>
 						</div>
-                        <span className="text-sm text-gray-500 font-light">Category List (count)</span>
+                        <span className="text-sm text-gray-500 font-light">
+                            <FormattedMessage id="CategoryListCount" defaultMessage="Category List (count)" />
+                        </span>
 						<div className="overflow-y-auto max-52 ">
                             
                             {categoryStats.map((category, index) => (
@@ -296,6 +326,7 @@ export default function DashboardStatsGrid({averageTaskCompletionTime, webSocket
             </div>
         </BoxWrapper>
     </div>
+    </IntlProvider>
 	)
 }
 

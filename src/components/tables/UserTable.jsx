@@ -5,8 +5,11 @@ import { ProfileStore } from "../../stores/ProfileStore";
 import { useNavigate } from 'react-router-dom';
 import WarningModal from '../modal/WarningModal';
 import MessageModal from '../modal/MessageModal';
+import languages from '../../translations';
+import { FormattedMessage, IntlProvider } from 'react-intl';
 
 function UserTable() {
+  const locale = userStore((state) => state.locale);
   const [users, setUsers] = useState([]);
   const [selectAll, setSelectAll] = useState(false);
   const token = userStore((state) => state.token);
@@ -142,7 +145,7 @@ function UserTable() {
   };
 
   return (
-
+    <IntlProvider locale={locale} messages={languages[locale]}>
     <div className="text-white p-8 flex h-full justify-center">
       {/* Show the MessageModal if showMessageModal is true */}
       <MessageModal 
@@ -161,7 +164,9 @@ function UserTable() {
       />
     <div className="bg-cyan-900/60 border border-cyan-950 rounded-md p-14 backdrop-filter backdrop-blur-sm bg-opacity-30 text-center">
       <div className="justify-center items-center">
-        <h1 className="text-2xl font-bold">Managing Users</h1>
+        <h1 className="text-2xl font-bold">
+          <FormattedMessage id="managingUsers" defaultMessage="Managing Users" />
+        </h1>
         <div className='overflow-y-auto h-96 mt-1'>
         <table className="w-full mt-4 border-collapse border border-gray-300">
           <thead>
@@ -169,13 +174,13 @@ function UserTable() {
               <th className="px-6 py-2 border border-gray-300">
                 <input type="checkbox" checked={selectAll || false} onChange={handleSelectAll} />
               </th>
-              <th className="px-6 py-2 border border-gray-300">Email</th>
-              <th className="px-6 py-2 border border-gray-300">Username</th>
-              <th className="px-6 py-2 border border-gray-300">First Name</th>
-              <th className="px-6 py-2 border border-gray-300">Last Name</th>
-              <th className="px-6 py-2 border border-gray-300">Job</th>
-              <th className="px-6 py-2 border border-gray-300">State</th>
-              <th className="px-6 py-2 border border-gray-300">Edit</th>
+              <th className="px-6 py-2 border border-gray-300"><FormattedMessage id="emailProfile" defaultMessage="Email" /></th>
+              <th className="px-6 py-2 border border-gray-300"><FormattedMessage id="usernameLabel" defaultMessage="username" /></th>
+              <th className="px-6 py-2 border border-gray-300"><FormattedMessage id="firstNameProfile" defaultMessage="First Name" /></th>
+              <th className="px-6 py-2 border border-gray-300"><FormattedMessage id="lastNameProfile" defaultMessage="Last Name" /></th>
+              <th className="px-6 py-2 border border-gray-300"><FormattedMessage id="job" defaultMessage="Job" /></th>
+              <th className="px-6 py-2 border border-gray-300"><FormattedMessage id="stateT" defaultMessage="State" /></th>
+              <th className="px-6 py-2 border border-gray-300"><FormattedMessage id="editT" defaultMessage="Edit" /></th>
             </tr>
           </thead>
           <tbody>
@@ -208,14 +213,14 @@ function UserTable() {
                 onClick={handleSetInactive}
                 className="px-4 py-2 bg-cyan-900 text-white rounded hover:bg-cyan-950 mr-2"
               >
-                Set Inactive
+                <FormattedMessage id="setInactiveButton" defaultMessage="inactive"/>
               </button>
               <button
                 type="button"
                 onClick={handleSetActive}
                 className="px-4 py-2 bg-cyan-900 text-white rounded hover:bg-cyan-950 mr-2"
               >
-                Set Active
+                <FormattedMessage id="setActiveButton" defaultMessage="Set Active"/>
               </button>
             </div>
           )}
@@ -225,13 +230,14 @@ function UserTable() {
                 onClick={handleDeleteButtonClick}
                 className="px-4 py-2 bg-red-900 text-white rounded hover:bg-red-950"
               >
-                Delete
+                <FormattedMessage id="deleteButton" defaultMessage="delete"/>
               </button>
             )}
         </div>
       </div>
     </div>
   </div>
+  </IntlProvider>
 );
 }
 

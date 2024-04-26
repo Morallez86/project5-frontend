@@ -2,9 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { userStore } from "../../stores/UserStore";
 import { MdOutlineMessage } from 'react-icons/md';
 import { useNavigate } from 'react-router-dom';
+import languages from '../../translations';
+import { FormattedMessage, IntlProvider } from 'react-intl';
 
 
 function NotificationTable() {
+    const locale = userStore((state) => state.locale);
     const token = userStore((state) => state.token);
     const userId = userStore((state) => state.userId);
     const [notifications, setAllNotifications] = useState([]);
@@ -65,15 +68,22 @@ function NotificationTable() {
 
 
     return (
+        <IntlProvider locale={locale} messages={languages[locale]}>
         <div className=" p-8 text-white flex justify-center">
             <div className="bg-cyan-900/60 border border-cyan-950 rounded-md p-8 backdrop-filter backdrop-blur-sm bg-opacity-30 text-center w-full max-w-screen-lg">
-                <h1 className="text-2xl font-bold mb-4">Notifications</h1>
+                <h1 className="text-2xl font-bold mb-4">
+                    <FormattedMessage id="notifications" defaultMessage="Notifications" />
+                </h1>
                 <div className='overflow-y-auto overflow-x-auto max-h-96' style={{ paddingRight: '8px' }}>
                     <table className="w-full border-collapse border border-gray-300">
                         <thead>
                             <tr>
-                                <th className="px-4 py-2 border border-gray-300">Message</th>
-                                <th className="px-4 py-2 border border-gray-300">Time</th>
+                                <th className="px-4 py-2 border border-gray-300">
+                                    <FormattedMessage id="message" defaultMessage="Message" />
+                                </th>
+                                <th className="px-4 py-2 border border-gray-300">
+                                    <FormattedMessage id="time" defaultMessage="Time" />
+                                </th>
                                 <th className="px-4 py-2 border border-gray-300">Chat</th>
                             </tr>
                         </thead>
@@ -97,6 +107,7 @@ function NotificationTable() {
                 </div>
             </div>
         </div>
+        </IntlProvider>
     );
 }
 

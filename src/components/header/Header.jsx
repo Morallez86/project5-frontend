@@ -9,10 +9,12 @@ import { IoMenu } from 'react-icons/io5';
 import { useNavigate } from 'react-router-dom';
 import { notificationsStore } from '../../stores/NotificationsStore';
 import NotificationMenu from '../userProfileMenu/NotificationMenu';
+import LanguageSelector from '../languageSelector/LanguageSelector'; // Import LanguageSelector component
 
 const Header = ({ toggleSidebar, isSidebarVisible }) => {
   const locale = userStore((state) => state.locale);
-  const updateLocale = userStore((state) => state.updateLocale);
+  const username = userStore((state) => state.username);
+  const setLocale = userStore((state) => state.setLocale); // Retrieve setLocale function
   const navigate = useNavigate();
 
   // Get all unread messages from notificationsStore
@@ -21,8 +23,8 @@ const Header = ({ toggleSidebar, isSidebarVisible }) => {
   // Calculate the number of unread messages
   const unreadMessagesCount = unreadMessages.length;
 
-  const handleSelect = (event) => {
-    updateLocale(event.target.value);
+  const handleLocaleChange = (selectedLocale) => {
+    setLocale(selectedLocale); // Set the new locale/language
   };
 
   const handleNavigation = (path) => {
@@ -37,14 +39,12 @@ const Header = ({ toggleSidebar, isSidebarVisible }) => {
             {!isSidebarVisible && (
               <IoMenu size={40} className="text-3xl cursor-pointer" onClick={toggleSidebar} />
             )}
-            <WelcomeMessage />
-            <select onChange={handleSelect} value={locale} className="text-black ml-2 rounded">
-              {['en', 'pt'].map((language) => (
-                <option key={language} value={language}>
-                  {language}
-                </option>
-              ))}
-            </select>
+            <WelcomeMessage username={username} />
+            {/* Render LanguageSelector component for language selection */}
+            <LanguageSelector
+              locale={locale}
+              onLocaleChange={handleLocaleChange}
+            />
           </div>
           <div className="flex items-center space-x-6">
             <div className="relative">

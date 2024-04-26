@@ -6,12 +6,15 @@ import '../index.css';
 import { useNavigate } from "react-router-dom";
 import Layout from "./Layout";
 import { taskStore } from "../stores/TaskStore";
+import { FormattedMessage, IntlProvider } from 'react-intl';
+import languages from '../translations';
 
 function Home() {
-    const { tasks, addTask, clearTasks } = taskStore(); // Access tasks state and addTask action from taskStore
-    const [isSidebarVisible, setIsSidebarVisible] = useState(false); // Initialize to false
-    const token = userStore((state) => state.token); // Define token
+    const { tasks, addTask, clearTasks } = taskStore();
+    const [isSidebarVisible, setIsSidebarVisible] = useState(false);
+    const token = userStore((state) => state.token);
     const navigate = useNavigate();
+    const locale = userStore((state) => state.locale);
 
     const toggleSidebar = () => {
         setIsSidebarVisible(!isSidebarVisible);
@@ -32,9 +35,7 @@ function Home() {
                         throw new Error('Failed to fetch tasks');
                     }
                     const data = await response.json();
-                    console.log(data);
                     clearTasks();
-                    // Add fetched tasks to the taskStore
                     data.forEach(task => {
                         addTask(task);
                     });
@@ -54,25 +55,27 @@ function Home() {
     };
 
     return (
-        <Layout isSidebarVisible={isSidebarVisible} toggleSidebar={toggleSidebar}>
-            <div className="flex flex-row h-5/6 p-10 mt-5 space-x-10 justify-center">
-                <TasksListColumn title="To Do">
-                    {filterTasksByStatus(100).map(task => (
-                        <TaskComponent key={task.id} id={task.id} title={task.title} priority={task.priority} owner={task.owner} />
-                    ))}
-                </TasksListColumn>
-                <TasksListColumn title="Doing">
-                    {filterTasksByStatus(200).map(task => (
-                        <TaskComponent key={task.id} id={task.id} title={task.title} priority={task.priority} owner={task.owner} />
-                    ))}
-                </TasksListColumn>
-                <TasksListColumn title="Done">
-                    {filterTasksByStatus(300).map(task => (
-                        <TaskComponent key={task.id} id={task.id} title={task.title} priority={task.priority} owner={task.owner} />
-                    ))}
-                </TasksListColumn>
-            </div>
-        </Layout>
+        <IntlProvider locale={locale} messages={languages[locale]}>
+            <Layout isSidebarVisible={isSidebarVisible} toggleSidebar={toggleSidebar}>
+                <div className="flex flex-row h-5/6 p-10 mt-5 space-x-10 justify-center">
+                    <TasksListColumn title={<FormattedMessage id="todo" defaultMessage="To Do" />}>
+                        {filterTasksByStatus(100).map(task => (
+                            <TaskComponent key={task.id} id={task.id} title={task.title} priority={task.priority} owner={task.owner} />
+                        ))}
+                    </TasksListColumn>
+                    <TasksListColumn title={<FormattedMessage id="doing" defaultMessage="Doing" />}>
+                        {filterTasksByStatus(200).map(task => (
+                            <TaskComponent key={task.id} id={task.id} title={task.title} priority={task.priority} owner={task.owner} />
+                        ))}
+                    </TasksListColumn>
+                    <TasksListColumn title={<FormattedMessage id="done" defaultMessage="Done" />}>
+                        {filterTasksByStatus(300).map(task => (
+                            <TaskComponent key={task.id} id={task.id} title={task.title} priority={task.priority} owner={task.owner} />
+                        ))}
+                    </TasksListColumn>
+                </div>
+            </Layout>
+        </IntlProvider>
     );
 }
 

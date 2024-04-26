@@ -5,6 +5,8 @@ import { ReactSearchAutocomplete } from 'react-search-autocomplete';
 import { format } from 'date-fns';
 import { IoIosCheckmarkCircle } from "react-icons/io";
 import { notificationsStore } from '../stores/NotificationsStore';
+import { IntlProvider } from 'react-intl';
+import languages from '../translations';
 
 
 function Chat() {
@@ -16,7 +18,8 @@ function Chat() {
     const [users, setUsers] = useState([]);
     const messagesEndRef = useRef(null);
     const removeReadMessages = notificationsStore ((state) => state.removeReadMessages);
-
+    const locale = userStore((state) => state.locale);
+    
     const fetchMessages = useCallback((recipientId) => {
         console.log(recipientId)
         fetch(`http://localhost:8080/demo-1.0-SNAPSHOT/rest/messages?recipientId=${recipientId}`, {
@@ -294,6 +297,7 @@ const handleSendMessage = (message) => {
     };
 
     return (
+        <IntlProvider locale={locale} messages={languages[locale]}>
         <Layout>
             <div className="container mx-auto shadow-lg rounded-lg p-6" style={{ maxHeight: '80vh' }}>
                 <div className="px-5 py-5 flex justify-between items-center bg-white rounded border-b-2">
@@ -340,7 +344,7 @@ const handleSendMessage = (message) => {
                             <input
                                 className="w-full bg-gray-300 py-5 px-3 rounded-xl"
                                 type="text"
-                                placeholder="type your message here..."
+                                placeholder={languages[locale].messagePlaceholder}  
                                 onKeyDown={(e) => {
                                     if (e.key === 'Enter') {
                                         const message = e.target.value.trim();
@@ -356,6 +360,7 @@ const handleSendMessage = (message) => {
                 </div>
             </div>
         </Layout>
+        </IntlProvider>
     );
 }
 

@@ -4,9 +4,12 @@ import { userStore } from "../../stores/UserStore";
 import { ProfileStore } from "../../stores/ProfileStore";
 import { taskStore } from '../../stores/TaskStore';
 import { FaRegSave } from "react-icons/fa";
+import languages from '../../translations';
+import { FormattedMessage, IntlProvider } from 'react-intl';
 
 
 const UserProfileMenu = () => {
+  const locale = userStore((state) => state.locale);
   const [isOpen, setIsOpen] = useState(false);
   const [photoURL, setPhotoURL] = useState('');
   const updateUserId = ProfileStore((state) => state.updateUserId);
@@ -162,6 +165,7 @@ const UserProfileMenu = () => {
   };
 
   return (
+    <IntlProvider locale={locale} messages={languages[locale]}>
     <div className="relative inline-block text-left" ref={menuRef}>
       <div>
         <button
@@ -183,13 +187,13 @@ const UserProfileMenu = () => {
               onClick={handleProfileClick}
               className="block px-4 py-2 w-full text-sm text-gray-700 hover:bg-gray-400"
             >
-              Profile
+              <FormattedMessage id="profile" defaultMessage="Profile" />
             </button>
             <button
               onClick={handleSettingsClick}
               className="block px-4 py-2 w-full text-sm text-gray-700 hover:bg-gray-400"
             >
-              Settings
+              <FormattedMessage id="settings" defaultMessage="Settings" />
             </button>
             {showSubmenu && (
               <div
@@ -197,7 +201,7 @@ const UserProfileMenu = () => {
                 style={{ top: 29, right: 128}}
               >
                 <label className="block px-4  py-b-2 w-full text-sm text-gray-700 hover:bg-gray-100">
-                  Token Timeout
+                  <FormattedMessage id="tokenTimeout" defaultMessage="Token Timeout" />
                 </label>
                 <div className="flex flex-row justify-between  items-center w-full mt-2">
                   <div className='flex'>
@@ -208,7 +212,7 @@ const UserProfileMenu = () => {
                     value={currentTokenExpirationTime}
                     onChange={(e) => setCurrentTokenExpirationTime(e.target.value)}
                   />
-                  <p className='text-black ml-1 w-1/3 text-sm'>hours</p>
+                  <p className='text-black ml-1 w-1/3 text-sm'><FormattedMessage id="hours" defaultMessage="hours" /></p>
                   </div>
                   <div className='flex place-item-end'>
                     <button
@@ -225,12 +229,13 @@ const UserProfileMenu = () => {
               onClick={handleLogoutClick}
               className="block px-4 py-2 w-full text-sm text-gray-700 hover:bg-gray-400"
             >
-              Logout
+              <FormattedMessage id="logout" defaultMessage="Logout" />
             </button>
           </div>
         </div>
       )}
     </div>
+    </IntlProvider>
   );
 };
 

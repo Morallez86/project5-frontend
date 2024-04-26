@@ -3,8 +3,11 @@ import { userStore } from "../../stores/UserStore";
 import { taskStore } from "../../stores/TaskStore";
 import { useNavigate } from 'react-router-dom';
 import MessageModal from '../modal/MessageModal';
+import { FormattedMessage, IntlProvider } from 'react-intl';
+import languages from '../../translations';
 
 function EditTaskInformation() {
+    const locale = userStore((state) => state.locale);
     const [categories, setCategories] = useState([]); // State variable to store categories
     const token = userStore((state) => state.token);
     const username2 = userStore((state) => state.username);
@@ -135,6 +138,7 @@ function EditTaskInformation() {
     };
 
     return (
+    <IntlProvider locale={locale} messages={languages[locale]}>
     <div className="text-white p-8 flex justify-center items-center">
         <MessageModal 
             isOpen={showModal} 
@@ -144,11 +148,15 @@ function EditTaskInformation() {
         />
         <div className="bg-cyan-900/60 border border-cyan-950 rounded-md p-12 backdrop-filter backdrop-blur-sm bg-opacity-30 relative">
             <div>
-                <h1 className="text-4xl font-bold text-center mb-6">Edit task</h1>
+                <h1 className="text-4xl font-bold text-center mb-6">
+                    <FormattedMessage id="editTask" defaultMessage="Edit Task" />
+                </h1>
                 <form onSubmit={handleSave}>
                     <div className="grid grid-cols-2 grid-rows-3  gap-10 relative my-4 items-center px-2">
                         <div>
-                            <label htmlFor="title" className="text-sm">Task Title:</label>
+                            <label htmlFor="title" className="text-sm">
+                                <FormattedMessage id="taskTitle" defaultMessage="Task Title:" />
+                            </label>
                             <input 
                                 type="text" 
                                 className="block w-full py-1 px-0 text-sm bg-transparent border-0 border-b-2 border-gray-300 appearance-none dark:focus:border-cyan-950 focus:outline-none focus:ring-0 focus:text-white focus:border-cyan-950 peer" 
@@ -159,21 +167,25 @@ function EditTaskInformation() {
                             />
                         </div>
                         <div className="flex flex-col">
-                            <label htmlFor="category" className="text-sm">Category:</label>
+                            <label htmlFor="category" className="text-sm">
+                                <FormattedMessage id="category" defaultMessage="Category:" />
+                            </label>
                             <select 
                                 className="bg-cyan-950 pl-1 border border-white w-60"
                                 value={formData.category ?? categories?.[0]}
                                 onChange={handleChange}
                                 name="category"
                                 >
-                                <option value="">Select a category</option>
+                                <option value="">{languages[locale].selectCategory}</option>
                                 {categories.map(category => (
                                     <option key={category.id} value={category.title}>{category.title}</option>
                                 ))}
                             </select>
                         </div>
                         <div className="flex flex-col">
-                            <label htmlFor="initialDate" className="text-sm">Start Date:</label>
+                            <label htmlFor="initialDate" className="text-sm">
+                                <FormattedMessage id="startDate" defaultMessage="Start Date:" />
+                            </label>
                             <input 
                                 type="date" 
                                 className="bg-cyan-950 pl-1 border border-white" 
@@ -183,7 +195,9 @@ function EditTaskInformation() {
                                 />
                         </div>
                         <div className="flex flex-col">
-                            <label htmlFor="finalDate" className="text-sm">End Date:</label>
+                            <label htmlFor="finalDate" className="text-sm">
+                                <FormattedMessage id="endDate" defaultMessage="End Date:" />
+                            </label>
                             <input 
                                 type="date" 
                                 className="bg-cyan-950 pl-1 border border-white"
@@ -193,36 +207,42 @@ function EditTaskInformation() {
                             />
                         </div>
                         <div className="flex flex-col">
-                            <label htmlFor="status" className="text-sm">Status:</label>
+                            <label htmlFor="status" className="text-sm">
+                                <FormattedMessage id="status" defaultMessage="Status:" />
+                            </label>
                             <select 
                                 className="bg-cyan-950 pl-1 border border-white"
                                 value={formData.status}
                                 onChange={handleChange}
                                 name="status"
                             >
-                                <option value="">Select Status</option>
-                                <option value="100">TO DO</option>
-                                <option value="200">DOING</option>
-                                <option value="300">DONE</option>
+                                <option value="">{languages[locale].selectStatus}</option>
+                                <option value="100">{languages[locale].todo}</option>
+                                <option value="200">{languages[locale].doing}</option>
+                                <option value="300">{languages[locale].done}</option>
                             </select>
                         </div>
                         <div className="flex flex-col">
-                            <label htmlFor="priority" className="text-sm">Priority:</label>
+                            <label htmlFor="priority" className="text-sm">
+                                <FormattedMessage id="priority" defaultMessage="Priority:" />
+                            </label>
                             <select 
                                 className="bg-cyan-950 pl-1 border border-white"
                                 value={formData.priority}
                                 onChange={handleChange}
                                 name="priority"
                             >
-                                <option value="">Select Priority</option>
-                                <option value="100">Low</option>
-                                <option value="200">Medium</option>
-                                <option value="300">High</option>
+                                <option value="">{languages[locale].selectPriority}</option>
+                                <option value="100">{languages[locale].low}</option>
+                                <option value="200">{languages[locale].medium}</option>
+                                <option value="300">{languages[locale].high}</option>
                             </select>
                         </div>
                     </div>
                     <div className="p-1">
-                        <label htmlFor="description" className="text-sm">Description:</label>
+                        <label htmlFor="description" className="text-sm">
+                            <FormattedMessage id="description" defaultMessage="Description:" />
+                        </label>
                         <textarea 
                             className="w-full p-2 h-40 text-sm text-white bg-cyan-950 border  border-gray-300 appearance-none focus:outline-none"
                             value={formData.description}
@@ -233,7 +253,7 @@ function EditTaskInformation() {
                     <div className="flex justify-between space-x-10">
                         {(role === "po" || role === "sm" || (role === "dev" && username2 === taskOwner)) && (
                         <button type="submit" className="w-full mb-4 text-[18px] mt-6 rounded-full bg-white text-cyan-900 hover:bg-cyan-950 hover:text-white py-2 transition-colors duration-300">
-                        Save
+                        <FormattedMessage id="saveButton" defaultMessage="Save" />
                         </button>
                         )}
                         <button 
@@ -241,13 +261,14 @@ function EditTaskInformation() {
                             className="w-full mb-4 text-[18px] mt-6 rounded-full bg-white text-cyan-900 hover:bg-slate-500 hover:text-white py-2 transition-colors duration-300"
                             onClick={() => navigate('/Home')}
                         >
-                        Cancel
+                        <FormattedMessage id="cancelButton" defaultMessage="Cancel" />
                         </button>
                     </div>
                 </form>
             </div>
         </div>
     </div>
+    </IntlProvider>
 );
 }
 

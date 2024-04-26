@@ -1,8 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { userStore } from "../../stores/UserStore";
 import { useNavigate } from "react-router-dom";
+import languages from '../../translations';
+import { FormattedMessage, IntlProvider } from 'react-intl';
 
 const EditUserInformation = ({ userDetails }) => {
+  const locale = userStore((state) => state.locale);
   const token = userStore((state) => state.token);
   const usernameProfile = userStore((state) => state.username);
   const navigate = useNavigate();
@@ -118,10 +121,13 @@ const EditUserInformation = ({ userDetails }) => {
   };
 
   return (
+    <IntlProvider locale={locale} messages={languages[locale]}>
     <div className="text-white p-8 flex justify-center items-center">
     <div className="bg-cyan-900/60	border border-cyan-950 rounded-md p-12 backdrop-filter backdrop-blur-sm bg-opacity-30 relative">
             <div> 
-                <h1 className="text-4xl text-whitefont-bold text-center mb-6">Profile</h1>
+                <h1 className="text-4xl text-whitefont-bold text-center mb-6">
+                  <FormattedMessage id="profileTitle" defaultMessage="Profile" />
+                </h1>
                 <form onSubmit={handleSubmit}>
                 <div className="relative my-4">
                     <input 
@@ -134,7 +140,7 @@ const EditUserInformation = ({ userDetails }) => {
                     <label 
                         htmlFor="" 
                         className="absolute text-sm text-white duration-300 transform translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-cyan-900 peer-focus:dark:text-cyan-950 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:translate-y-6"
-                        >Username
+                        ><FormattedMessage id="usernameLabel" defaultMessage="username" />
                     </label>
                 </div>
                 <div className="relative my-4">
@@ -149,7 +155,7 @@ const EditUserInformation = ({ userDetails }) => {
                     <label 
                     htmlFor="" 
                     className="absolute text-sm text-white duration-300 transform translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-cyan-900 peer-focus:dark:text-cyan-950 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:translate-y-6"
-                    >First Name
+                    ><FormattedMessage id="firstNameProfile" defaultMessage="First Name" />
                     </label>
                 </div>
                 <div className="relative my-4">
@@ -164,7 +170,7 @@ const EditUserInformation = ({ userDetails }) => {
                     <label 
                     htmlFor="" 
                     className="absolute text-sm text-white duration-300 transform translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-cyan-900 peer-focus:dark:text-cyan-950 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:translate-y-6"
-                    >Last Name
+                    ><FormattedMessage id="lastNameProfile" defaultMessage="Last Name" />
                     </label>
                 </div>
                 <div className="relative my-4">
@@ -179,7 +185,7 @@ const EditUserInformation = ({ userDetails }) => {
                     <label 
                     htmlFor="" 
                     className="absolute text-sm text-white duration-300 transform translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-cyan-900 peer-focus:dark:text-cyan-950 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:translate-y-6"
-                    >Email
+                    ><FormattedMessage id="emailProfile" defaultMessage="Email" />
                     </label>
                 </div>
                 <div className="relative my-4">
@@ -194,7 +200,7 @@ const EditUserInformation = ({ userDetails }) => {
                     <label 
                     htmlFor="" 
                     className="absolute text-sm text-white duration-300 transform translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-cyan-900 peer-focus:dark:text-cyan-950 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:translate-y-6"
-                    >Phone
+                    ><FormattedMessage id="phoneProfile" defaultMessage="Phone" />
                     </label>
                 </div>
                 {userRole === 'po' && (
@@ -205,16 +211,24 @@ const EditUserInformation = ({ userDetails }) => {
                 value={formData.role}
                 onChange={handleChange}
                 >
-                <option value="">Select Job</option>
-                <option className="text-black" value="dev">Developer</option>
-                <option className="text-black" value="sm">Scrum Master</option>
-                <option className="text-black" value="po">Product Owner</option>
+                <option className='text-black' value="">
+                  <FormattedMessage id="selectJob" defaultMessage="Select Job" />
+                </option>
+                <option className='text-black' value="dev">
+                  <FormattedMessage id="developer" defaultMessage="Developer" />
+                </option>
+                <option className='text-black' value="sm">
+                  <FormattedMessage id="scrumMaster" defaultMessage="Scrum Master" />
+                </option>
+                <option className='text-black' value="po">
+                  <FormattedMessage id="productOwner" defaultMessage="Product Owner" />
+                </option>
               </select>
               <label 
                 htmlFor="" 
                 className="absolute text-sm text-white duration-300 transform translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-cyan-900 peer-focus:dark:text-cyan-950 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:translate-y-6"
               >
-                User Job
+                <FormattedMessage id="userJobProfile" defaultMessage="User Job" />
               </label>
             </div>
                 )}
@@ -230,27 +244,30 @@ const EditUserInformation = ({ userDetails }) => {
                     <label 
                     htmlFor="" 
                     className="absolute text-sm text-white duration-300 transform translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-cyan-900 peer-focus:dark:text-cyan-950 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:translate-y-6"
-                    >Photo URL
+                    ><FormattedMessage id="photoURLProfile" defaultMessage="Photo URL" />
                     </label>
                 </div>
                 
                 <button 
                     className="w-full mb-4 text-[18px] mt-6 rounded-full bg-white text-teal-900 hover:bg-teal-950 hover:text-white py-2 transition-colors duration-300" 
                     type="submit"
-                    >Save
+                    ><FormattedMessage id="saveButton" defaultMessage="Save" />
                 </button>
                 </form>
                 <button 
                     className="w-full mb-4 text-[18px] mt-6 rounded-full bg-white text-teal-900 hover:bg-teal-950 hover:text-white py-2 transition-colors duration-300" 
                     type="button"
                     onClick={() => setShowModal(true)}
-                    >Change Password
+                    ><FormattedMessage id="changePasswordButton" defaultMessage="Change Password" />
                 </button>
                 <button 
                   className="w-full mb-4 text-[18px] mt-6 rounded-full bg-white text-teal-900 hover:bg-teal-950 hover:text-white py-2 transition-colors duration-300" 
                   type="button"
                   onClick={copyToClipboard}>
-                {copied ? 'Copied!' : 'Share Profile'}
+                <FormattedMessage 
+                  id={copied ? 'copiedMessage' : 'shareProfileMessage'}
+                  defaultMessage={copied ? 'Copied!' : 'Share Profile'}
+                />
               </button>
             </div>
       </div>
@@ -258,25 +275,27 @@ const EditUserInformation = ({ userDetails }) => {
         <div className="fixed inset-0 z-10 flex items-center justify-center">
           <div className="absolute inset-0 bg-black opacity-75"></div>
           <div className="bg-cyan-900 p-6 rounded-lg z-20 border-2 border-white">
-            <h2 className="text-lg font-bold mb-4 text-white text-center">Change Password</h2>
+            <h2 className="text-lg font-bold mb-4 text-white text-center">
+              <FormattedMessage id="ChangePassword" defaultMessage="Change Password" />
+            </h2>
             <input
               type="password"
               className="block w-full py-2.5 px-4 mb-4 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 text-black"
-              placeholder="Old Password"
+              placeholder={languages[locale].oldPassword}
               value={oldPassword}
               onChange={(e) => setOldPassword(e.target.value)}
             />
             <input
               type="password"
               className="block w-full py-2.5 px-4 mb-4 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 text-black"
-              placeholder="New Password"
+              placeholder={languages[locale].newPassword}
               value={newPassword}
               onChange={(e) => setNewPassword(e.target.value)}
             />
             <input
               type="password"
               className="block w-full py-2.5 px-4 mb-4 border border-gray-300 rounded-md focus:outline-none focus:border-blue-500 text-black"
-              placeholder="Confirm Password"
+              placeholder={languages[locale].confirmPassword}
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
             />
@@ -284,14 +303,20 @@ const EditUserInformation = ({ userDetails }) => {
               <label 
                 htmlFor="" 
                 className="px-1 text-sm mb-4 text-red-600 text-center"
-                >New password does not match confirmed password
+                > <FormattedMessage
+                id="passwordMismatch"
+                defaultMessage="Password and confirmed password are not the same"
+              />
               </label>
             )}
             {showPasswordUpdated && (
               <label 
               htmlFor="" 
               className="px-1 text-sm mb-4 text-green-600 text-center"
-              >Password updated successfully
+              ><FormattedMessage
+                id="passwordUpdated"
+                defaultMessage="Password updated successfully"
+              />
               </label>
             )}
             {errorMsg && (
@@ -303,22 +328,23 @@ const EditUserInformation = ({ userDetails }) => {
             )}
             <div className="flex justify-end">
               <button
-                className="px-4 py-2 bg-cyan-950 w-20 h-10 text-white rounded hover:bg-cyan-950 mr-2"
+                className="px-4 py-2 bg-cyan-950 w-auto h-10 text-white rounded hover:bg-cyan-950 mr-2"
                 onClick={handlePasswordChange}
               >
-                Save
+                <FormattedMessage id="saveButton" defaultMessage="Save" />
               </button>
               <button
-                className="px-4 py-2 w-20 h-10 bg-slate-400 text-white rounded hover:bg-slate-500"
+                className="px-4 py-2 w-auto h-10 bg-slate-400 text-white rounded hover:bg-slate-500"
                 onClick={handleCloseModal}
               >
-                Cancel
+                <FormattedMessage id="cancelButton" defaultMessage="Cancel" />
               </button>
             </div>
           </div>
         </div>
       )}
     </div>
+    </IntlProvider>
   );
 }
 

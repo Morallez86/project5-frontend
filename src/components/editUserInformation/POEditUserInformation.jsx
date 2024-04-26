@@ -2,8 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { ProfileStore } from "../../stores/ProfileStore";
 import { userStore } from "../../stores/UserStore";
 import { useNavigate } from "react-router-dom";
+import languages from '../../translations';
+import { FormattedMessage, IntlProvider } from 'react-intl';
 
 const POEditUserInformation = ({ userDetails }) => {
+  const locale = userStore((state) => state.locale);
   const token = userStore((state) => state.token);
   const selectedUserId = ProfileStore((state) => state.userId);
   const navigate = useNavigate();
@@ -57,10 +60,13 @@ const POEditUserInformation = ({ userDetails }) => {
   };
 
 return (
+  <IntlProvider locale={locale} messages={languages[locale]}>
     <div className="text-white mt-8 flex justify-center items-center">
       <div className="bg-cyan-900/60 border border-cyan-950 rounded-md p-6 md:p-12 backdrop-filter backdrop-blur-sm bg-opacity-30 relative">
         <div> 
-          <h1 className="text-4xl text-whitefont-bold text-center mb-6">Profile User</h1>
+          <h1 className="text-4xl text-whitefont-bold text-center mb-6">
+            <FormattedMessage id="profileUserTitle" defaultMessage="Profile User" />
+          </h1>
           <form onSubmit={handleSubmit} className="flex flex-col md:flex-row md:flex-wrap">
             <div className="relative my-4 flex-grow md:w-1/2 md:pr-4">
               <input 
@@ -73,7 +79,7 @@ return (
               <label 
                 htmlFor="" 
                 className="absolute text-sm text-white duration-300 transform translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-cyan-900 peer-focus:dark:text-cyan-950 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:translate-y-6 text-center"
-                >Username
+                ><FormattedMessage id="usernameLabel" defaultMessage="username" />
               </label>
             </div>
             <div className="relative my-4 flex-grow md:w-1/2 md:pr-4">
@@ -88,7 +94,7 @@ return (
               <label 
                 htmlFor="" 
                 className="absolute text-sm text-white duration-300 transform translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-cyan-900 peer-focus:dark:text-cyan-950 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:translate-y-6 text-center"
-              >First Name
+              ><FormattedMessage id="firstNameProfile" defaultMessage="First Name" />
               </label>
             </div>
             <div className="relative my-4 flex-grow md:w-1/2 md:pr-4">
@@ -103,7 +109,7 @@ return (
               <label 
                 htmlFor="" 
                 className="absolute text-sm text-white duration-300 transform translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-cyan-900 peer-focus:dark:text-cyan-950 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:translate-y-6 text-center"
-              >Last Name
+              ><FormattedMessage id="lastNameProfile" defaultMessage="Last Name" />
               </label>
             </div>
             <div className="relative my-4 flex-grow md:w-1/2 md:pr-4">
@@ -118,7 +124,7 @@ return (
               <label 
                 htmlFor="" 
                 className="absolute text-sm text-white duration-300 transform translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-cyan-900 peer-focus:dark:text-cyan-950 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:translate-y-6 text-center"
-              >Email
+              ><FormattedMessage id="emailProfile" defaultMessage="Email" />
               </label>
             </div>
             <div className="relative my-4 flex-grow md:w-1/2 md:pr-4">
@@ -133,7 +139,7 @@ return (
               <label 
                 htmlFor="" 
                 className="absolute text-sm text-white duration-300 transform translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-cyan-900 peer-focus:dark:text-cyan-950 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:translate-y-6 text-center"
-              >Phone
+              ><FormattedMessage id="phoneProfile" defaultMessage="Phone" />
               </label>
             </div>
             {userRole === 'po' && (
@@ -144,16 +150,24 @@ return (
                   value={formData.role}
                   onChange={handleChange}
                 >
-                  <option value="">Select Job</option>
-                  <option className="text-black" value="dev">Developer</option>
-                  <option className="text-black" value="sm">Scrum Master</option>
-                  <option className="text-black" value="po">Product Owner</option>
+                  <option value="">
+                    <FormattedMessage id="selectJob" defaultMessage="Select Job" />
+                  </option>
+                  <option className="text-black" value="dev">
+                    <FormattedMessage id="developer" defaultMessage="Developer" />
+                  </option>
+                  <option className="text-black" value="sm">
+                    <FormattedMessage id="scrumMaster" defaultMessage="Scrum Master" />
+                  </option>
+                  <option className="text-black" value="po">
+                    <FormattedMessage id="productOwner" defaultMessage="Product Owner" />
+                  </option>
                 </select>
                 <label 
                   htmlFor="" 
                   className="absolute text-sm text-white duration-300 transform translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-cyan-900 peer-focus:dark:text-cyan-950 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:translate-y-6 text-center"
                 >
-                User Job
+                <FormattedMessage id="userJobProfile" defaultMessage="User Job" />
                 </label>
               </div>
             )}
@@ -169,7 +183,7 @@ return (
               <label 
                 htmlFor="" 
                 className="absolute text-sm text-white duration-300 transform translate-y-6 scale-75 top-3 -z-10 origin-[0] peer-focus:left-0 peer-focus:text-cyan-900 peer-focus:dark:text-cyan-950 peer-placeholder-shown:scale-100 peer-placeholder-shown:translate-y-0 peer-focus:scale-75 peer-focus:translate-y-6 text-center"
-              >Photo URL
+              ><FormattedMessage id="photoURLProfile" defaultMessage="Photo URL" />
               </label>
             </div>
                 {userRole === 'po' && (
@@ -177,7 +191,7 @@ return (
                     className="w-full mb-4 text-[18px] mt-6 rounded-full bg-white text-teal-900 hover:bg-teal-950 hover:text-white py-2 transition-colors duration-300"
                     type="submit"
                     >
-                    Save
+                    <FormattedMessage id="saveButton" defaultMessage="Save" />
                   </button>
                 )}
                 </form>
@@ -185,11 +199,12 @@ return (
                     className="w-full mb-4 text-[18px] mt-6 rounded-full bg-white text-teal-900 hover:bg-teal-950 hover:text-white py-2 transition-colors duration-300" 
                     type="button"
                     onClick={() => navigate('/ManagingUsers')}
-                    >Return
+                    ><FormattedMessage id="returnButton" defaultMessage="Return" />
                 </button>
             </div>
         </div>
         </div>
+    </IntlProvider>
   )
 }
 
