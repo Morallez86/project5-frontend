@@ -7,11 +7,13 @@ import { IoIosCheckmarkCircle } from "react-icons/io";
 import { notificationsStore } from '../stores/NotificationsStore';
 import { IntlProvider } from 'react-intl';
 import languages from '../translations';
+//import { useNavigate } from 'react-router-dom';
 
 
 function Chat() {
     const [searchResults, setSearchResults] = useState([]);
     const token = userStore((state) => state.token);
+    const userId = userStore((state) => state.userId);
     const [socket, setSocket] = useState(null);
     const [messages, setMessages] = useState([]);
     const [receiverId, setReceiverId] = useState(null);
@@ -19,7 +21,16 @@ function Chat() {
     const messagesEndRef = useRef(null);
     const removeReadMessages = notificationsStore ((state) => state.removeReadMessages);
     const locale = userStore((state) => state.locale);
+    const [unreadMessagesCount, setUnreadMessagesCount] = useState(0);
+    const unreadMessages = notificationsStore((state) => state.unreadMessages);
+    //const navigate = useNavigate();
     
+    useEffect(() => {
+        // Calculate the number of unread messages
+        const countUnreadMessages = unreadMessages.filter((message) => message.recipient === userId).length;
+        setUnreadMessagesCount(countUnreadMessages);
+    }, [unreadMessages, userId]);
+
     const fetchMessages = useCallback((recipientId) => {
         console.log(recipientId)
         fetch(`http://localhost:8080/demo-1.0-SNAPSHOT/rest/messages?recipientId=${recipientId}`, {
@@ -148,10 +159,11 @@ function Chat() {
     }, [receiverId]);
 
 
-    const handleUserClick = (userId) => {
+    const handleUserClick = (userId, username) => {
         setReceiverId(userId);
         fetchMessages(userId);
         console.log(`User clicked with ID: ${userId}`);
+        //navigate(`/Chat/${username}`);
     };
 
     const handleOnHover = (result) => {
@@ -175,20 +187,20 @@ function Chat() {
         );
     };
 
-const handleSendMessage = (message) => {
-    if (socket && socket.readyState === WebSocket.OPEN) {
-        const senderId = userStore.getState().userId;
-        const messageObject = {
-            sender: senderId,
-            recipient: receiverId,
-            content: message
-        };
-        console.log(messageObject)
-        socket.send(JSON.stringify(messageObject)); // Send message as JSON string
-    } else {
-        console.error('WebSocket connection not established.');
-    }
-};
+    const handleSendMessage = (message) => {
+        if (socket && socket.readyState === WebSocket.OPEN) {
+            const senderId = userStore.getState().userId;
+            const messageObject = {
+                sender: senderId,
+                recipient: receiverId,
+                content: message
+            };
+            console.log(messageObject)
+            socket.send(JSON.stringify(messageObject)); // Send message as JSON string
+        } else {
+            console.error('WebSocket connection not established.');
+        }
+    };
 
 
     const handleSearch = (string) => {
@@ -248,9 +260,10 @@ const handleSendMessage = (message) => {
                     return message;
                 }
             });
+            console.log(updatedMessages);
             setMessages(updatedMessages);
             
-            removeReadMessages();
+            removeReadMessages(messageId);
 
             if (response.status === 200) {
                 fetchMessages(receiverId); // Update all messages for the current receiverId
@@ -267,6 +280,34 @@ const handleSendMessage = (message) => {
     };
 
 
+    const renderUser = (user) => {
+        const isUnread = unreadMessages.some((message) => message.sender === user.userId);
+
+        return (
+            <div
+                key={"user" + user.userId}
+                className="flex flex-row py-4 px-2 justify-center items-center border-cyan-950 border-b-2 cursor-pointer relative"
+                onClick={() => handleUserClick(user.userId, user.username)}
+            >
+                <div className="w-1/4 sm:w-1/5 md:w-1/4 lg:w-1/5 xl:w-1/4">
+                    <img
+                        src={user.photoUrl}
+                        className="object-cover h-10 sm:h-12 w-10 sm:w-12 rounded-full"
+                        alt=""
+                    />
+                    {isUnread && (
+                        <div className="w-3 h-3 sm:w-4 sm:h-4 bg-red-500 rounded-full flex items-center justify-center absolute top-0.5 right-0.5">
+                            <span className="text-xs text-white">{unreadMessagesCount}</span>
+                        </div>
+                    )}
+                </div>
+                <div className="w-full pl-4">
+                    <div className="text-base sm:text-sm md:text-base lg:text-lg xl:text-lg font-semibold">{user.username}</div>
+                </div>
+            </div>
+        );
+    };
+
     const renderMessageContainer = (message) => {
         const isCurrentUser = message.sender === userStore.getState().userId;
         const isSeen = message.read;
@@ -281,14 +322,14 @@ const handleSendMessage = (message) => {
             <div
                 key={message.id}
                 className={`py-2 px-4 border-b ${isCurrentUser ? 'ml-auto' : 'mr-auto'} w-fit ${
-                    isCurrentUser ? 'bg-gray-400 rounded-bl-3xl rounded-tl-3xl rounded-tr-xl' : 'bg-blue-400 rounded-br-3xl rounded-tr-3xl rounded-tl-xl round'
+                    isCurrentUser ? 'bg-gray-400 rounded-bl-3xl rounded-tl-3xl rounded-tr-xl' : ' bg-teal-700 rounded-br-3xl rounded-tr-3xl rounded-tl-xl round'
                 } text-white`}
             >
                 <div className="text-sm">{message.content}</div>
-                <div className="text-xs text-gray-500">{message.timestamp}</div>
+                <div className="text-xs text-gray-400">{message.timestamp}</div>
                 {!isCurrentUser && (
                     <IoIosCheckmarkCircle
-                        className={`cursor-pointer mt-1 ${isSeen ? 'text-green-300' : 'text-gray-300'}`}
+                        className={`cursor-pointer mt-1 ${isSeen ? 'text-blue-400' : 'text-gray-300'}`}
                         onClick={() => handleConfirmSeenClick(message.id)}
                     />
                 )}
@@ -299,13 +340,13 @@ const handleSendMessage = (message) => {
     return (
         <IntlProvider locale={locale} messages={languages[locale]}>
         <Layout>
-            <div className="container mx-auto shadow-lg rounded-lg p-6" style={{ maxHeight: '80vh' }}>
-                <div className="px-5 py-5 flex justify-between items-center bg-white rounded border-b-2">
+            <div className="container mx-auto shadow-lg rounded-lg p-6" style={{ maxHeight: '83vh' }}>
+                <div className="px-5 py-5 flex justify-between text-white bg-cyan-900 border border-cyan-950 rounded-md items-center border-b-2">
                     <div className="font-semibold text-2xl">ScrumChat</div>
                 </div>
-                <div className="flex flex-row justify-between bg-white">
-                    <div className="flex flex-col w-2/5 border-r-2 overflow-y-auto">
-                        <div className="border-b-2 py-4 px-2 cursor-progress">
+                <div className="flex flex-row justify-between bg-none">
+                    <div className="flex flex-col bg-white/80 border border-cyan-950 rounded-md w-2/5 border-r-2 overflow-y-auto">
+                        <div className="border-b-2 py-4 px-2 border-cyan-950 cursor-progress">
                             <ReactSearchAutocomplete
                                 items={searchResults}
                                 onSearch={handleSearch}
@@ -316,26 +357,9 @@ const handleSendMessage = (message) => {
                                 formatResult={formatResult}
                             />
                         </div>
-                        {users.map((user) => (
-                            <div
-                                key={"user" + user.userId}
-                                className="flex flex-row py-4 px-2 justify-center items-center border-b-2 cursor-pointer"
-                                onClick={() => handleUserClick(user.userId)}
-                            >
-                                <div className="w-1/4">
-                                    <img
-                                        src={user.photoUrl}
-                                        className="object-cover h-12 w-12 rounded-full"
-                                        alt=""
-                                    />
-                                </div>
-                                <div className="w-full">
-                                    <div className="text-lg font-semibold">{user.username}</div>
-                                </div>
-                            </div>
-                        ))}
+                        {users.map((user) => renderUser(user))}
                     </div>
-                    <div className="w-full px-5 flex flex-col justify-between">
+                    <div className="w-full bg-white/80 max-h-100 border-cyan-950 rounded-md border-b-2 px-5 flex flex-col justify-between">
                         <div className="flex flex-col mt-5 space-y-2" style={{ maxHeight: '60vh', overflowY: 'auto' }}>
                             {messages.map((message) => renderMessageContainer(message))}
                             <div ref={messagesEndRef} /> {/* Ref for scrolling to the end */}

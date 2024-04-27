@@ -16,6 +16,7 @@
     "usernameLabel": "Your Username",
     "passwordLabel": "Your Password",
     "loginFailed": "*Failed to login",
+    "pendingAccountWarning": "*Account registration is pending.",
     "loginButton": "Login",
     "forgotPassword": "Forgot your password?",
     "passwordRetrieveTitle": "New Password",

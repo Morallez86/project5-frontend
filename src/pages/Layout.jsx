@@ -55,6 +55,7 @@ const Layout = ({ children }) => {
         return () => {
             ws.close();
         };
+        // eslint-disable-next-line 
     }, []);
 
 
@@ -108,12 +109,14 @@ const Layout = ({ children }) => {
     };
 
     return (
-        <div className="flex flex-col h-screen">
+        <div className="flex flex-col min-h-screen">
             <div className="flex flex-1">
                 {isSidebarVisible && <Sidebar toggleSidebar={toggleSidebar} isSidebarVisible={isSidebarVisible}/>}
                 <div className="flex-1">
                     <Header username={username} toggleSidebar={toggleSidebar} isSidebarVisible={isSidebarVisible}/>
-                    <div>{children}</div>
+                    <div className="flex-1 p-4 overflow-y-auto">
+                        {children}
+                    </div>
                 </div>
             </div>
             <Footer className="bg-gray-800 text-white p-4" />

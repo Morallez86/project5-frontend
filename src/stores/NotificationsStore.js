@@ -13,9 +13,9 @@ export const notificationsStore = create(
             // Function to add a notification
             addNotification: (notification) => set((state) => ({ notifications: [...state.notifications, notification] })),
 
-            removeReadMessages: () => {
+            removeReadMessages: (messageId) => {
                 set((state) => ({
-                    unreadMessages: state.unreadMessages.filter((message) => !message.read),
+                    unreadMessages: state.unreadMessages.filter((message) => message.id > messageId),
                 }));
             },
 

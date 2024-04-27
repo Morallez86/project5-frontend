@@ -1,29 +1,26 @@
 .footer {
     background: linear-gradient(to right, rgba(30, 80, 102, 0.345), rgba(25, 63, 79, 0.784));
     padding: 10px;
-    /* Increase padding for better spacing on mobile */
     text-align: center;
     color: antiquewhite;
-    position: fixed;
-    bottom: 0;
+    /* Remove fixed positioning */
+    /* position: fixed; */
+    /* bottom: 0; */
     width: 100%;
+    margin-top: 10px;
 }
 
 /* Responsive adjustments using media queries */
 @media (max-width: 768px) {
     .footer {
         padding: 8px;
-        /* Reduce padding on smaller screens */
         font-size: 14px;
-        /* Decrease font size for better readability */
     }
 }
 
 @media (max-width: 480px) {
     .footer {
         padding: 6px;
-        /* Further reduce padding on very small screens */
         font-size: 12px;
-        /* Reduce font size for smaller screens */
     }
 }
