@@ -53,7 +53,6 @@ function NotificationTable() {
                     if (response.ok) {
                         const data = await response.json();
                         setAllNotifications(data);
-                        console.log(data)
                     } else {
                         console.error('Failed to fetch notifications.');
                     }

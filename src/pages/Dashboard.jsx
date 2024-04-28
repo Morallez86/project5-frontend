@@ -34,20 +34,16 @@ function Dashboard() {
                     }
 
                     const data = await response.json();
-                    console.log(data);
                     const formattedRegistrations = formatRegistrationData(data);
                     setUserRegistrationData(formattedRegistrations);
-                    console.log(formattedRegistrations);
 
                     const taskFinalDates = formatFinalDatesData(data);
                     setTasksFinalDate(taskFinalDates);
-                    console.log(taskFinalDates);
 
                     const averageTime = calculateAverageTaskCompletionTime(data);
                     setAverageTaskCompletionTime(averageTime);
                 } catch (error) {
                     console.error('Error fetching data:', error);
-                    // Handle error (e.g., show error message)
                 }
             };
 
@@ -166,8 +162,6 @@ function Dashboard() {
         return durationInDays;
     });
 
-    console.log("Task durations (in days):", taskDurations);
-
     if (taskDurations.length === 0) return 0;
 
     const totalDurationInDays = taskDurations.reduce((sum, duration) => sum + duration, 0);
@@ -196,16 +190,13 @@ function Dashboard() {
         ws.onmessage = (event) => {
             try {
                 const newMessage = JSON.parse(event.data);
-                console.log(newMessage);
                 if(newMessage.totalUsers){
                     setDashboardStats(newMessage);
                 }else if(newMessage[0].registTime){
                     const formattedRegistrations = formatRegistrationData(newMessage);
-                    console.log(formattedRegistrations)
                     setUserRegistrationData(formattedRegistrations);
                 }else if(newMessage[0].initialDate){
                     const formattedFinalDatesData = formatFinalDatesData(newMessage);
-                    console.log(formattedFinalDatesData);
                     setTasksFinalDate(formattedFinalDatesData);
 
                     const averageTime = calculateAverageTaskCompletionTime(newMessage);

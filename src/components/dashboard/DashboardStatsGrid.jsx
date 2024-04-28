@@ -49,7 +49,6 @@ export default function DashboardStatsGrid({averageTaskCompletionTime, webSocket
                 if (response.ok) {
                     const data = await response.json();
                     setDashboardStats(data);
-                    console.log(data);
                 } else {
                     throw new Error('Failed to fetch dashboard statistics');
                 }
@@ -77,7 +76,6 @@ export default function DashboardStatsGrid({averageTaskCompletionTime, webSocket
                 if (response.ok) {
                     const categoryStats = await response.json();
                     SetCategoryStats(categoryStats)
-                    console.log('Category Stats:', categoryStats);
                 } else {
                     throw new Error('Failed to fetch category statistics');
                 }

@@ -50,8 +50,7 @@ const EditUserInformation = ({ userDetails }) => {
         },
         body: JSON.stringify(filteredFormData)
       });
-      const data = await response.json();
-      console.log(data); 
+      await response.json();
       navigate('/Home');
     } catch (error) {
       console.error('Error adding user:', error);
@@ -73,7 +72,6 @@ const EditUserInformation = ({ userDetails }) => {
         body: JSON.stringify({ oldPassword, newPassword })
       });
       const data = await response.json();
-      console.log(data);
       if (response.ok) {
         setShowPasswordUpdated(true);
         setErrorMsg('');

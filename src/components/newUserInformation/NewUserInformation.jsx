@@ -36,8 +36,7 @@ const NewUserInformation = () => {
         },
         body: JSON.stringify(formData)
       });
-      const data = await response.json(); 
-      console.log(data);
+      await response.json(); 
       if (response.ok) {
         setModalTitle('Success');
         setModalMessage('User added successfully!');

@@ -49,7 +49,6 @@ function Login() {
                 navigate('/Home', { replace: true });
             } else {
                 const responseBody = await response.json();
-                console.log(responseBody)
                 if (response.status === 401 && responseBody.message === "User registration pending") {
                     setShowPendingWarning(true);
                 } else {

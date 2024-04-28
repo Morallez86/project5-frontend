@@ -38,7 +38,6 @@ function Chat() {
     }, [unreadMessages, userId, navigate, token]);
 
     const fetchMessages = useCallback((recipientId) => {
-        console.log(recipientId)
         fetch(`http://localhost:8080/demo-1.0-SNAPSHOT/rest/messages?recipientId=${recipientId}`, {
             method: 'GET',
             headers: {
@@ -48,7 +47,6 @@ function Chat() {
         })
         .then((response) => {
             if (response.ok) {
-                console.log(response)
                 return response.json();
             } else {
                 throw new Error('Failed to fetch messages');
@@ -104,12 +102,10 @@ function Chat() {
             const ws = new WebSocket(`ws://localhost:8080/demo-1.0-SNAPSHOT/websocket/chat/${userId}`);
 
             ws.onopen = () => {
-                console.log('WebSocket connected');
                 setSocket(ws);
             };
 
             ws.onclose = () => {
-                console.log('WebSocket disconnected');
                 setSocket(null);
             };
 
@@ -168,7 +164,6 @@ function Chat() {
     const handleUserClick = (userId, username) => {
         setReceiverId(userId);
         fetchMessages(userId);
-        console.log(`User clicked with ID: ${userId}`);
         //navigate(`/Chat/${username}`);
     };
 
@@ -201,7 +196,6 @@ function Chat() {
                 recipient: receiverId,
                 content: message
             };
-            console.log(messageObject)
             socket.send(JSON.stringify(messageObject)); // Send message as JSON string
         } else {
             console.error('WebSocket connection not established.');
@@ -266,7 +260,6 @@ function Chat() {
                     return message;
                 }
             });
-            console.log(updatedMessages);
             setMessages(updatedMessages);
             
             removeReadMessages(messageId);
@@ -274,8 +267,6 @@ function Chat() {
             if (response.status === 200) {
                 fetchMessages(receiverId); // Update all messages for the current receiverId
             }
-
-            console.log(`Message ${messageId} marked as seen`);
             } else {
                 throw new Error('Failed to mark message as seen');
             }
@@ -375,16 +366,17 @@ function Chat() {
                             <input
                                 className="w-full bg-gray-300 py-5 px-3 rounded-xl"
                                 type="text"
-                                placeholder={languages[locale].messagePlaceholder}  
+                                placeholder={receiverId ? languages[locale].messagePlaceholder : languages[locale].chatPlaceholderNoUser}
                                 onKeyDown={(e) => {
                                     if (e.key === 'Enter') {
                                         const message = e.target.value.trim();
-                                        if (message) {
+                                        if (message && receiverId) { // Ensure there's a receiverId before sending the message
                                             handleSendMessage(message);
                                             e.target.value = ''; // Clear input field after sending
                                         }
                                     }
                                 }}
+                                disabled={!receiverId} // Disable input if no user is selected
                             />
                         </div>
                     </div>

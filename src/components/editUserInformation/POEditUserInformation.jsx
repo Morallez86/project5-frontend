@@ -32,7 +32,6 @@ const POEditUserInformation = ({ userDetails }) => {
 
     // Create a new object with filtered fields from formData
     const { taskCounts, totalTasks, ...filteredFormData } = formData;
-    console.log(filteredFormData);
 
     try {
       const response = await fetch(`http://localhost:8080/demo-1.0-SNAPSHOT/rest/users/updateProfile/${selectedUserId}`, {
@@ -44,8 +43,7 @@ const POEditUserInformation = ({ userDetails }) => {
         body: JSON.stringify(filteredFormData) // Send the filteredFormData in the request body
       });
 
-      const data = await response.json();
-      console.log(data);
+      await response.json();
       navigate('/Home');
     } catch (error) {
       console.error('Error updating user profile:', error);

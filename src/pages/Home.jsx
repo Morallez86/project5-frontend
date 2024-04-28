@@ -61,7 +61,7 @@ function Home() {
     return (
         <IntlProvider locale={locale} messages={languages[locale]}>
             <Layout isSidebarVisible={isSidebarVisible} toggleSidebar={toggleSidebar}>
-                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 justify-items-center p-4 mt-5">
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 justify-items-center p-4 mt-5">
                     <TasksListColumn title={<FormattedMessage id="todo" defaultMessage="To Do" />}>
                         {filterTasksByStatus(100).map(task => (
                             <TaskComponent key={task.id} id={task.id} title={task.title} priority={task.priority} owner={task.owner} />

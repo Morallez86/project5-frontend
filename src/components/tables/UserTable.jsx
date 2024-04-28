@@ -19,6 +19,7 @@ function UserTable() {
   const [showMessageModal, setShowMessageModal] = useState(false);
   const navigate = useNavigate(); // Get the navigate function
   const userRole = userStore((state) => state.role)
+  const [searchInput, setSearchInput] = useState('');
 
   const fetchUsers = useCallback (async () => {
     try {
@@ -31,7 +32,6 @@ function UserTable() {
         throw new Error('Failed to fetch users');
       }
       const data = await response.json();
-      console.log(data);
       setUsers(data);
     } catch (error) {
       console.error('Error fetching users:', error);
@@ -45,7 +45,6 @@ function UserTable() {
   const handleEdit = (userId) => {
     updateUserId(userId);
     navigate('/Profile');
-    console.log(`Editing user with ID: ${userId}`);
   };
 
   const handleSelectAll = () => {
@@ -58,7 +57,6 @@ function UserTable() {
 
   const handleSetInactive = async () => {
     const selectedUserIds = users.filter(user => user.selected).map(user => user.id);
-    console.log(selectedUserIds);
     try {
       const response = await fetch('http://localhost:8080/demo-1.0-SNAPSHOT/rest/users/updateInactive', {
         method: 'POST',
@@ -79,7 +77,6 @@ function UserTable() {
 
   const handleSetActive = async () => {
     const selectedUserIds = users.filter(user => user.selected).map(user => user.id);
-    console.log(selectedUserIds);
     try {
       const response = await fetch('http://localhost:8080/demo-1.0-SNAPSHOT/rest/users/updateActive', {
         method: 'POST',
@@ -99,8 +96,6 @@ function UserTable() {
   };
 
   const handleDeleteUsers = async () => {
-    const selectedUserIds = users.filter(user => user.selected).map(user => user.id);
-    console.log(selectedUserIds);
     try {
       const response = await fetch('http://localhost:8080/demo-1.0-SNAPSHOT/rest/users/deleteUsers', {
         method: 'DELETE',
@@ -116,6 +111,23 @@ function UserTable() {
       fetchUsers();
     } catch (error) {
       console.error('Error deleting users:', error);
+    }
+  };
+
+  const handleSearch = async () => {
+    try {
+      const response = await fetch(`http://localhost:8080/demo-1.0-SNAPSHOT/rest/users/search?query=${searchInput}`, {
+        headers: {
+          'token': token
+        }
+      });
+      if (!response.ok) {
+        throw new Error('Failed to search users');
+      }
+      const data = await response.json();
+      setUsers(data);
+    } catch (error) {
+      console.error('Error searching users:', error);
     }
   };
 
@@ -167,6 +179,22 @@ function UserTable() {
         <h1 className="text-2xl font-bold">
           <FormattedMessage id="managingUsers" defaultMessage="Managing Users" />
         </h1>
+        <div className="flex items-center">
+          <input
+            type="text"
+            value={searchInput}
+            onChange={(e) => setSearchInput(e.target.value)}
+            className="px-3 py-1.5 border border-gray-300 text-black rounded-md mr-2"
+            placeholder={languages[locale].searchUsername}  
+          />
+          <button
+            type="button"
+            onClick={handleSearch}
+            className="px-4 py-2 bg-cyan-900 text-white rounded hover:bg-cyan-950"
+          >
+            <FormattedMessage id="searchButton" defaultMessage="Search" />
+          </button>
+        </div>
         <div className='overflow-y-auto h-96 mt-1'>
         <table className="w-full mt-4 border-collapse border border-gray-300">
           <thead>

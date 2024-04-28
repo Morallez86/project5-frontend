@@ -113,5 +113,7 @@
     "settings": "Settings",
     "tokenTimeout": "Token Timeout",
     "logout": "Logout",
-    "hours": "hours"
+    "hours": "hours",
+    "searchUsername": "Search by username",
+    "chatPlaceholderNoUser": "Select a user to send a message"
 }

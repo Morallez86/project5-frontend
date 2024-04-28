@@ -113,5 +113,7 @@
     "settings": "Configurações",
     "tokenTimeout": "Tempo Limite Token",
     "logout": "Sair",
-    "hours": "horas"
+    "hours": "horas",
+    "searchUsername": "Procurar por utilizador",
+    "chatPlaceholderNoUser": "Seleccione um utilizador para enviar mensagem"
 }

@@ -38,8 +38,7 @@ function VerifyAccount(){
                 },
                 body: JSON.stringify({ token, password })
             });
-            const data = await response.json();
-            console.log(data);
+            await response.json();
             if (response.ok) {
                 navigate('/', { replace: true });
             } else {

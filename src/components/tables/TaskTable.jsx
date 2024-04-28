@@ -32,7 +32,6 @@ function TaskTable() {
         throw new Error('Failed to fetch tasks');
       }
       const data = await response.json();
-      console.log(data);
       setTasks(data);
     } catch (error) {
       console.error('Error fetching tasks:', error);
@@ -111,7 +110,6 @@ function TaskTable() {
 
   const handleSetInactive = async () => {
     const selectedTaskIds = tasks.filter(task => task.selected).map(task => task.id);
-    console.log(selectedTaskIds);
     try {
       const response = await fetch('http://localhost:8080/demo-1.0-SNAPSHOT/rest/tasks/deactivate', {
         method: 'PUT',
@@ -143,7 +141,6 @@ function TaskTable() {
             throw new Error('Failed to fetch tasks');
         }
         const data = await response.json();
-        console.log(data);
         setTasks(data);
     } catch (error) {
         console.error('Error fetching tasks:', error);
@@ -162,7 +159,6 @@ function TaskTable() {
             throw new Error('Failed to fetch tasks');
         }
         const data = await response.json();
-        console.log(data);
         setTasks(data);
     } catch (error) {
         console.error('Error fetching tasks:', error);
@@ -180,7 +176,6 @@ function TaskTable() {
         throw new Error('Failed to fetch inactive tasks');
       }
       const data = await response.json();
-      console.log(data);
       setTasks(data);
     } catch (error) {
       console.error('Error fetching inactive tasks:', error);
@@ -189,7 +184,6 @@ function TaskTable() {
 
   const handleSetActive = async () => {
     const selectedTaskIds = tasks.filter(task => task.selected).map(task => task.id);
-    console.log(selectedTaskIds);
     try {
       const response = await fetch('http://localhost:8080/demo-1.0-SNAPSHOT/rest/tasks/activate', {
         method: 'PUT',

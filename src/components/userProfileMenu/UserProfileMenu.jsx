@@ -139,7 +139,6 @@ const UserProfileMenu = () => {
   const handleSaveChanges = async () => {
     // Ensure currentTokenExpirationTime is converted to an integer before sending
     const newTokenExpirationTime = parseInt(currentTokenExpirationTime, 10);
-    console.log(newTokenExpirationTime)
     if (!isNaN(newTokenExpirationTime)) {
       try {
         const response = await fetch('http://localhost:8080/demo-1.0-SNAPSHOT/rest/configurations/updateTokenExpirationTime', {

@@ -18,7 +18,6 @@ const Layout = ({ children }) => {
 
     // WebSocket setup and message handling
     useEffect(() => {
-        console.log("just mount")
         const ws = new WebSocket(`ws://localhost:8080/demo-1.0-SNAPSHOT/websocket/application/${token}`);
 
         ws.onopen = () => {
@@ -28,19 +27,12 @@ const Layout = ({ children }) => {
         ws.onmessage = (event) => {
             try {
                 const message = JSON.parse(event.data);
-                console.log("111111")
-                console.log(message)
-
                 // Check if the message is a new message
                 if (message.recipient === userId) {
                     addUnreadMessage(message);
-                    console.log("222222")
                 } else if(message.notificationType) {
                     // If not a new message, assume it's a new notification
-                    console.log(message)
                     addNotification(message);
-                    console.log("ON MESSAGE")
-                    
                 }else{
                     clearTasks();
                     message.forEach((task) => {
@@ -87,7 +79,6 @@ const Layout = ({ children }) => {
                 if (!notificationsResponse.ok) {
                     throw new Error(`Error fetching unread notifications! Status: ${notificationsResponse.status}`);
                 }
-                console.log("FETCH NOtificações")
                 const messagesData = await messagesResponse.json();
                 const notificationsData = await notificationsResponse.json();
 
