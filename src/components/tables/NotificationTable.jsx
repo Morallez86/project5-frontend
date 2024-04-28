@@ -69,13 +69,13 @@ function NotificationTable() {
 
     return (
         <IntlProvider locale={locale} messages={languages[locale]}>
-        <div className=" p-8 text-white flex justify-center">
-            <div className="bg-cyan-900/60 border border-cyan-950 rounded-md p-8 backdrop-filter backdrop-blur-sm bg-opacity-30 text-center w-full max-w-screen-lg">
+        <div className="p-8 text-white flex justify-center">
+            <div className="bg-cyan-900/60 border border-cyan-950 rounded-md p-8 backdrop-filter backdrop-blur-sm bg-opacity-30 text-center w-full max-w-screen-lg overflow-hidden">
                 <h1 className="text-2xl font-bold mb-4">
                     <FormattedMessage id="notifications" defaultMessage="Notifications" />
                 </h1>
-                <div className='overflow-y-auto overflow-x-auto max-h-96' style={{ paddingRight: '8px' }}>
-                    <table className="w-full border-collapse border border-gray-300">
+                <div className='overflow-auto max-h-80'>
+                    <table className="w-full table-auto border-collapse border border-gray-300">
                         <thead>
                             <tr>
                                 <th className="px-4 py-2 border border-gray-300">
@@ -99,7 +99,6 @@ function NotificationTable() {
                                             </div>
                                         )}
                                     </td>
-
                                 </tr>
                             ))}
                         </tbody>
@@ -111,4 +110,4 @@ function NotificationTable() {
     );
 }
 
-export default NotificationTable
+export default NotificationTable;

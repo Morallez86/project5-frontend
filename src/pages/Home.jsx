@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import { userStore } from "../stores/UserStore";
 import TasksListColumn from "../components/tasksListColumn/TasksListColumn";
 import TaskComponent from "../components/taskComponent/TaskComponent";
-import '../index.css';
 import { useNavigate } from "react-router-dom";
 import Layout from "./Layout";
 import { taskStore } from "../stores/TaskStore";
@@ -57,7 +56,7 @@ function Home() {
     return (
         <IntlProvider locale={locale} messages={languages[locale]}>
             <Layout isSidebarVisible={isSidebarVisible} toggleSidebar={toggleSidebar}>
-                <div className="flex flex-row h-5/6 p-10 mt-5 space-x-10 justify-center">
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-4 justify-items-center p-4 mt-5">
                     <TasksListColumn title={<FormattedMessage id="todo" defaultMessage="To Do" />}>
                         {filterTasksByStatus(100).map(task => (
                             <TaskComponent key={task.id} id={task.id} title={task.title} priority={task.priority} owner={task.owner} />

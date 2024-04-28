@@ -16,8 +16,10 @@ function ManagingUsers() {
     }, [token, navigate]);
     return (
         <Layout>
-            <div>
-                <UserTable />
+            <div className="flex justify-center items-center">
+                <div className="w-full lg:max-w-4xl p-4">
+                    <UserTable />
+                </div>
             </div>
         </Layout>
     );

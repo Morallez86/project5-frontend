@@ -16,7 +16,7 @@ const UserProfileMenu = () => {
   const clearUserId = ProfileStore((state) => state.clearUserId);
   const clearTaskData = taskStore((state) => state.clearTaskData);
   const navigate = useNavigate();
-  const { token, username, clearUserData } = userStore.getState();
+  const { token, username, role, clearUserData } = userStore.getState();
   const menuRef = useRef();
   const [showSubmenu, setShowSubmenu] = useState(false);
   const [currentTokenExpirationTime, setCurrentTokenExpirationTime] = useState(null);
@@ -189,13 +189,15 @@ const UserProfileMenu = () => {
             >
               <FormattedMessage id="profile" defaultMessage="Profile" />
             </button>
+            {role === 'po' &&(
             <button
               onClick={handleSettingsClick}
               className="block px-4 py-2 w-full text-sm text-gray-700 hover:bg-gray-400"
             >
               <FormattedMessage id="settings" defaultMessage="Settings" />
             </button>
-            {showSubmenu && (
+            )}
+            {showSubmenu && role === 'po' && (
               <div
                 className="origin-top-left flex items-center flex-col border border-black absolute z-10 w-36 p-1 py-2 mt-2 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none"
                 style={{ top: 29, right: 128}}

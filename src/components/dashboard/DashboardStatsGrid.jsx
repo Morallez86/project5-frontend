@@ -189,7 +189,7 @@ export default function DashboardStatsGrid({averageTaskCompletionTime, webSocket
                 <div className="flex flex-col items-center space-y-4 p-2 border-r border-gray-300">
                     <div>
 						<div className='flex items-center justify-center'>
-                        <div className="rounded-full h-12 w-12 m-2 flex items-center  justify-center bg-sky-500">
+                        <div className="rounded-full h-12 w-12 m-2 flex items-center  justify-center bg-teal-900">
                             <ImUsers className="text-2xl text-white" />
                         </div>
 						</div>
@@ -263,7 +263,7 @@ export default function DashboardStatsGrid({averageTaskCompletionTime, webSocket
                 <div className="flex flex-col items-center space-y-4 p-2 border-r border-gray-300">
                     <div>
 						<div className='flex items-center justify-center'>
-                        <div className="rounded-full h-12 w-12 m-2 flex items-center  justify-center bg-sky-500">
+                        <div className="rounded-full h-12 w-12 m-2 flex items-center  justify-center bg-teal-900">
                             <FaTasks className="text-2xl text-white" />
                         </div>
 						</div>
@@ -301,10 +301,10 @@ export default function DashboardStatsGrid({averageTaskCompletionTime, webSocket
                 </div>
 				</div>
 				</div>
-				<div className="flex flex-col items-center space-y-4 p-2 border-gray-300">
+				<div className="flex flex-col items-center space-y-4 p-2">
                     <div>
 						<div className='flex items-center justify-center'>
-                        <div className="rounded-full h-12 w-12 m-2 flex items-center  justify-center bg-sky-500">
+                        <div className="rounded-full h-12 w-12 m-2 flex items-center  justify-center bg-teal-900">
                             <BiSolidCategory className="text-2xl text-white" />
                         </div>
 						</div>
@@ -331,5 +331,5 @@ export default function DashboardStatsGrid({averageTaskCompletionTime, webSocket
 }
 
 function BoxWrapper({ children }) {
-	return <div className="bg-white rounded-md p-4 flex-1 border border-gray-200  items-center justify-center">{children}</div>
+	return <div className="bg-white rounded-md p-4 flex-1 border border-teal-900  items-center justify-center">{children}</div>
 }

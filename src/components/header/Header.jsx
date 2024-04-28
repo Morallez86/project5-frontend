@@ -11,7 +11,7 @@ import { notificationsStore } from '../../stores/NotificationsStore';
 import NotificationMenu from '../userProfileMenu/NotificationMenu';
 import LanguageSelector from '../languageSelector/LanguageSelector'; // Import LanguageSelector component
 
-const Header = ({ toggleSidebar, isSidebarVisible }) => {
+const Header = ({ toggleSidebar }) => {
   const locale = userStore((state) => state.locale);
   const username = userStore((state) => state.username);
   const setLocale = userStore((state) => state.setLocale); // Retrieve setLocale function
@@ -36,9 +36,9 @@ const Header = ({ toggleSidebar, isSidebarVisible }) => {
       <header className="bg-teal-950 border-b-2 text-white p-4">
         <div className="flex items-center justify-between">
           <div className="flex items-center">
-            {!isSidebarVisible && (
-              <IoMenu size={40} className="text-3xl cursor-pointer" onClick={toggleSidebar} />
-            )}
+
+            <IoMenu size={40} className="text-3xl cursor-pointer" onClick={toggleSidebar} />
+
             <WelcomeMessage username={username} />
             {/* Render LanguageSelector component for language selection */}
             <LanguageSelector

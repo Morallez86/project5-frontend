@@ -307,12 +307,7 @@ function TaskTable() {
                   </div>
                 </td>
                 <td className="px-6 py-2 border border-gray-300">
-                  <div className="flex items-center">
-                    <img
-                      src={task.owner.photoURL}
-                      alt={task.owner.username}
-                      className="h-8 w-8 rounded-full mr-2"
-                    />
+                  <div className="flex items-center text-center">
                     <span>{task.owner.username}</span>
                   </div>
                 </td>

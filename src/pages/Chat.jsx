@@ -281,32 +281,33 @@ function Chat() {
 
 
     const renderUser = (user) => {
-        const isUnread = unreadMessages.some((message) => message.sender === user.userId);
+    const isUnread = unreadMessages.some((message) => message.sender === user.userId);
 
-        return (
-            <div
-                key={"user" + user.userId}
-                className="flex flex-row py-4 px-2 justify-center items-center border-cyan-950 border-b-2 cursor-pointer relative"
-                onClick={() => handleUserClick(user.userId, user.username)}
-            >
-                <div className="w-1/4 sm:w-1/5 md:w-1/4 lg:w-1/5 xl:w-1/4">
-                    <img
-                        src={user.photoUrl}
-                        className="object-cover h-10 sm:h-12 w-10 sm:w-12 rounded-full"
-                        alt=""
-                    />
-                    {isUnread && (
-                        <div className="w-3 h-3 sm:w-4 sm:h-4 bg-red-500 rounded-full flex items-center justify-center absolute top-0.5 right-0.5">
-                            <span className="text-xs text-white">{unreadMessagesCount}</span>
-                        </div>
-                    )}
-                </div>
-                <div className="w-full pl-4">
-                    <div className="text-base sm:text-sm md:text-base lg:text-lg xl:text-lg font-semibold">{user.username}</div>
-                </div>
+    return (
+        <div
+            key={"user" + user.userId}
+            className="flex flex-row py-4 px-2 justify-center items-center border-cyan-950 border-b-2 cursor-pointer relative"
+            onClick={() => handleUserClick(user.userId, user.username)}
+        >
+            <div className="w-1/4 sm:w-1/5 md:w-1/4 lg:w-1/5 xl:w-1/4">
+                <img
+                    src={user.photoUrl}
+                    className="object-cover sm:h-12 sm:w-12 rounded-full"
+                    alt=""
+                />
+                {isUnread && (
+                    <div className="w-3 h-3 sm:w-4 sm:h-4 bg-red-500 rounded-full flex items-center justify-center absolute top-0.5 right-0.5">
+                        <span className="text-xs text-white">{unreadMessagesCount}</span>
+                    </div>
+                )}
             </div>
-        );
-    };
+            {/* Show username only on larger screens */}
+            <div className="w-full pl-4 hidden sm:block">
+                <div className="text-base sm:text-sm md:text-base lg:text-lg xl:text-lg font-semibold">{user.username}</div>
+            </div>
+        </div>
+    );
+};
 
     const renderMessageContainer = (message) => {
         const isCurrentUser = message.sender === userStore.getState().userId;

@@ -14,11 +14,13 @@ function Notifications() {
             navigate('/'); // Redirect to login page
         }
     }, [token, navigate]);
+
     return (
         <Layout>
-            <div>
-                <NotificationTable>
-                </NotificationTable>
+            <div className="flex flex-col items-center justify-center">
+                <div className="w-full max-w-screen-lg">
+                    <NotificationTable />
+                </div>
             </div>
         </Layout>
     );

@@ -152,10 +152,9 @@ function CategoryEdition() {
 
         // Create the renameCategoryBody for the PUT request
         const renameCategoryBody = {
-            // Assuming categoryId is the ID of the selected category
-            categoryId: categoryId,
             title: newCategoryTitle,
         };
+        console.log(renameCategoryBody)
 
         // Make a PUT request to update the category
         fetch(`http://localhost:8080/demo-1.0-SNAPSHOT/rest/categories/${categoryId}?title=${selectedCategory}`, {
