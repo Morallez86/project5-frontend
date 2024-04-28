@@ -1,10 +1,11 @@
 import React, { useState, useEffect, useCallback, useRef } from 'react';
 import Layout from './Layout';
 import { userStore } from '../stores/UserStore';
+import { taskStore } from '../stores/TaskStore';
+import { notificationsStore } from '../stores/NotificationsStore';
 import { ReactSearchAutocomplete } from 'react-search-autocomplete';
 import { format } from 'date-fns';
 import { IoIosCheckmarkCircle } from "react-icons/io";
-import { notificationsStore } from '../stores/NotificationsStore';
 import { IntlProvider } from 'react-intl';
 import languages from '../translations';
 import { useNavigate } from 'react-router-dom';
@@ -24,6 +25,10 @@ function Chat() {
     const [unreadMessagesCount, setUnreadMessagesCount] = useState(0);
     const unreadMessages = notificationsStore((state) => state.unreadMessages);
     const navigate = useNavigate();
+    const clearTaskData = taskStore((state) => state.clearTaskData);
+    const clearUserData = userStore((state) => state.clearUserData);
+    const clearMessageData = notificationsStore((state) => state.clearUnreadMessages);
+    const clearNotificationData = notificationsStore((state) => state.clearNotifications);
 
     useEffect(() => {
         // Check if there is no token or if the token is invalid
@@ -49,8 +54,16 @@ function Chat() {
             if (response.ok) {
                 return response.json();
             } else {
+                    if (response.status === 401) {
+                    // Unauthorized - Navigate to the specified route
+                    clearUserData();
+                    clearTaskData();
+                    clearMessageData();
+                    clearNotificationData();
+                    navigate('/');
+                }
                 throw new Error('Failed to fetch messages');
-            }
+                }
         })
         .then((data) => {
             // Format timestamps in the fetched data before updating state
@@ -65,6 +78,7 @@ function Chat() {
         .catch((error) => {
             console.error('Error fetching messages:', error);
         });
+        // eslint-disable-next-line 
     }, [token]);
 
     useEffect(() => {
@@ -80,7 +94,15 @@ function Chat() {
                 if (response.ok) {
                     return response.json();
                 } else {
-                    throw new Error('Failed to fetch users');
+                    if (response.status === 401) {
+                    // Unauthorized - Navigate to the specified route
+                    clearUserData();
+                    clearTaskData();
+                    clearMessageData();
+                    clearNotificationData();
+                    navigate('/');
+                }
+                throw new Error('Failed to fetch messages');
                 }
             })
             .then((data) => {
@@ -93,6 +115,7 @@ function Chat() {
         };
 
         fetchUsers();
+        // eslint-disable-next-line
     }, [token]); // Added 'token' as a dependency
 
     useEffect(() => {
