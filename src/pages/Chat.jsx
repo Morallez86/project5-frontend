@@ -7,7 +7,7 @@ import { IoIosCheckmarkCircle } from "react-icons/io";
 import { notificationsStore } from '../stores/NotificationsStore';
 import { IntlProvider } from 'react-intl';
 import languages from '../translations';
-//import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 
 
 function Chat() {
@@ -23,13 +23,19 @@ function Chat() {
     const locale = userStore((state) => state.locale);
     const [unreadMessagesCount, setUnreadMessagesCount] = useState(0);
     const unreadMessages = notificationsStore((state) => state.unreadMessages);
-    //const navigate = useNavigate();
-    
+    const navigate = useNavigate();
+
     useEffect(() => {
-        // Calculate the number of unread messages
+        // Check if there is no token or if the token is invalid
+        if (!token) {
+            navigate('/'); // Redirect to login page
+        }else{
+            // Calculate the number of unread messages
         const countUnreadMessages = unreadMessages.filter((message) => message.recipient === userId).length;
         setUnreadMessagesCount(countUnreadMessages);
-    }, [unreadMessages, userId]);
+        }
+        
+    }, [unreadMessages, userId, navigate, token]);
 
     const fetchMessages = useCallback((recipientId) => {
         console.log(recipientId)

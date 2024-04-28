@@ -20,7 +20,10 @@ function Home() {
     };
 
     useEffect(() => {
-        const fetchTasks = async () => {
+        if (!token) {
+            navigate('/'); // Redirect to login page
+        } else {
+            const fetchTasks = async () => {
             if (token !== null) {
                 try {
                     const response = await fetch("http://localhost:8080/demo-1.0-SNAPSHOT/rest/tasks", {
@@ -47,6 +50,8 @@ function Home() {
         };
 
         fetchTasks();
+        }
+        
     }, [token, navigate, addTask, clearTasks]);
 
     const filterTasksByStatus = (status) => {

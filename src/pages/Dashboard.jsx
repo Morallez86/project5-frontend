@@ -15,42 +15,48 @@ function Dashboard() {
     const [categoryStats, SetCategoryStats] = useState([]);
     
 
+
     useEffect(() => {
-        const fetchData = async () => {
-            try {
-                const response = await fetch('http://localhost:8080/demo-1.0-SNAPSHOT/rest/dashboards/lineChartStats', {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'token': token
+        if (!token) {
+            navigate('/'); // Redirect to login page
+        }else{
+            const fetchData = async () => {
+                try {
+                    const response = await fetch('http://localhost:8080/demo-1.0-SNAPSHOT/rest/dashboards/lineChartStats', {
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'token': token
+                        }
+                    });
+
+                    if (!response.ok) {
+                        throw new Error('Failed to fetch data');
                     }
-                });
 
-                if (!response.ok) {
-                    throw new Error('Failed to fetch data');
+                    const data = await response.json();
+                    console.log(data);
+                    const formattedRegistrations = formatRegistrationData(data);
+                    setUserRegistrationData(formattedRegistrations);
+                    console.log(formattedRegistrations);
+
+                    const taskFinalDates = formatFinalDatesData(data);
+                    setTasksFinalDate(taskFinalDates);
+                    console.log(taskFinalDates);
+
+                    const averageTime = calculateAverageTaskCompletionTime(data);
+                    setAverageTaskCompletionTime(averageTime);
+                } catch (error) {
+                    console.error('Error fetching data:', error);
+                    // Handle error (e.g., show error message)
                 }
+            };
 
-                const data = await response.json();
-                console.log(data);
-                const formattedRegistrations = formatRegistrationData(data);
-                setUserRegistrationData(formattedRegistrations);
-                console.log(formattedRegistrations);
-
-                const taskFinalDates = formatFinalDatesData(data);
-                setTasksFinalDate(taskFinalDates);
-                console.log(taskFinalDates);
-
-                const averageTime = calculateAverageTaskCompletionTime(data);
-                setAverageTaskCompletionTime(averageTime);
-            } catch (error) {
-                console.error('Error fetching data:', error);
-                // Handle error (e.g., show error message)
+            if (token) {
+                fetchData();
             }
-        };
-
-        if (token) {
-            fetchData();
         }
-    }, [token]);
+        
+    }, [token, navigate]);
 
     const formatRegistrationData = (data) => {
         const registrationCountsByDate = {};
